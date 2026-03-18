@@ -1,4 +1,12 @@
-# HalfyShop — Convenciones del Proyecto
+# HalfyShop — Instrucciones para Claude
+
+## Workflow obligatorio
+
+- **Antes de hacer un commit, avisar al usuario y esperar confirmación** para que pueda revisar el código
+- No se considera implementado un cambio hasta que los tests pasan
+- Mientras se trabaja en archivos de planificación, no ejecutar nada — esperar orden explícita
+
+---
 
 ## Stack
 
@@ -57,11 +65,15 @@ final class ArtworkTitle
 test_{acción}_{contexto}__when_{condición}__should_{resultado}
 ```
 
-Ejemplo: `test_create_artwork__when_title_is_empty__should_throw_exception`
+Ejemplos:
+- `test_create_artwork__when_title_is_empty__should_throw_exception`
+- `test_sync_bigcartel__when_artwork_exists__should_update_not_duplicate`
 
 ## Tests de Integración
 
-Usar `IntegrationTestCase` con `beginTransaction()` / `rollBack()` — nunca limpiar la BD manualmente entre tests.
+- Usar `IntegrationTestCase` con `beginTransaction()` / `rollBack()` — nunca limpiar la BD manualmente entre tests
+- Solo se mockea la API externa (Big Cartel), la BD de tests es real
+- Ejecutar tests con: `docker compose exec -T php-cli php bin/phpunit`
 
 ## Arquitectura
 
@@ -77,7 +89,9 @@ src/
 └── Infrastructure/  # Doctrine, Controllers, Http, Views, Image processing.
 ```
 
-Los templates Twig están en `src/Infrastructure/Http/View/`, no en `templates/`.
+- Los templates Twig están en `src/Infrastructure/Http/View/`, no en `templates/`
+- Controllers registrados explícitamente en `services.yaml`
+- Migraciones en `src/Infrastructure/Shared/Persistence/Doctrine/Migrations/`
 
 ## Comandos Útiles
 
