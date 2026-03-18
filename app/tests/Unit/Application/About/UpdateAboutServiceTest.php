@@ -11,9 +11,11 @@ use App\Domain\About\Entity\AboutPage;
 use App\Domain\About\Repository\AboutPageRepository;
 use App\Domain\About\ValueObject\AboutPageId;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+#[AllowMockObjectsWithoutExpectations]
 final class UpdateAboutServiceTest extends TestCase
 {
     private AboutPageRepository&MockObject $aboutPageRepository;

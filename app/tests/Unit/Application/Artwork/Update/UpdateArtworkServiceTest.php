@@ -23,10 +23,12 @@ use App\Domain\Category\ValueObject\CategoryName;
 use App\Domain\Category\ValueObject\CategorySlug;
 use App\Domain\Tag\Repository\TagRepository;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 final class UpdateArtworkServiceTest extends TestCase
 {
     private ArtworkRepository&MockObject $artworkRepository;

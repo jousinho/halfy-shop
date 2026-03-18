@@ -1,0 +1,121 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Infrastructure\Http\Feed;
+
+use App\Application\Shared\BigCartelFeedFetcher;
+
+final class RssXmlBigCartelFeedFetcher implements BigCartelFeedFetcher
+{
+    public function fetch(string $feedUrl): array
+    {
+        $xmlContent = @file_get_contents($feedUrl);
+
+        if ($xmlContent === false) {
+            return [];
+        }
+
+        $xml = simplexml_load_string($xmlContent);
+
+        if ($xml === false) {
+            return [];
+        }
+
+        $items = [];
+
+        foreach ($xml->channel->item as $item) {
+            $parsed = $this->parseItem($item);
+
+            if ($parsed !== null) {
+                $items[] = $parsed;
+            }
+        }
+
+        return $items;
+    }
+
+    private function parseItem(\SimpleXMLElement $item): ?array
+    {
+        $shopUrl = (string) $item->link;
+
+        if ($shopUrl === '') {
+            return null;
+        }
+
+        $imageUrl = $this->extractImageUrl($item);
+        $price    = $this->extractPrice($item);
+
+        return [
+            'title'       => trim((string) $item->title),
+            'description' => $this->extractDescription($item),
+            'price'       => $price,
+            'shopUrl'     => $shopUrl,
+            'imageUrl'    => $imageUrl,
+            'isAvailable' => $this->extractAvailability($item),
+        ];
+    }
+
+    private function extractImageUrl(\SimpleXMLElement $item): string
+    {
+        $enclosure = $item->enclosure;
+
+        if ($enclosure !== null) {
+            $url = (string) $enclosure->attributes()['url'];
+            if ($url !== '') {
+                return $url;
+            }
+        }
+
+        $namespaces = $item->getNamespaces(true);
+
+        if (isset($namespaces['media'])) {
+            $media = $item->children($namespaces['media']);
+            if (isset($media->content)) {
+                return (string) $media->content->attributes()['url'];
+            }
+        }
+
+        return '';
+    }
+
+    private function extractPrice(\SimpleXMLElement $item): ?float
+    {
+        $namespaces = $item->getNamespaces(true);
+
+        foreach (['g', 'bc'] as $ns) {
+            if (isset($namespaces[$ns])) {
+                $children = $item->children($namespaces[$ns]);
+                if (isset($children->price)) {
+                    $priceStr = preg_replace('/[^0-9.]/', '', (string) $children->price);
+                    return $priceStr !== '' ? (float) $priceStr : null;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private function extractDescription(\SimpleXMLElement $item): string
+    {
+        $description = strip_tags((string) $item->description);
+
+        return trim($description);
+    }
+
+    private function extractAvailability(\SimpleXMLElement $item): bool
+    {
+        $namespaces = $item->getNamespaces(true);
+
+        foreach (['g', 'bc'] as $ns) {
+            if (isset($namespaces[$ns])) {
+                $children = $item->children($namespaces[$ns]);
+                if (isset($children->availability)) {
+                    return strtolower((string) $children->availability) === 'in stock';
+                }
+            }
+        }
+
+        return true;
+    }
+}

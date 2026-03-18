@@ -18,8 +18,10 @@ use App\Domain\Artwork\ValueObject\Technique;
 use App\Domain\Sync\Entity\SyncLog;
 use App\Domain\Sync\Repository\SyncLogRepository;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class SyncWithBigCartelServiceTest extends TestCase
 {
     private BigCartelFeedFetcher&MockObject $feedFetcher;

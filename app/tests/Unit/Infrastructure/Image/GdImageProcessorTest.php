@@ -6,10 +6,12 @@ namespace App\Tests\Unit\Infrastructure\Image;
 
 use App\Infrastructure\Image\GdImageProcessor;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+#[AllowMockObjectsWithoutExpectations]
 final class GdImageProcessorTest extends TestCase
 {
     private string $uploadsDir;

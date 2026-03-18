@@ -12,8 +12,10 @@ use App\Domain\Blog\ValueObject\PostId;
 use App\Domain\Blog\ValueObject\PostSlug;
 use App\Domain\Blog\ValueObject\PostTitle;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class UpdatePostServiceTest extends TestCase
 {
     private PostRepository&MockObject $postRepository;

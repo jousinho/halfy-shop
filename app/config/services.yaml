@@ -1,23 +1,51 @@
 # yaml-language-server: $schema=../vendor/symfony/dependency-injection/Loader/schema/services.schema.json
 
-# This file is the entry point to configure your own services.
-# Files in the packages/ subdirectory configure your dependencies.
-# See also https://symfony.com/doc/current/service_container/import.html
-
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    uploads_dir: '%kernel.project_dir%/public/uploads'
 
 services:
-    # default configuration for services in *this* file
     _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        autowire: true
+        autoconfigure: true
+        bind:
+            string $uploadsDir: '%uploads_dir%'
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    # Domain interface → Infrastructure implementation aliases
+    App\Domain\Artwork\Repository\ArtworkRepository:
+        alias: App\Infrastructure\Persistence\Doctrine\DoctrineArtworkRepository
+
+    App\Domain\Category\Repository\CategoryRepository:
+        alias: App\Infrastructure\Persistence\Doctrine\DoctrineCategoryRepository
+
+    App\Domain\Tag\Repository\TagRepository:
+        alias: App\Infrastructure\Persistence\Doctrine\DoctrineTagRepository
+
+    App\Domain\Blog\Repository\PostRepository:
+        alias: App\Infrastructure\Persistence\Doctrine\DoctrinePostRepository
+
+    App\Domain\About\Repository\AboutPageRepository:
+        alias: App\Infrastructure\Persistence\Doctrine\DoctrineAboutPageRepository
+
+    App\Domain\Sync\Repository\SyncLogRepository:
+        alias: App\Infrastructure\Persistence\Doctrine\DoctrineSyncLogRepository
+
+    App\Application\Shared\ImageProcessor:
+        alias: App\Infrastructure\Image\GdImageProcessor
+
+    App\Application\Shared\BigCartelFeedFetcher:
+        alias: App\Infrastructure\Http\Feed\RssXmlBigCartelFeedFetcher
+
+    App\Application\Shared\RemoteImageDownloader:
+        alias: App\Infrastructure\Image\GdRemoteImageDownloader
+
+    # Services requiring scalar parameters beyond the global bind
+    App\Application\Sync\SyncWithBigCartelService:
+        arguments:
+            $feedUrl: '%env(BIGCARTEL_FEED_URL)%'
+
+    App\Infrastructure\Http\Controller\Public\AboutController:
+        arguments:
+            $contactEmail: '%env(CONTACT_EMAIL)%'

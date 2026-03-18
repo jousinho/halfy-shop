@@ -11,8 +11,10 @@ use App\Domain\Tag\Repository\TagRepository;
 use App\Domain\Tag\ValueObject\TagId;
 use App\Domain\Tag\ValueObject\TagName;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class UpdateTagServiceTest extends TestCase
 {
     private TagRepository&MockObject $tagRepository;

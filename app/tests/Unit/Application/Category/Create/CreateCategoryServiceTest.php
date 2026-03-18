@@ -9,8 +9,10 @@ use App\Application\Category\Create\CreateCategoryService;
 use App\Domain\Category\Entity\Category;
 use App\Domain\Category\Repository\CategoryRepository;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class CreateCategoryServiceTest extends TestCase
 {
     private CategoryRepository&MockObject $categoryRepository;

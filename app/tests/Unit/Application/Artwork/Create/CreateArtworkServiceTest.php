@@ -20,10 +20,12 @@ use App\Domain\Tag\Repository\TagRepository;
 use App\Domain\Tag\ValueObject\TagId;
 use App\Domain\Tag\ValueObject\TagName;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 final class CreateArtworkServiceTest extends TestCase
 {
     private ArtworkRepository&MockObject $artworkRepository;

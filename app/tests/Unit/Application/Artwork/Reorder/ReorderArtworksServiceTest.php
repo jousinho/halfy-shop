@@ -14,8 +14,10 @@ use App\Domain\Artwork\ValueObject\ArtworkYear;
 use App\Domain\Artwork\ValueObject\Dimensions;
 use App\Domain\Artwork\ValueObject\Technique;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class ReorderArtworksServiceTest extends TestCase
 {
     private ArtworkRepository&MockObject $artworkRepository;

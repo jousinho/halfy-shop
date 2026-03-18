@@ -12,8 +12,10 @@ use App\Domain\Category\ValueObject\CategoryId;
 use App\Domain\Category\ValueObject\CategoryName;
 use App\Domain\Category\ValueObject\CategorySlug;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class DeleteCategoryServiceTest extends TestCase
 {
     private CategoryRepository&MockObject $categoryRepository;

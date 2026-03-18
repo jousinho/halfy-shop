@@ -9,8 +9,10 @@ use App\Application\Blog\Create\CreatePostService;
 use App\Domain\Blog\Entity\Post;
 use App\Domain\Blog\Repository\PostRepository;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class CreatePostServiceTest extends TestCase
 {
     private PostRepository&MockObject $postRepository;

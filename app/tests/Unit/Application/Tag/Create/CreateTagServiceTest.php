@@ -9,8 +9,10 @@ use App\Application\Tag\Create\CreateTagService;
 use App\Domain\Tag\Entity\Tag;
 use App\Domain\Tag\Repository\TagRepository;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 final class CreateTagServiceTest extends TestCase
 {
     private TagRepository&MockObject $tagRepository;
