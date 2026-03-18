@@ -34,7 +34,7 @@ final class UpdateAboutServiceTest extends TestCase
     public function test_execute__should_update_content_and_save(): void
     {
         $page = $this->buildAboutPage();
-        $this->aboutPageRepository->method('find')->willReturn($page);
+        $this->aboutPageRepository->method('findPage')->willReturn($page);
 
         $this->aboutPageRepository->expects($this->once())->method('save')->with($page);
 
@@ -45,7 +45,7 @@ final class UpdateAboutServiceTest extends TestCase
 
     public function test_execute__when_page_does_not_exist__should_create_it(): void
     {
-        $this->aboutPageRepository->method('find')->willReturn(null);
+        $this->aboutPageRepository->method('findPage')->willReturn(null);
 
         $capturedPage = null;
         $this->aboutPageRepository
@@ -65,7 +65,7 @@ final class UpdateAboutServiceTest extends TestCase
         $page      = $this->buildAboutPage(photoFilename: 'old-photo.jpg');
         $photoFile = $this->createMock(UploadedFile::class);
 
-        $this->aboutPageRepository->method('find')->willReturn($page);
+        $this->aboutPageRepository->method('findPage')->willReturn($page);
         $this->aboutPageRepository->method('save');
 
         $this->imageProcessor
@@ -83,7 +83,7 @@ final class UpdateAboutServiceTest extends TestCase
     {
         $page = $this->buildAboutPage(photoFilename: 'existing-photo.jpg');
 
-        $this->aboutPageRepository->method('find')->willReturn($page);
+        $this->aboutPageRepository->method('findPage')->willReturn($page);
         $this->aboutPageRepository->method('save');
         $this->imageProcessor->expects($this->never())->method('process');
 
@@ -96,7 +96,7 @@ final class UpdateAboutServiceTest extends TestCase
     {
         $page = $this->buildAboutPage(photoFilename: 'foto.jpg');
 
-        $this->aboutPageRepository->method('find')->willReturn($page);
+        $this->aboutPageRepository->method('findPage')->willReturn($page);
         $this->aboutPageRepository->method('save');
         $this->imageProcessor->expects($this->never())->method('process');
 
@@ -110,7 +110,7 @@ final class UpdateAboutServiceTest extends TestCase
         $page      = $this->buildAboutPage(photoFilename: 'vieja.jpg');
         $photoFile = $this->createMock(UploadedFile::class);
 
-        $this->aboutPageRepository->method('find')->willReturn($page);
+        $this->aboutPageRepository->method('findPage')->willReturn($page);
         $this->aboutPageRepository->method('save');
 
         $this->imageProcessor->method('process')->willReturn('nueva.jpg');

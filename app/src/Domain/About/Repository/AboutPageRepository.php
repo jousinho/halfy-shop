@@ -10,5 +10,5 @@ interface AboutPageRepository
 {
     public function save(AboutPage $page): void;
 
-    public function find(): ?AboutPage;
+    public function findPage(): ?AboutPage;
 }

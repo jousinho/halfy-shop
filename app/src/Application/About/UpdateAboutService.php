@@ -27,7 +27,7 @@ final class UpdateAboutService
 
     private function findOrCreateAboutPage(): AboutPage
     {
-        return $this->aboutPageRepository->find()
+        return $this->aboutPageRepository->findPage()
             ?? AboutPage::create(AboutPageId::generate(), '', null);
     }
 
