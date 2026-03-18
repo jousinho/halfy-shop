@@ -1,0 +1,60 @@
+/* ===================================================
+   HalfyShop — nav.css
+   Navegación principal y filtro de categorías
+   =================================================== */
+
+/* --- Nav principal --- */
+.site-nav ul {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.site-nav a {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.site-nav a:hover,
+.site-nav a.active {
+    color: var(--color-text);
+    border-bottom-color: var(--color-text);
+    text-decoration: none;
+}
+
+/* --- Filtro de categorías --- */
+.category-filter {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 1.5rem var(--gutter) 0;
+}
+
+.category-filter ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+}
+
+.filter-btn {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    color: var(--color-text);
+    border-bottom-color: var(--color-text);
+    text-decoration: none;
+}

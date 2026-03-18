@@ -1,0 +1,426 @@
+/* ===================================================
+   HalfyShop — admin.css
+   Backoffice
+   =================================================== */
+
+:root {
+    --admin-sidebar-width: 220px;
+    --admin-bg:            #f5f5f7;
+    --admin-surface:       #ffffff;
+    --admin-border:        #e0e0e6;
+    --admin-text:          #313339;
+    --admin-muted:         #8a8d9a;
+    --admin-primary:       #313339;
+    --admin-danger:        #c0392b;
+    --admin-success:       #27ae60;
+    --admin-warning:       #e67e22;
+    --font-admin:          -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: var(--font-admin);
+    color: var(--admin-text);
+    background: var(--admin-bg);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* --- Layout --- */
+.admin-body {
+    display: flex;
+    min-height: 100vh;
+}
+
+.admin-sidebar {
+    width: var(--admin-sidebar-width);
+    background: var(--admin-primary);
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.admin-sidebar__logo {
+    padding: 1.5rem 1.25rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.admin-sidebar__logo a {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.04em;
+}
+
+.admin-nav {
+    padding: 1rem 0;
+    flex: 1;
+}
+
+.admin-nav ul { list-style: none; }
+
+.admin-nav a {
+    display: block;
+    padding: 0.6rem 1.25rem;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.65);
+    transition: background 0.15s, color 0.15s;
+}
+
+.admin-nav a:hover,
+.admin-nav a.active {
+    background: rgba(255,255,255,0.1);
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.admin-sidebar__footer {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.admin-sidebar__footer a {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.5);
+}
+
+.admin-sidebar__footer a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+.admin-content {
+    flex: 1;
+    overflow: hidden;
+}
+
+.admin-main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem 2rem 4rem;
+}
+
+/* --- Login --- */
+.admin-body--login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--admin-primary);
+}
+
+.login-box {
+    background: var(--admin-surface);
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 360px;
+    border-radius: 4px;
+}
+
+.login-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+/* --- Page header --- */
+.admin-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.admin-page-header h1 {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+/* --- Buttons --- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    font-size: 0.82rem;
+    font-family: var(--font-admin);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+}
+
+.btn--primary {
+    background: var(--admin-primary);
+    color: #fff;
+    border-color: var(--admin-primary);
+}
+.btn--primary:hover { background: #4a4d57; border-color: #4a4d57; text-decoration: none; }
+
+.btn--secondary {
+    background: transparent;
+    color: var(--admin-muted);
+    border-color: var(--admin-border);
+}
+.btn--secondary:hover { color: var(--admin-text); text-decoration: none; }
+
+.btn--danger {
+    background: var(--admin-danger);
+    color: #fff;
+    border-color: var(--admin-danger);
+}
+.btn--danger:hover { background: #a93226; text-decoration: none; }
+
+.btn--sm { padding: 0.3rem 0.65rem; font-size: 0.78rem; }
+.btn--full { width: 100%; justify-content: center; }
+
+/* --- Flash messages --- */
+.flash {
+    padding: 0.75rem 1rem;
+    border-radius: 3px;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+}
+
+.flash--success { background: #eafaf1; color: #1e8449; border: 1px solid #a9dfbf; }
+.flash--error   { background: #fdedec; color: #922b21; border: 1px solid #f5b7b1; }
+.flash--warning { background: #fef9e7; color: #9a7d0a; border: 1px solid #f9e79f; }
+.flash--info    { background: #eaf4fb; color: #1a5276; border: 1px solid #a9cce3; }
+
+/* --- Table --- */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.admin-table th,
+.admin-table td {
+    text-align: left;
+    padding: 0.6rem 0.8rem;
+    border-bottom: 1px solid var(--admin-border);
+}
+
+.admin-table th {
+    font-weight: 600;
+    color: var(--admin-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: var(--admin-bg);
+}
+
+.table-actions {
+    display: flex;
+    gap: 0.4rem;
+    justify-content: flex-end;
+}
+
+.table-actions form { display: inline; }
+
+/* --- Forms --- */
+.admin-form { max-width: 720px; }
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--admin-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.35rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="url"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="datetime-local"],
+.form-group textarea,
+.login-form input {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--admin-border);
+    border-radius: 3px;
+    font-family: var(--font-admin);
+    font-size: 0.88rem;
+    color: var(--admin-text);
+    background: var(--admin-surface);
+    transition: border-color 0.15s;
+    -webkit-appearance: none;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.login-form input:focus {
+    outline: none;
+    border-color: var(--admin-primary);
+}
+
+.form-group textarea { resize: vertical; }
+
+.form-group small {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: 0.75rem;
+    color: var(--admin-muted);
+}
+
+.form-group--check label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: none;
+    font-size: 0.85rem;
+    font-weight: 400;
+    cursor: pointer;
+    color: var(--admin-text);
+    margin-top: 1.5rem;
+}
+
+.form-actions { margin-top: 1.75rem; }
+
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+/* --- Current image preview --- */
+.current-image {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.current-image img {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border: 1px solid var(--admin-border);
+    border-radius: 2px;
+}
+
+.current-image span,
+.current-image label {
+    font-size: 0.82rem;
+    color: var(--admin-muted);
+}
+
+/* --- Artwork list (drag & drop) --- */
+.artwork-list {
+    list-style: none;
+}
+
+.artwork-list__item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.6rem 0.75rem;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 3px;
+    margin-bottom: 0.4rem;
+    cursor: default;
+}
+
+.artwork-list__item.sortable-chosen {
+    background: #f0f1f5;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.drag-handle {
+    cursor: grab;
+    color: var(--admin-muted);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.artwork-list__thumb {
+    width: 60px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.artwork-list__info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.artwork-list__title { font-weight: 600; font-size: 0.88rem; }
+.artwork-list__technique { font-size: 0.78rem; color: var(--admin-muted); }
+
+.artwork-list__actions {
+    display: flex;
+    gap: 0.4rem;
+    flex-shrink: 0;
+}
+
+.artwork-list__actions form { display: inline; }
+
+/* --- Badges --- */
+.badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.badge--unavailable { background: #fdecea; color: #b71c1c; }
+.badge--draft       { background: #f3f3f5; color: var(--admin-muted); }
+
+/* --- Sync page --- */
+.sync-info { margin-bottom: 2.5rem; }
+.sync-last h2,
+.sync-action h2 { font-size: 0.9rem; font-weight: 600; margin-bottom: 1rem; color: var(--admin-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.sync-table th { width: 130px; }
+.sync-action p { margin-bottom: 1rem; font-size: 0.88rem; color: var(--admin-muted); }
+
+/* --- Admin hints --- */
+.admin-hint,
+.admin-empty { font-size: 0.82rem; color: var(--admin-muted); margin-bottom: 1rem; }
+.admin-empty a { text-decoration: underline; }
+
+/* code */
+code { font-size: 0.82rem; background: var(--admin-bg); padding: 0.1em 0.35em; border-radius: 2px; color: var(--admin-muted); }
