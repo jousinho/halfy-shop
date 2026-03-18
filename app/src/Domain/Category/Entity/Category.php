@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Domain\Category\Entity;
 
+use App\Domain\Category\ValueObject\CategoryId;
+use App\Domain\Category\ValueObject\CategoryName;
+use App\Domain\Category\ValueObject\CategorySlug;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -32,41 +35,38 @@ final class Category
     }
 
     public static function create(
-        \App\Domain\Category\ValueObject\CategoryId $id,
-        \App\Domain\Category\ValueObject\CategoryName $name,
-        \App\Domain\Category\ValueObject\CategorySlug $slug,
+        CategoryId $id,
+        CategoryName $name,
+        CategorySlug $slug,
         int $sortOrder,
     ): self {
         return new self($id->value(), $name->value(), $slug->value(), $sortOrder);
     }
 
-    public function id(): \App\Domain\Category\ValueObject\CategoryId
+    public function update(CategoryName $name, CategorySlug $slug, int $sortOrder): void
     {
-        return \App\Domain\Category\ValueObject\CategoryId::create($this->id);
+        $this->name      = $name->value();
+        $this->slug      = $slug->value();
+        $this->sortOrder = $sortOrder;
     }
 
-    public function name(): \App\Domain\Category\ValueObject\CategoryName
+    public function id(): CategoryId
     {
-        return \App\Domain\Category\ValueObject\CategoryName::create($this->name);
+        return CategoryId::create($this->id);
     }
 
-    public function slug(): \App\Domain\Category\ValueObject\CategorySlug
+    public function name(): CategoryName
     {
-        return \App\Domain\Category\ValueObject\CategorySlug::create($this->slug);
+        return CategoryName::create($this->name);
+    }
+
+    public function slug(): CategorySlug
+    {
+        return CategorySlug::create($this->slug);
     }
 
     public function sortOrder(): int
     {
         return $this->sortOrder;
-    }
-
-    public function update(
-        \App\Domain\Category\ValueObject\CategoryName $name,
-        \App\Domain\Category\ValueObject\CategorySlug $slug,
-        int $sortOrder,
-    ): void {
-        $this->name      = $name->value();
-        $this->slug      = $slug->value();
-        $this->sortOrder = $sortOrder;
     }
 }
