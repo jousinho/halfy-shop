@@ -61,9 +61,10 @@ final class CreateArtworkService
 
 **`docker-compose.yml`** — servicios:
 - `php`: PHP 8.4-FPM Alpine, build `./docker/php`, volumen `./app:/var/www/html`
+- `php-cli`: mismo build que `php`, comando `tail -f /dev/null` — para ejecutar comandos de consola (sync, migrations...)
 - `nginx`: imagen nginx:alpine, puerto `8080:80`, volumen `./docker/nginx/default.conf`
-- `postgres`: PostgreSQL 16, puerto `5432`, BD `halfyshop`, usuario/pass en `.env`
-- `postgres-test`: PostgreSQL 16, puerto `5433`, BD `halfyshop_test`
+- `postgres`: PostgreSQL 16, puerto `5432`, BD `halfyshop`, usuario/pass en `.env`, health check, volumen persistente `postgres_data`
+- `postgres-test`: PostgreSQL 16, puerto `5433`, BD `halfyshop_test`, health check, volumen persistente `postgres_test_data`
 
 **`docker/php/Dockerfile`** — extensiones PHP:
 `pdo_pgsql`, `intl`, `bcmath`, `opcache`, `zip`, `exif`, `gd`
@@ -914,6 +915,27 @@ public/assets/
 - `SyncWithBigCartelServiceTest`
 
 ### Integración (`tests/Integration/`)
+
+**Base: `tests/Integration/IntegrationTestCase.php`**
+```php
+abstract class IntegrationTestCase extends KernelTestCase
+{
+    protected EntityManagerInterface $entityManager;
+
+    protected function setUp(): void
+    {
+        self::bootKernel();
+        $this->entityManager = static::getContainer()->get(EntityManagerInterface::class);
+        $this->entityManager->getConnection()->beginTransaction();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->entityManager->getConnection()->rollBack();
+        parent::tearDown();
+    }
+}
+```
 
 **Repositorios** contra PostgreSQL de test:
 - `DoctrineArtworkRepositoryTest` — save, findById, findByCategory, delete

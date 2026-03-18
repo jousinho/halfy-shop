@@ -13,9 +13,9 @@ Rediseño del portfolio de Anna Pownall (grabado e ilustración). La web actual 
 
 ## Stack Técnico
 
-- **PHP 8.4** + **Symfony 7**
+- **PHP 8.4** + **Symfony 8.0**
 - **PostgreSQL 16** (producción) + **PostgreSQL de test** (Docker, integración)
-- **Docker** (php-fpm + nginx + postgres + postgres-test)
+- **Docker** (php-fpm + php-cli + nginx + postgres + postgres-test)
 - **Twig** para frontend público y backoffice
 - **Vanilla JS** + **GSAP** (animaciones) + **GLightbox** (lightbox personalizado)
 - **Doctrine ORM 3.x** con attribute mapping
@@ -363,10 +363,17 @@ Meta tags en todas las páginas públicas:
 - Domain Events (que se disparan correctamente)
 
 ### Integración
+- Base: `IntegrationTestCase` con `beginTransaction()` / `rollBack()` — aislamiento perfecto sin limpiar BD entre tests
 - Repositorios Doctrine contra PostgreSQL de test (Docker)
 - Controllers públicos y de admin (respuestas HTTP, redirecciones)
 - Subida de imágenes
-- Formulario de contacto (About)
+- Sync con Big Cartel (cliente HTTP mockeado, repositorios reales)
+
+### Convención de nombres
+```
+test_{acción}_{contexto}__when_{condición}__should_{resultado}
+```
+Ejemplo: `test_create_artwork__when_title_is_empty__should_throw_exception`
 
 ---
 
@@ -374,10 +381,11 @@ Meta tags en todas las páginas públicas:
 
 ```
 docker-compose.yml
-├── php         (PHP 8.4-FPM Alpine) — extensiones: pdo_pgsql, intl, bcmath, opcache, zip, exif, gd
-├── nginx       (puerto 8080)
-├── postgres    (PostgreSQL 16, puerto 5432) — BD: halfyshop
-└── postgres-test (PostgreSQL 16, puerto 5433) — BD: halfyshop_test
+├── php           (PHP 8.4-FPM Alpine) — extensiones: pdo_pgsql, intl, bcmath, opcache, zip, exif, gd
+├── php-cli       (mismo build que php) — para comandos de consola (sync, migrations...)
+├── nginx         (puerto 8080)
+├── postgres      (PostgreSQL 16, puerto 5432, health check) — BD: halfyshop, volumen persistente
+└── postgres-test (PostgreSQL 16, puerto 5433, health check) — BD: halfyshop_test, volumen persistente
 ```
 
 ---
