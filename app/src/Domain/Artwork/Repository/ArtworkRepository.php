@@ -23,4 +23,6 @@ interface ArtworkRepository
     public function findByCategory(CategoryId $id): array;
 
     public function findNextSortOrder(): int;
+
+    public function findByShopUrl(string $shopUrl): ?Artwork;
 }
