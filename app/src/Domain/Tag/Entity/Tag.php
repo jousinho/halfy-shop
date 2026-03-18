@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\Tag\Entity;
 
+use App\Domain\Tag\ValueObject\TagId;
+use App\Domain\Tag\ValueObject\TagName;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -27,32 +29,29 @@ final class Tag
         $this->slug = $slug;
     }
 
-    public static function create(
-        \App\Domain\Tag\ValueObject\TagId $id,
-        \App\Domain\Tag\ValueObject\TagName $name,
-        string $slug,
-    ): self {
+    public static function create(TagId $id, TagName $name, string $slug): self
+    {
         return new self($id->value(), $name->value(), $slug);
     }
 
-    public function id(): \App\Domain\Tag\ValueObject\TagId
+    public function update(TagName $name, string $slug): void
     {
-        return \App\Domain\Tag\ValueObject\TagId::create($this->id);
+        $this->name = $name->value();
+        $this->slug = $slug;
     }
 
-    public function name(): \App\Domain\Tag\ValueObject\TagName
+    public function id(): TagId
     {
-        return \App\Domain\Tag\ValueObject\TagName::create($this->name);
+        return TagId::create($this->id);
+    }
+
+    public function name(): TagName
+    {
+        return TagName::create($this->name);
     }
 
     public function slug(): string
     {
         return $this->slug;
-    }
-
-    public function update(\App\Domain\Tag\ValueObject\TagName $name, string $slug): void
-    {
-        $this->name = $name->value();
-        $this->slug = $slug;
     }
 }
