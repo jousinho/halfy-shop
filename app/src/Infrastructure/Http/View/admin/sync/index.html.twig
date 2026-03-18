@@ -1,0 +1,46 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Sincronización Big Cartel{% endblock %}
+
+{% block content %}
+    <div class="admin-page-header">
+        <h1>Sincronización Big Cartel</h1>
+    </div>
+
+    <div class="sync-info">
+        {% if lastSync is not null %}
+        <div class="sync-last">
+            <h2>Última sincronización</h2>
+            <table class="admin-table sync-table">
+                <tr>
+                    <th>Fecha</th>
+                    <td><time datetime="{{ lastSync.executedAt|date('c') }}">{{ lastSync.executedAt|date('d/m/Y H:i:s') }}</time></td>
+                </tr>
+                <tr>
+                    <th>Creadas</th>
+                    <td>{{ lastSync.created }}</td>
+                </tr>
+                <tr>
+                    <th>Actualizadas</th>
+                    <td>{{ lastSync.updated }}</td>
+                </tr>
+                <tr>
+                    <th>Sin cambios</th>
+                    <td>{{ lastSync.unchanged }}</td>
+                </tr>
+            </table>
+        </div>
+        {% else %}
+            <p class="admin-empty">No se ha realizado ninguna sincronización todavía.</p>
+        {% endif %}
+    </div>
+
+    <div class="sync-action">
+        <h2>Sincronizar ahora</h2>
+        <p>Importa las obras desde Big Cartel. Las obras existentes se actualizarán si han cambiado.</p>
+        <form method="post" action="{{ path('admin_sync_run') }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('run_sync') }}">
+            <button type="submit" class="btn btn--primary">Ejecutar sincronización</button>
+        </form>
+    </div>
+{% endblock %}

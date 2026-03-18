@@ -1,0 +1,28 @@
+{% extends 'public/layout.html.twig' %}
+
+{% block title %}Blog — Anna Pownall{% endblock %}
+
+{% block content %}
+    <section class="blog-section">
+        <h1 class="section-title">Blog</h1>
+
+        {% if posts is empty %}
+            <p class="blog-empty">No hay entradas publicadas.</p>
+        {% else %}
+            <ul class="post-list">
+                {% for post in posts %}
+                <li class="post-list__item">
+                    <a href="{{ path('blog_show', {slug: post.slug.value}) }}" class="post-list__link">
+                        <span class="post-list__title">{{ post.title.value }}</span>
+                        {% if post.publishedAt is not null %}
+                        <time class="post-list__date" datetime="{{ post.publishedAt|date('Y-m-d') }}">
+                            {{ post.publishedAt|date('d/m/Y') }}
+                        </time>
+                        {% endif %}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </section>
+{% endblock %}

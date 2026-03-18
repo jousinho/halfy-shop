@@ -1,0 +1,24 @@
+{% extends 'public/layout.html.twig' %}
+
+{% block title %}{{ post.title.value }} — Anna Pownall{% endblock %}
+
+{% block content %}
+    <article class="blog-post">
+        <header class="blog-post__header">
+            <h1 class="blog-post__title">{{ post.title.value }}</h1>
+            {% if post.publishedAt is not null %}
+            <time class="blog-post__date" datetime="{{ post.publishedAt|date('Y-m-d') }}">
+                {{ post.publishedAt|date('d \d\e F \d\e Y') }}
+            </time>
+            {% endif %}
+        </header>
+
+        <div class="blog-post__content">
+            {{ post.content|raw }}
+        </div>
+
+        <footer class="blog-post__footer">
+            <a href="{{ path('blog_index') }}" class="back-link">&larr; Volver al blog</a>
+        </footer>
+    </article>
+{% endblock %}

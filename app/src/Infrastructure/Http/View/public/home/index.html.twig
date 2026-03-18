@@ -1,0 +1,37 @@
+{% extends 'public/layout.html.twig' %}
+
+{% block title %}Anna Pownall — Grabado e Ilustración{% endblock %}
+
+{% block content %}
+    <section class="gallery-section">
+
+        {% if categories is not empty %}
+        <nav class="category-filter">
+            <ul>
+                <li>
+                    <a href="{{ path('home') }}" class="filter-btn {% if activeCategory is not defined or activeCategory is null %}active{% endif %}">
+                        Todas
+                    </a>
+                </li>
+                {% for category in categories %}
+                <li>
+                    <a href="{{ path('gallery_by_category', {slug: category.slug.value}) }}"
+                       class="filter-btn {% if activeCategory is defined and activeCategory is not null and activeCategory.id.value == category.id.value %}active{% endif %}">
+                        {{ category.name.value }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </nav>
+        {% endif %}
+
+        <div class="artwork-grid" id="artworkGrid">
+            {% for artwork in artworks %}
+                {% include 'public/home/_artwork_card.html.twig' with {artwork: artwork} %}
+            {% else %}
+                <p class="gallery-empty">No hay obras disponibles.</p>
+            {% endfor %}
+        </div>
+
+    </section>
+{% endblock %}

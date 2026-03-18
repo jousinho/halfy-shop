@@ -1,0 +1,50 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Obras{% endblock %}
+
+{% block content %}
+    <div class="admin-page-header">
+        <h1>Obras</h1>
+        <a href="{{ path('admin_artworks_new') }}" class="btn btn--primary">+ Nueva obra</a>
+    </div>
+
+    {% if artworks is empty %}
+        <p class="admin-empty">No hay obras. <a href="{{ path('admin_artworks_new') }}">Crear la primera</a>.</p>
+    {% else %}
+        <p class="admin-hint">Arrastra para reordenar.</p>
+        <ul class="artwork-list sortable-list" id="sortableArtworks">
+            {% for artwork in artworks %}
+            <li class="artwork-list__item" data-id="{{ artwork.id.value }}">
+                <span class="drag-handle">⠿</span>
+                <img src="/uploads/artworks/thumbnails/{{ artwork.imageFilename }}"
+                     alt="{{ artwork.title.value }}"
+                     class="artwork-list__thumb">
+                <div class="artwork-list__info">
+                    <span class="artwork-list__title">{{ artwork.title.value }}</span>
+                    <span class="artwork-list__technique">{{ artwork.technique.value }}</span>
+                    {% if not artwork.isAvailable %}
+                        <span class="badge badge--unavailable">No disponible</span>
+                    {% endif %}
+                </div>
+                <div class="artwork-list__actions">
+                    <a href="{{ path('admin_artworks_edit', {id: artwork.id.value}) }}" class="btn btn--sm">Editar</a>
+                    <form method="post" action="{{ path('admin_artworks_delete', {id: artwork.id.value}) }}"
+                          onsubmit="return confirm('¿Eliminar esta obra?')">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_artwork_' ~ artwork.id.value) }}">
+                        <button type="submit" class="btn btn--sm btn--danger">Eliminar</button>
+                    </form>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sortablejs@1/Sortable.min.css">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1/Sortable.min.js"></script>
+    <script src="/assets/js/admin-sortable.js"></script>
+{% endblock %}

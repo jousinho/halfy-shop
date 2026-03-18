@@ -1,0 +1,121 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}{{ artwork is null ? 'Nueva obra' : 'Editar obra' }}{% endblock %}
+
+{% block content %}
+    <div class="admin-page-header">
+        <h1>{{ artwork is null ? 'Nueva obra' : 'Editar: ' ~ artwork.title.value }}</h1>
+        <a href="{{ path('admin_artworks') }}" class="btn btn--secondary">← Volver</a>
+    </div>
+
+    <form method="post"
+          action="{{ artwork is null ? path('admin_artworks_create') : path('admin_artworks_update', {id: artwork.id.value}) }}"
+          enctype="multipart/form-data"
+          class="admin-form">
+
+        <div class="form-group">
+            <label for="title">Título *</label>
+            <input type="text" id="title" name="title" required
+                   value="{{ artwork is not null ? artwork.title.value : '' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="technique">Técnica *</label>
+            <input type="text" id="technique" name="technique" required
+                   value="{{ artwork is not null ? artwork.technique.value : '' }}">
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="dimensions">Dimensiones</label>
+                <input type="text" id="dimensions" name="dimensions"
+                       placeholder="ej. 30x40 cm"
+                       value="{{ artwork is not null and artwork.dimensions is not null ? artwork.dimensions.value : '' }}">
+            </div>
+            <div class="form-group">
+                <label for="year">Año</label>
+                <input type="number" id="year" name="year"
+                       min="1900" max="{{ "now"|date("Y") }}"
+                       value="{{ artwork is not null and artwork.year is not null ? artwork.year.value : '' }}">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="price">Precio (€)</label>
+                <input type="number" id="price" name="price" step="0.01" min="0"
+                       value="{{ artwork is not null and artwork.price is not null ? artwork.price.amount : '' }}">
+            </div>
+            <div class="form-group form-group--check">
+                <label>
+                    <input type="checkbox" name="isAvailable" value="1"
+                           {{ artwork is null or artwork.isAvailable ? 'checked' : '' }}>
+                    Disponible en tienda
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="shopUrl">URL tienda (Big Cartel)</label>
+            <input type="url" id="shopUrl" name="shopUrl"
+                   value="{{ artwork is not null and artwork.shopUrl is not null ? artwork.shopUrl : '' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="description">Descripción</label>
+            <textarea id="description" name="description" rows="4">{{ artwork is not null and artwork.description is not null ? artwork.description : '' }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="imageFile">Imagen{% if artwork is null %} *{% endif %}</label>
+            {% if artwork is not null %}
+            <div class="current-image">
+                <img src="/uploads/artworks/thumbnails/{{ artwork.imageFilename }}" alt="Imagen actual">
+                <span>Imagen actual. Sube otra para reemplazarla.</span>
+            </div>
+            {% endif %}
+            <input type="file" id="imageFile" name="imageFile" accept="image/jpeg,image/png,image/webp"
+                   {{ artwork is null ? 'required' : '' }}>
+        </div>
+
+        <div class="form-group">
+            <label>Categorías</label>
+            <div class="checkbox-group">
+                {% for category in categories %}
+                <label class="checkbox-label">
+                    <input type="checkbox" name="categoryIds[]" value="{{ category.id.value }}"
+                           {% if artwork is not null %}
+                               {% for assigned in artwork.categories %}
+                                   {% if assigned.id.value == category.id.value %}checked{% endif %}
+                               {% endfor %}
+                           {% endif %}>
+                    {{ category.name.value }}
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Tags</label>
+            <div class="checkbox-group">
+                {% for tag in tags %}
+                <label class="checkbox-label">
+                    <input type="checkbox" name="tagIds[]" value="{{ tag.id.value }}"
+                           {% if artwork is not null %}
+                               {% for assigned in artwork.tags %}
+                                   {% if assigned.id.value == tag.id.value %}checked{% endif %}
+                               {% endfor %}
+                           {% endif %}>
+                    {{ tag.name.value }}
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn--primary">
+                {{ artwork is null ? 'Crear obra' : 'Guardar cambios' }}
+            </button>
+        </div>
+    </form>
+{% endblock %}

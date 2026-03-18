@@ -1,0 +1,41 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}{{ category is null ? 'Nueva categoría' : 'Editar categoría' }}{% endblock %}
+
+{% block content %}
+    <div class="admin-page-header">
+        <h1>{{ category is null ? 'Nueva categoría' : 'Editar: ' ~ category.name.value }}</h1>
+        <a href="{{ path('admin_categories') }}" class="btn btn--secondary">← Volver</a>
+    </div>
+
+    <form method="post"
+          action="{{ category is null ? path('admin_categories_create') : path('admin_categories_update', {id: category.id.value}) }}"
+          class="admin-form">
+
+        <div class="form-group">
+            <label for="name">Nombre *</label>
+            <input type="text" id="name" name="name" required
+                   value="{{ category is not null ? category.name.value : '' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="slug">Slug *</label>
+            <input type="text" id="slug" name="slug" required
+                   placeholder="ej. grabado"
+                   value="{{ category is not null ? category.slug.value : '' }}">
+            <small>Solo minúsculas y guiones. Se usa en la URL.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="sortOrder">Orden</label>
+            <input type="number" id="sortOrder" name="sortOrder" min="0"
+                   value="{{ category is not null ? category.sortOrder : 0 }}">
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn--primary">
+                {{ category is null ? 'Crear categoría' : 'Guardar cambios' }}
+            </button>
+        </div>
+    </form>
+{% endblock %}
