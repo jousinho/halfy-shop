@@ -1,6 +1,6 @@
 {% extends 'public/layout.html.twig' %}
 
-{% block title %}{{ category.name.value }} — Anna Pownall{% endblock %}
+{% block title %}{{ activeCategory.name.value }} — Anna Pownall{% endblock %}
 
 {% block content %}
     <section class="gallery-section">
@@ -14,7 +14,7 @@
                 {% for cat in categories %}
                 <li>
                     <a href="{{ path('gallery_by_category', {slug: cat.slug.value}) }}"
-                       class="filter-btn {% if cat.id.value == category.id.value %}active{% endif %}">
+                       class="filter-btn {% if cat.id.value == activeCategory.id.value %}active{% endif %}">
                         {{ cat.name.value }}
                     </a>
                 </li>

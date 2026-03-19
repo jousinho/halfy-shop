@@ -44,7 +44,7 @@
             <div class="form-group">
                 <label for="price">Precio (€)</label>
                 <input type="number" id="price" name="price" step="0.01" min="0"
-                       value="{{ artwork is not null and artwork.price is not null ? artwork.price.amount : '' }}">
+                       value="{{ artwork is not null and artwork.price is not null ? artwork.price.value : '' }}">
             </div>
             <div class="form-group form-group--check">
                 <label>

@@ -37,29 +37,39 @@ final class RssXmlBigCartelFeedFetcher implements BigCartelFeedFetcher
 
     private function parseItem(\SimpleXMLElement $item): ?array
     {
-        $shopUrl = (string) $item->link;
+        $namespaces = $item->getNamespaces(true);
+        $g          = isset($namespaces['g']) ? $item->children($namespaces['g']) : null;
+
+        $shopUrl = $g !== null && isset($g->link) ? (string) $g->link : (string) $item->link;
 
         if ($shopUrl === '') {
             return null;
         }
 
-        $imageUrl = $this->extractImageUrl($item);
-        $price    = $this->extractPrice($item);
+        $title       = $g !== null && isset($g->title) ? trim((string) $g->title) : trim((string) $item->title);
+        $imageUrl    = $this->extractImageUrl($item, $g);
+        $price       = $this->extractPrice($item, $namespaces);
 
         return [
-            'title'       => trim((string) $item->title),
+            'title'       => $title,
             'description' => $this->extractDescription($item),
             'price'       => $price,
             'shopUrl'     => $shopUrl,
             'imageUrl'    => $imageUrl,
-            'isAvailable' => $this->extractAvailability($item),
+            'isAvailable' => $this->extractAvailability($item, $namespaces),
         ];
     }
 
-    private function extractImageUrl(\SimpleXMLElement $item): string
+    private function extractImageUrl(\SimpleXMLElement $item, ?\SimpleXMLElement $g): string
     {
-        $enclosure = $item->enclosure;
+        if ($g !== null && isset($g->image_link)) {
+            $url = (string) $g->image_link;
+            if ($url !== '') {
+                return $url;
+            }
+        }
 
+        $enclosure = $item->enclosure;
         if ($enclosure !== null) {
             $url = (string) $enclosure->attributes()['url'];
             if ($url !== '') {
@@ -68,7 +78,6 @@ final class RssXmlBigCartelFeedFetcher implements BigCartelFeedFetcher
         }
 
         $namespaces = $item->getNamespaces(true);
-
         if (isset($namespaces['media'])) {
             $media = $item->children($namespaces['media']);
             if (isset($media->content)) {
@@ -79,10 +88,8 @@ final class RssXmlBigCartelFeedFetcher implements BigCartelFeedFetcher
         return '';
     }
 
-    private function extractPrice(\SimpleXMLElement $item): ?float
+    private function extractPrice(\SimpleXMLElement $item, array $namespaces): ?float
     {
-        $namespaces = $item->getNamespaces(true);
-
         foreach (['g', 'bc'] as $ns) {
             if (isset($namespaces[$ns])) {
                 $children = $item->children($namespaces[$ns]);
@@ -103,10 +110,8 @@ final class RssXmlBigCartelFeedFetcher implements BigCartelFeedFetcher
         return trim($description);
     }
 
-    private function extractAvailability(\SimpleXMLElement $item): bool
+    private function extractAvailability(\SimpleXMLElement $item, array $namespaces): bool
     {
-        $namespaces = $item->getNamespaces(true);
-
         foreach (['g', 'bc'] as $ns) {
             if (isset($namespaces[$ns])) {
                 $children = $item->children($namespaces[$ns]);

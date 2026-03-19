@@ -45,7 +45,7 @@ ul, ol { list-style: none; }
     background-image: url('/assets/img/background.jpg');
     background-size: cover;
     background-position: center;
-    opacity: 0.06;
+    opacity: 0.25;
     pointer-events: none;
     z-index: 0;
 }
@@ -207,6 +207,3 @@ ul, ol { list-style: none; }
     .about-photo img { width: 100%; }
 }
 
-@import url('nav.css');
-@import url('grid.css');
-@import url('lightbox.css');
