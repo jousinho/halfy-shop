@@ -90,9 +90,14 @@ final class SyncWithBigCartelService
 
     private function hasChanged(Artwork $artwork, array $item): bool
     {
+        $newTechnique  = $item['technique'] ?? $artwork->technique()->value();
+        $newDimensions = $item['dimensions'] ?? $artwork->dimensions()->value();
+
         return $artwork->title()->value() !== $item['title']
             || $artwork->isAvailable() !== $item['isAvailable']
-            || $artwork->price()?->value() !== $item['price'];
+            || $artwork->price()?->value() !== $item['price']
+            || $artwork->technique()->value() !== $newTechnique
+            || $artwork->dimensions()->value() !== $newDimensions;
     }
 
     private function createArtworkFromItem(array $item): void
@@ -103,8 +108,8 @@ final class SyncWithBigCartelService
             id:            ArtworkId::generate(),
             title:         ArtworkTitle::create($item['title']),
             description:   $item['description'] !== '' ? $item['description'] : null,
-            technique:     Technique::create('—'),
-            dimensions:    Dimensions::create('—'),
+            technique:     Technique::create($item['technique'] ?? '—'),
+            dimensions:    Dimensions::create($item['dimensions'] ?? '—'),
             year:          ArtworkYear::create((int) date('Y')),
             price:         $item['price'] !== null ? Price::create($item['price']) : null,
             imageFilename: $imageFilename,
@@ -121,8 +126,8 @@ final class SyncWithBigCartelService
         $artwork->update(
             title:       ArtworkTitle::create($item['title']),
             description: $item['description'] !== '' ? $item['description'] : null,
-            technique:   $artwork->technique(),
-            dimensions:  $artwork->dimensions(),
+            technique:   $item['technique'] !== null ? Technique::create($item['technique']) : $artwork->technique(),
+            dimensions:  $item['dimensions'] !== null ? Dimensions::create($item['dimensions']) : $artwork->dimensions(),
             year:        $artwork->year(),
             price:       $item['price'] !== null ? Price::create($item['price']) : null,
             shopUrl:     $item['shopUrl'],

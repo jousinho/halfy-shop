@@ -8,6 +8,8 @@ use App\Application\Shared\BigCartelFeedFetcher;
 
 final class RssXmlBigCartelFeedFetcher implements BigCartelFeedFetcher
 {
+    public function __construct(private readonly DescriptionParser $descriptionParser) {}
+
     public function fetch(string $feedUrl): array
     {
         $xmlContent = @file_get_contents($feedUrl);
@@ -47,12 +49,16 @@ final class RssXmlBigCartelFeedFetcher implements BigCartelFeedFetcher
         }
 
         $title       = $g !== null && isset($g->title) ? trim((string) $g->title) : trim((string) $item->title);
+        $description = $this->extractDescription($item);
+        $parsed      = $this->descriptionParser->parse($description);
         $imageUrl    = $this->extractImageUrl($item, $g);
         $price       = $this->extractPrice($item, $namespaces);
 
         return [
             'title'       => $title,
-            'description' => $this->extractDescription($item),
+            'description' => $description,
+            'technique'   => $parsed['technique'],
+            'dimensions'  => $parsed['dimensions'],
             'price'       => $price,
             'shopUrl'     => $shopUrl,
             'imageUrl'    => $imageUrl,
