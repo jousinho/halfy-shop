@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin{% endblock %} — HalfyShop</title>
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    {% block stylesheets %}{% endblock %}
+</head>
+<body class="admin-body">
+
+    <aside class="admin-sidebar">
+        <div class="admin-sidebar__logo">
+            <a href="{{ path('admin_artworks') }}">HalfyShop</a>
+        </div>
+        <nav class="admin-nav">
+            <ul>
+                <li>
+                    <a href="{{ path('admin_artworks') }}"
+                       class="{% if app.request.pathInfo starts with '/admin/artworks' %}active{% endif %}">
+                        Obras
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('admin_categories') }}"
+                       class="{% if app.request.pathInfo starts with '/admin/categories' %}active{% endif %}">
+                        Categorías
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('admin_tags') }}"
+                       class="{% if app.request.pathInfo starts with '/admin/tags' %}active{% endif %}">
+                        Tags
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('admin_posts') }}"
+                       class="{% if app.request.pathInfo starts with '/admin/posts' %}active{% endif %}">
+                        Blog
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('admin_about') }}"
+                       class="{% if app.request.pathInfo starts with '/admin/about' %}active{% endif %}">
+                        Sobre mí
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('admin_sync') }}"
+                       class="{% if app.request.pathInfo starts with '/admin/sync' %}active{% endif %}">
+                        Sincronización
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="admin-sidebar__footer">
+            <a href="{{ path('home') }}" target="_blank">Ver web →</a>
+            <a href="{{ path('admin_logout') }}">Cerrar sesión</a>
+        </div>
+    </aside>
+
+    <div class="admin-content">
+        <main class="admin-main">
+
+            {% for type in ['success', 'error', 'warning', 'info'] %}
+                {% for message in app.flashes(type) %}
+                <div class="flash flash--{{ type }}">{{ message }}</div>
+                {% endfor %}
+            {% endfor %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,40 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Tags{% endblock %}
+
+{% block content %}
+    <div class="admin-page-header">
+        <h1>Tags</h1>
+        <a href="{{ path('admin_tags_new') }}" class="btn btn--primary">+ Nuevo tag</a>
+    </div>
+
+    {% if tags is empty %}
+        <p class="admin-empty">No hay tags. <a href="{{ path('admin_tags_new') }}">Crear el primero</a>.</p>
+    {% else %}
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Slug</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tag in tags %}
+                <tr>
+                    <td>{{ tag.name.value }}</td>
+                    <td><code>{{ tag.slug }}</code></td>
+                    <td class="table-actions">
+                        <a href="{{ path('admin_tags_edit', {id: tag.id.value}) }}" class="btn btn--sm">Editar</a>
+                        <form method="post" action="{{ path('admin_tags_delete', {id: tag.id.value}) }}"
+                              onsubmit="return confirm('¿Eliminar este tag?')">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_tag_' ~ tag.id.value) }}">
+                            <button type="submit" class="btn btn--sm btn--danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

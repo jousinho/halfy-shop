@@ -1,0 +1,31 @@
+{% extends 'public/layout.html.twig' %}
+
+{% block title %}Sobre mí — Anna Pownall{% endblock %}
+
+{% block content %}
+    <section class="about-section">
+
+        <div class="about-content">
+            {% if page is not null and page.photoFilename is not null %}
+            <div class="about-photo">
+                <img src="/uploads/about/{{ page.photoFilename }}" alt="Anna Pownall">
+            </div>
+            {% endif %}
+
+            <div class="about-text">
+                {% if page is not null and page.content is not null %}
+                    {{ page.content|raw }}
+                {% else %}
+                    <p>Hola, soy Anna Pownall, artista especializada en grabado e ilustración.</p>
+                {% endif %}
+
+                {% if contactEmail is not null %}
+                <p class="about-contact">
+                    <a href="mailto:{{ contactEmail }}" class="contact-link">{{ contactEmail }}</a>
+                </p>
+                {% endif %}
+            </div>
+        </div>
+
+    </section>
+{% endblock %}

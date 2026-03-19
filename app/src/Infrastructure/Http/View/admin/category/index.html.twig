@@ -1,0 +1,42 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Categorías{% endblock %}
+
+{% block content %}
+    <div class="admin-page-header">
+        <h1>Categorías</h1>
+        <a href="{{ path('admin_categories_new') }}" class="btn btn--primary">+ Nueva categoría</a>
+    </div>
+
+    {% if categories is empty %}
+        <p class="admin-empty">No hay categorías. <a href="{{ path('admin_categories_new') }}">Crear la primera</a>.</p>
+    {% else %}
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Slug</th>
+                    <th>Orden</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in categories %}
+                <tr>
+                    <td>{{ category.name.value }}</td>
+                    <td><code>{{ category.slug.value }}</code></td>
+                    <td>{{ category.sortOrder }}</td>
+                    <td class="table-actions">
+                        <a href="{{ path('admin_categories_edit', {id: category.id.value}) }}" class="btn btn--sm">Editar</a>
+                        <form method="post" action="{{ path('admin_categories_delete', {id: category.id.value}) }}"
+                              onsubmit="return confirm('¿Eliminar esta categoría?')">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_category_' ~ category.id.value) }}">
+                            <button type="submit" class="btn btn--sm btn--danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,17 @@
+<article class="artwork-card" data-id="{{ artwork.id.value }}">
+    <a href="/uploads/artworks/{{ artwork.imageFilename }}"
+       class="glightbox artwork-card__link"
+       data-gallery="artworks"
+       data-title="{{ artwork.title.value }}"
+       data-description="<span class='lb-technique'>{{ artwork.technique.value }}</span>{% if artwork.dimensions is not null %}<span class='lb-dimensions'>{{ artwork.dimensions.value }}</span>{% endif %}{% if artwork.year is not null %}<span class='lb-year'>{{ artwork.year.value }}</span>{% endif %}{% if artwork.price is not null %}<span class='lb-price'>{{ artwork.price.value }}€</span>{% endif %}{% if artwork.shopUrl is not null and artwork.isAvailable %}<a href='{{ artwork.shopUrl }}' target='_blank' class='lb-shop-link'>Ver en tienda</a>{% endif %}">
+        <div class="artwork-card__image-wrapper">
+            <img src="/uploads/artworks/thumbnails/{{ artwork.imageFilename }}"
+                 alt="{{ artwork.title.value }}"
+                 loading="lazy"
+                 class="artwork-card__image">
+            <div class="artwork-card__overlay">
+                <span class="artwork-card__title">{{ artwork.title.value }}</span>
+            </div>
+        </div>
+    </a>
+</article>

@@ -1,0 +1,47 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}{{ post is null ? 'Nueva entrada' : 'Editar entrada' }}{% endblock %}
+
+{% block content %}
+    <div class="admin-page-header">
+        <h1>{{ post is null ? 'Nueva entrada' : 'Editar: ' ~ post.title.value }}</h1>
+        <a href="{{ path('admin_posts') }}" class="btn btn--secondary">← Volver</a>
+    </div>
+
+    <form method="post"
+          action="{{ post is null ? path('admin_posts_create') : path('admin_posts_update', {id: post.id.value}) }}"
+          class="admin-form">
+
+        <div class="form-group">
+            <label for="title">Título *</label>
+            <input type="text" id="title" name="title" required
+                   value="{{ post is not null ? post.title.value : '' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="slug">Slug *</label>
+            <input type="text" id="slug" name="slug" required
+                   placeholder="ej. mi-primera-entrada"
+                   value="{{ post is not null ? post.slug.value : '' }}">
+            <small>Solo minúsculas y guiones. Se usa en la URL.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="content">Contenido</label>
+            <textarea id="content" name="content" rows="15">{{ post is not null and post.content is not null ? post.content : '' }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="publishedAt">Fecha de publicación</label>
+            <input type="datetime-local" id="publishedAt" name="publishedAt"
+                   value="{{ post is not null and post.publishedAt is not null ? post.publishedAt|date('Y-m-d\\TH:i') : '' }}">
+            <small>Deja vacío para guardar como borrador.</small>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn--primary">
+                {{ post is null ? 'Crear entrada' : 'Guardar cambios' }}
+            </button>
+        </div>
+    </form>
+{% endblock %}

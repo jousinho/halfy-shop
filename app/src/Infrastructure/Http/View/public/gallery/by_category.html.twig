@@ -1,0 +1,35 @@
+{% extends 'public/layout.html.twig' %}
+
+{% block title %}{{ activeCategory.name.value }} — Anna Pownall{% endblock %}
+
+{% block content %}
+    <section class="gallery-section">
+
+        {% if categories is not empty %}
+        <nav class="category-filter">
+            <ul>
+                <li>
+                    <a href="{{ path('home') }}" class="filter-btn">Todas</a>
+                </li>
+                {% for cat in categories %}
+                <li>
+                    <a href="{{ path('gallery_by_category', {slug: cat.slug.value}) }}"
+                       class="filter-btn {% if cat.id.value == activeCategory.id.value %}active{% endif %}">
+                        {{ cat.name.value }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </nav>
+        {% endif %}
+
+        <div class="artwork-grid" id="artworkGrid">
+            {% for artwork in artworks %}
+                {% include 'public/home/_artwork_card.html.twig' with {artwork: artwork} %}
+            {% else %}
+                <p class="gallery-empty">No hay obras en esta categoría.</p>
+            {% endfor %}
+        </div>
+
+    </section>
+{% endblock %}

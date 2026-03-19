@@ -1,0 +1,50 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Blog{% endblock %}
+
+{% block content %}
+    <div class="admin-page-header">
+        <h1>Entradas del blog</h1>
+        <a href="{{ path('admin_posts_new') }}" class="btn btn--primary">+ Nueva entrada</a>
+    </div>
+
+    {% if posts is empty %}
+        <p class="admin-empty">No hay entradas. <a href="{{ path('admin_posts_new') }}">Crear la primera</a>.</p>
+    {% else %}
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Slug</th>
+                    <th>Publicado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                <tr>
+                    <td>{{ post.title.value }}</td>
+                    <td><code>{{ post.slug.value }}</code></td>
+                    <td>
+                        {% if post.publishedAt is not null %}
+                            <time datetime="{{ post.publishedAt|date('Y-m-d') }}">
+                                {{ post.publishedAt|date('d/m/Y') }}
+                            </time>
+                        {% else %}
+                            <span class="badge badge--draft">Borrador</span>
+                        {% endif %}
+                    </td>
+                    <td class="table-actions">
+                        <a href="{{ path('admin_posts_edit', {id: post.id.value}) }}" class="btn btn--sm">Editar</a>
+                        <form method="post" action="{{ path('admin_posts_delete', {id: post.id.value}) }}"
+                              onsubmit="return confirm('¿Eliminar esta entrada?')">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_post_' ~ post.id.value) }}">
+                            <button type="submit" class="btn btn--sm btn--danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

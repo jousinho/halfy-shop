@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Anna Pownall{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Droid+Serif:ital,wght@0,400;0,700;1,400&family=Tinos:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/nav.css">
+    <link rel="stylesheet" href="/assets/css/grid.css">
+    <link rel="stylesheet" href="/assets/css/lightbox.css">
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+
+    <div class="site-bg"></div>
+
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a href="{{ path('home') }}" class="site-logo">Anna Pownall</a>
+            <nav class="site-nav">
+                <ul>
+                    <li><a href="{{ path('home') }}" {% if app.request.pathInfo == '/' %}class="active"{% endif %}>Obras</a></li>
+                    <li><a href="{{ path('blog_index') }}" {% if app.request.pathInfo starts with '/blog' %}class="active"{% endif %}>Blog</a></li>
+                    <li><a href="{{ path('about') }}" {% if app.request.pathInfo == '/sobre-mi/' %}class="active"{% endif %}>Sobre mí</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="site-main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; {{ "now"|date("Y") }} Anna Pownall</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    <script src="/assets/js/lightbox.js"></script>
+    <script src="/assets/js/grid-animations.js"></script>
+    <script src="/assets/js/category-filter.js"></script>
+    {% block javascripts %}{% endblock %}
+</body>
+</html>
