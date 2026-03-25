@@ -51,6 +51,12 @@
                         Sincronización
                     </a>
                 </li>
+                <li>
+                    <a href="{{ path('admin_theme') }}"
+                       class="{% if app.request.pathInfo starts with '/admin/tema' %}active{% endif %}">
+                        Diseño
+                    </a>
+                </li>
             </ul>
         </nav>
         <div class="admin-sidebar__footer">
