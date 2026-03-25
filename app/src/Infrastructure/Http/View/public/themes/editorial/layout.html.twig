@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Anna Pownall{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <style>
+        :root {
+            --ed-bg:       #f7f4ef;
+            --ed-paper:    #fffffe;
+            --ed-ink:      #1a1611;
+            --ed-muted:    #8a8070;
+            --ed-rule:     #d4cdc0;
+            --ed-accent:   #c0392b;
+            --ed-sidebar:  260px;
+            --ed-font-s:   'Playfair Display', Georgia, serif;
+            --ed-font-b:   'DM Sans', system-ui, sans-serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--ed-bg);
+            color: var(--ed-ink);
+            font-family: var(--ed-font-b);
+            font-weight: 300;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* Top masthead */
+        .ed-masthead {
+            background: var(--ed-ink);
+            color: var(--ed-bg);
+            text-align: center;
+            padding: 2rem 2rem 1.5rem;
+            border-bottom: 4px solid var(--ed-accent);
+        }
+
+        .ed-masthead__eyebrow {
+            font-family: var(--ed-font-b);
+            font-size: 0.6rem;
+            font-weight: 400;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--ed-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .ed-logo {
+            font-family: var(--ed-font-s);
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            color: var(--ed-paper);
+            display: block;
+        }
+
+        .ed-logo em {
+            font-style: italic;
+            font-weight: 400;
+        }
+
+        .ed-masthead__rule {
+            width: 40px;
+            height: 2px;
+            background: var(--ed-accent);
+            margin: 0.85rem auto;
+        }
+
+        .ed-nav {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+        }
+
+        .ed-nav a {
+            font-size: 0.65rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--ed-muted);
+            transition: color 0.2s;
+        }
+
+        .ed-nav a:hover,
+        .ed-nav a.active { color: var(--ed-paper); }
+
+        /* Layout: sidebar + main */
+        .ed-body {
+            display: flex;
+            flex: 1;
+        }
+
+        /* Sidebar */
+        .ed-sidebar {
+            width: var(--ed-sidebar);
+            flex-shrink: 0;
+            background: var(--ed-paper);
+            border-right: 1px solid var(--ed-rule);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .ed-sidebar__heading {
+            font-family: var(--ed-font-b);
+            font-size: 0.55rem;
+            font-weight: 400;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--ed-muted);
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--ed-rule);
+        }
+
+        .ed-sidebar__filter {
+            display: block;
+            font-family: var(--ed-font-b);
+            font-size: 0.72rem;
+            font-weight: 300;
+            color: var(--ed-muted);
+            padding: 0.55rem 0;
+            border-bottom: 1px solid var(--ed-rule);
+            transition: color 0.15s;
+            position: relative;
+        }
+
+        .ed-sidebar__filter::before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 0;
+            background: var(--ed-accent);
+            transition: height 0.2s;
+        }
+
+        .ed-sidebar__filter:hover,
+        .ed-sidebar__filter--active {
+            color: var(--ed-ink);
+        }
+
+        .ed-sidebar__filter:hover::before,
+        .ed-sidebar__filter--active::before {
+            height: 60%;
+        }
+
+        .ed-sidebar__filter--active {
+            font-weight: 400;
+        }
+
+        /* Mobile filter select */
+        .ed-filters-select {
+            display: none;
+            width: 100%;
+            background: var(--ed-paper);
+            color: var(--ed-ink);
+            border: none;
+            border-bottom: 2px solid var(--ed-ink);
+            padding: 0.75rem 1.5rem;
+            font-family: var(--ed-font-b);
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231a1611' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1.25rem center;
+            cursor: pointer;
+        }
+
+        .ed-filters-select:focus { outline: none; }
+
+        /* Content area */
+        .ed-content {
+            flex: 1;
+            padding: 2.5rem;
+            overflow: hidden;
+        }
+
+        .ed-content__header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--ed-ink);
+        }
+
+        .ed-content__title {
+            font-family: var(--ed-font-s);
+            font-size: 1.4rem;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--ed-ink);
+        }
+
+        .ed-content__count {
+            font-size: 0.6rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--ed-muted);
+        }
+
+        /* Grid */
+        .ed-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem 1.5rem;
+        }
+
+        @media (max-width: 1100px) { .ed-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        /* Card */
+        .ed-card {
+            cursor: pointer;
+        }
+
+        .ed-card__link { display: block; }
+
+        .ed-card__image-wrap {
+            aspect-ratio: 3/4;
+            overflow: hidden;
+            background: var(--ed-rule);
+            position: relative;
+        }
+
+        .ed-card__img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+            filter: saturate(90%);
+        }
+
+        .ed-card:hover .ed-card__img {
+            transform: scale(1.04);
+            filter: saturate(105%);
+        }
+
+        .ed-card__badge {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: var(--ed-accent);
+            color: white;
+            font-size: 0.5rem;
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 0.2rem 0.5rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .ed-card:hover .ed-card__badge { opacity: 1; }
+
+        .ed-card__caption {
+            padding: 0.75rem 0 1rem;
+            border-bottom: 1px solid var(--ed-rule);
+        }
+
+        .ed-card__title {
+            font-family: var(--ed-font-s);
+            font-size: 0.95rem;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--ed-ink);
+            line-height: 1.3;
+            margin-bottom: 0.2rem;
+        }
+
+        .ed-card__price {
+            font-size: 0.65rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            color: var(--ed-muted);
+        }
+
+        .ed-card__price--sold {
+            color: var(--ed-accent);
+            font-style: italic;
+        }
+
+        .ed-empty {
+            grid-column: 1/-1;
+            font-family: var(--ed-font-s);
+            font-style: italic;
+            font-size: 1rem;
+            color: var(--ed-muted);
+            padding: 4rem 0;
+        }
+
+        /* Footer */
+        .ed-footer {
+            background: var(--ed-ink);
+            color: var(--ed-muted);
+            text-align: center;
+            padding: 1.25rem;
+            font-size: 0.6rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        /* Blog / About */
+        .blog-section, .blog-post, .about-section {
+            font-family: var(--ed-font-b);
+            color: var(--ed-ink);
+            padding: 2rem 2.5rem;
+        }
+        .blog-post__title { font-family: var(--ed-font-s); font-style: italic; font-size: 2rem; }
+        .blog-post__date, .post-list__date { color: var(--ed-muted); }
+        .post-list__link { border-bottom-color: var(--ed-rule); }
+        .back-link, .contact-link { color: var(--ed-muted); }
+        .section-title { font-family: var(--ed-font-s); font-style: italic; }
+        .about-photo img { border-color: var(--ed-rule); }
+
+        @media (max-width: 760px) {
+            .ed-sidebar       { display: none; }
+            .ed-filters-select { display: block; }
+            .ed-content       { padding: 1.5rem; }
+            .ed-logo          { font-size: 2.2rem; }
+        }
+    </style>
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+    <header class="ed-masthead">
+        <p class="ed-masthead__eyebrow">Obra gráfica e ilustración</p>
+        <a href="{{ path('home') }}" class="ed-logo">Anna <em>Pownall</em></a>
+        <div class="ed-masthead__rule"></div>
+        <nav class="ed-nav">
+            <a href="{{ path('home') }}" {% if app.request.pathInfo == '/' %}class="active"{% endif %}>Obras</a>
+            <a href="{{ path('blog_index') }}" {% if app.request.pathInfo starts with '/blog' %}class="active"{% endif %}>Blog</a>
+            <a href="{{ path('about') }}" {% if app.request.pathInfo == '/sobre-mi/' %}class="active"{% endif %}>Sobre mí</a>
+        </nav>
+    </header>
+
+    <div class="ed-body">
+        {% block sidebar %}{% endblock %}
+        <main class="ed-content">{% block content %}{% endblock %}</main>
+    </div>
+
+    <footer class="ed-footer">&copy; {{ "now"|date("Y") }} Anna Pownall</footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    <script src="/assets/js/lightbox.js"></script>
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

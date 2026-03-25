@@ -1,0 +1,22 @@
+<div class="pk-card">
+    <a href="/uploads/artworks/{{ artwork.imageFilename }}"
+       class="glightbox pk-card__link"
+       data-gallery="artworks"
+       data-title="{{ artwork.title.value }}"
+       data-description="<span class='lb-technique'>{{ artwork.technique.value }}</span>{% if artwork.dimensions is not null %}<span class='lb-dimensions'>{{ artwork.dimensions.value }}</span>{% endif %}{% if artwork.year is not null %}<span class='lb-year'>{{ artwork.year.value }}</span>{% endif %}{% if artwork.price is not null %}<span class='lb-price'>{{ artwork.price.value }}€</span>{% endif %}{% if artwork.shopUrl is not null and artwork.isAvailable %}<a href='{{ artwork.shopUrl }}' target='_blank' class='lb-shop-link'>Ver en tienda</a>{% endif %}">
+        <div class="pk-card__image-wrap">
+            <img src="/uploads/artworks/thumbnails/{{ artwork.imageFilename }}"
+                 alt="{{ artwork.title.value }}"
+                 loading="lazy"
+                 class="pk-card__img">
+        </div>
+    </a>
+    <div class="pk-card__caption">
+        <p class="pk-card__title">{{ artwork.title.value }}</p>
+        {% if artwork.isAvailable and artwork.price is not null %}
+            <p class="pk-card__price">{{ artwork.price.value|number_format(2, ',', '.') }} €</p>
+        {% elseif not artwork.isAvailable %}
+            <p class="pk-card__price">Vendida</p>
+        {% endif %}
+    </div>
+</div>
