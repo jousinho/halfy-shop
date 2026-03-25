@@ -214,15 +214,80 @@ final class SyncWithBigCartelServiceTest extends TestCase
         $this->service->execute();
     }
 
+    public function test_execute__when_feed_item_has_technique__should_create_artwork_with_it(): void
+    {
+        $item = $this->buildFeedItem(technique: 'Acuarela', dimensions: '30 x 40 cm');
+
+        $this->feedFetcher->method('fetch')->willReturn([$item]);
+        $this->artworkRepository->method('findByShopUrl')->willReturn(null);
+        $this->artworkRepository->method('findNextSortOrder')->willReturn(1);
+        $this->imageDownloader->method('download')->willReturn('img.jpg');
+
+        $saved = null;
+        $this->artworkRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($this->callback(function (Artwork $a) use (&$saved) {
+                $saved = $a;
+                return true;
+            }));
+
+        $this->service->execute();
+
+        $this->assertSame('Acuarela', $saved->technique()->value());
+        $this->assertSame('30 x 40 cm', $saved->dimensions()->value());
+    }
+
+    public function test_execute__when_feed_item_has_no_technique__should_create_artwork_with_placeholder(): void
+    {
+        $item = $this->buildFeedItem(technique: null, dimensions: null);
+
+        $this->feedFetcher->method('fetch')->willReturn([$item]);
+        $this->artworkRepository->method('findByShopUrl')->willReturn(null);
+        $this->artworkRepository->method('findNextSortOrder')->willReturn(1);
+        $this->imageDownloader->method('download')->willReturn('img.jpg');
+
+        $saved = null;
+        $this->artworkRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($this->callback(function (Artwork $a) use (&$saved) {
+                $saved = $a;
+                return true;
+            }));
+
+        $this->service->execute();
+
+        $this->assertSame('—', $saved->technique()->value());
+        $this->assertSame('—', $saved->dimensions()->value());
+    }
+
+    public function test_execute__when_technique_changes__should_update(): void
+    {
+        $item    = $this->buildFeedItem(technique: 'Óleo');
+        $artwork = $this->buildArtwork();
+
+        $this->feedFetcher->method('fetch')->willReturn([$item]);
+        $this->artworkRepository->method('findByShopUrl')->willReturn($artwork);
+
+        $log = $this->service->execute();
+
+        $this->assertSame(1, $log->updated());
+    }
+
     private function buildFeedItem(
         string $title = 'Fluye',
         string $shopUrl = 'https://annapownall.bigcartel.com/product/fluye',
         ?float $price = 100.0,
         bool $isAvailable = true,
+        ?string $technique = null,
+        ?string $dimensions = null,
     ): array {
         return [
             'title'       => $title,
             'description' => 'Descripción de la obra',
+            'technique'   => $technique,
+            'dimensions'  => $dimensions,
             'price'       => $price,
             'shopUrl'     => $shopUrl,
             'imageUrl'    => 'https://images.bigcartel.com/fluye.jpg',

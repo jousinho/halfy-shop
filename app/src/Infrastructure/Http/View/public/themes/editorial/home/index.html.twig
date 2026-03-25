@@ -1,0 +1,39 @@
+{% extends 'public/themes/editorial/layout.html.twig' %}
+
+{% block title %}Anna Pownall — Obra gráfica e Ilustración{% endblock %}
+
+{% block sidebar %}
+    {% if categories is not empty %}
+    <aside class="ed-sidebar">
+        <p class="ed-sidebar__heading">Categorías</p>
+        <a href="{{ path('home') }}" class="ed-sidebar__filter ed-sidebar__filter--active">Todas las obras</a>
+        {% for category in categories %}
+        <a href="{{ path('gallery_by_category', {slug: category.slug.value}) }}" class="ed-sidebar__filter">
+            {{ category.name.value }}
+        </a>
+        {% endfor %}
+    </aside>
+    <select class="ed-filters-select" onchange="window.location=this.value">
+        <option value="{{ path('home') }}" selected>Todas las categorías</option>
+        {% for category in categories %}
+        <option value="{{ path('gallery_by_category', {slug: category.slug.value}) }}">
+            {{ category.name.value }}
+        </option>
+        {% endfor %}
+    </select>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="ed-content__header">
+        <h1 class="ed-content__title">Todas las obras</h1>
+        <span class="ed-content__count">{{ artworks|length }} piezas</span>
+    </div>
+    <div class="ed-grid">
+        {% for artwork in artworks %}
+            {% include 'public/themes/editorial/home/_artwork_card.html.twig' with {artwork: artwork} %}
+        {% else %}
+            <p class="ed-empty">No hay obras disponibles.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Diseño de la web{% endblock %}
+
+{% block content %}
+    <div class="admin-page-header">
+        <h1>Diseño de la web</h1>
+        <p class="admin-page-subtitle">Elige el diseño que verán los visitantes. El cambio es inmediato.</p>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="flash flash--success">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="flash flash--error">{{ message }}</div>
+    {% endfor %}
+
+    <div class="theme-list">
+        {% for theme in themes %}
+            <div class="theme-card {% if theme.value == activeTheme.value %}theme-card--active{% endif %}">
+                <div class="theme-card__preview">
+                    {% include 'admin/theme/preview/' ~ theme.value ~ '.html.twig' ignore missing %}
+                </div>
+                <div class="theme-card__body">
+                    <div class="theme-card__info">
+                        <h2 class="theme-card__name">{{ theme.label }}</h2>
+                        <p class="theme-card__description">{{ theme.description }}</p>
+                    </div>
+                    <div class="theme-card__action">
+                        {% if theme.value == activeTheme.value %}
+                            <span class="badge badge--active">Activo</span>
+                        {% else %}
+                            <form method="post" action="{{ path('admin_theme_update') }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('update_theme') }}">
+                                <input type="hidden" name="theme" value="{{ theme.value }}">
+                                <button type="submit" class="btn btn--primary">Activar</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

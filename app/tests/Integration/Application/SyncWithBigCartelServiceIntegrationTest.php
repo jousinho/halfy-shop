@@ -47,6 +47,8 @@ final class SyncWithBigCartelServiceIntegrationTest extends IntegrationTestCase
         $this->feedFetcher->method('fetch')->willReturn([[
             'title'       => 'Nueva Obra',
             'description' => 'Descripción',
+            'technique'   => 'Acuarela',
+            'dimensions'  => '30 x 40 cm',
             'price'       => 150.00,
             'shopUrl'     => 'https://tienda.bigcartel.com/product/nueva-obra',
             'imageUrl'    => 'https://fake.bigcartel.com/img/nueva-obra.jpg',
@@ -84,6 +86,8 @@ final class SyncWithBigCartelServiceIntegrationTest extends IntegrationTestCase
         $this->feedFetcher->method('fetch')->willReturn([[
             'title'       => 'Obra Existente',
             'description' => 'Desc',
+            'technique'   => 'Óleo',
+            'dimensions'  => '30x40',
             'price'       => null,
             'shopUrl'     => 'https://tienda.bigcartel.com/product/existente',
             'imageUrl'    => null,
@@ -117,6 +121,8 @@ final class SyncWithBigCartelServiceIntegrationTest extends IntegrationTestCase
         $this->feedFetcher->method('fetch')->willReturn([[
             'title'       => 'Título Nuevo',
             'description' => 'Desc',
+            'technique'   => 'Óleo',
+            'dimensions'  => '30x40',
             'price'       => null,
             'shopUrl'     => 'https://tienda.bigcartel.com/product/cambio',
             'imageUrl'    => null,

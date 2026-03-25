@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Anna Pownall{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <style>
+        :root {
+            --es-bg:       #0e0e0e;
+            --es-surface:  #161616;
+            --es-text:     #ddd8ce;
+            --es-muted:    #6e6860;
+            --es-border:   #2a2825;
+            --es-accent:   #b89a6e;
+            --es-font:     'Inter', system-ui, sans-serif;
+        }
+
+        body {
+            background: var(--es-bg);
+            color: var(--es-text);
+            font-family: var(--es-font);
+            font-weight: 300;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* Header */
+        .es-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--es-bg);
+            border-bottom: 1px solid var(--es-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            height: 52px;
+        }
+
+        .es-logo {
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--es-text);
+        }
+
+        .es-nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .es-nav a {
+            font-size: 0.68rem;
+            font-weight: 400;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--es-muted);
+            transition: color 0.2s;
+        }
+
+        .es-nav a:hover,
+        .es-nav a.active {
+            color: var(--es-accent);
+        }
+
+        /* Category filter — desktop */
+        .es-filters {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            padding: 0 2rem;
+            border-bottom: 1px solid var(--es-border);
+            height: 40px;
+        }
+
+        .es-filter {
+            font-size: 0.65rem;
+            font-weight: 400;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--es-muted);
+            padding: 0 1.25rem;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            border-right: 1px solid var(--es-border);
+            transition: color 0.2s;
+            white-space: nowrap;
+        }
+
+        .es-filter:first-child { padding-left: 0; }
+
+        .es-filter:hover,
+        .es-filter--active { color: var(--es-accent); }
+
+        /* Category filter — mobile select */
+        .es-filters-select {
+            display: none;
+            width: 100%;
+            background: var(--es-surface);
+            color: var(--es-text);
+            border: none;
+            border-bottom: 1px solid var(--es-border);
+            padding: 0.75rem 1.25rem;
+            font-family: var(--es-font);
+            font-size: 0.72rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236e6860' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1.25rem center;
+            cursor: pointer;
+        }
+
+        .es-filters-select:focus { outline: none; }
+
+        @media (max-width: 640px) {
+            .es-filters        { display: none; }
+            .es-filters-select { display: block; }
+            .es-header         { padding: 0 1rem; }
+            .es-nav            { gap: 1.25rem; }
+            .es-masonry        { columns: 2; }
+            .es-footer         { padding: 1.25rem 1rem; }
+        }
+
+        /* Masonry grid */
+        .es-masonry {
+            columns: 3;
+            column-gap: 3px;
+            padding: 3px;
+        }
+
+        @media (max-width: 900px) { .es-masonry { columns: 2; } }
+        @media (max-width: 500px) { .es-masonry { columns: 1; } }
+
+        /* Artwork card */
+        .es-card {
+            break-inside: avoid;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 3px;
+            cursor: pointer;
+        }
+
+        .es-card__link {
+            display: block;
+        }
+
+        .es-card__img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.6s ease, filter 0.4s ease;
+            filter: brightness(0.92);
+        }
+
+        .es-card:hover .es-card__img {
+            transform: scale(1.02);
+            filter: brightness(1);
+        }
+
+        .es-card__caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem 1rem 0.75rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.72));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .es-card:hover .es-card__caption {
+            opacity: 1;
+        }
+
+        .es-card__title {
+            font-size: 0.72rem;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            color: #f0ebe3;
+        }
+
+        .es-card__price {
+            font-size: 0.65rem;
+            color: var(--es-accent);
+            margin-top: 0.15rem;
+            letter-spacing: 0.06em;
+        }
+
+        .es-empty {
+            text-align: center;
+            color: var(--es-muted);
+            padding: 5rem 2rem;
+            font-size: 0.85rem;
+            letter-spacing: 0.06em;
+        }
+
+        /* Main / Footer */
+        .es-main { flex: 1; }
+
+        .es-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--es-border);
+            font-size: 0.65rem;
+            color: var(--es-muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* Blog / About — adapt base styles to dark theme */
+        .blog-section,
+        .blog-post,
+        .about-section {
+            font-family: var(--es-font);
+            color: var(--es-text);
+        }
+
+        .blog-post__title { color: var(--es-text); }
+        .blog-post__date  { color: var(--es-muted); }
+
+        .post-list__link  { border-bottom-color: var(--es-border); }
+        .post-list__date  { color: var(--es-muted); }
+
+        .about-photo img  { border-color: var(--es-border); }
+        .back-link        { color: var(--es-muted); }
+
+        .section-title    { color: var(--es-muted); }
+        .contact-link     { color: var(--es-muted); }
+    </style>
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+
+    <header class="es-header">
+        <a href="{{ path('home') }}" class="es-logo">Anna Pownall</a>
+        <nav class="es-nav">
+            <a href="{{ path('home') }}" {% if app.request.pathInfo == '/' %}class="active"{% endif %}>Obras</a>
+            <a href="{{ path('blog_index') }}" {% if app.request.pathInfo starts with '/blog' %}class="active"{% endif %}>Blog</a>
+            <a href="{{ path('about') }}" {% if app.request.pathInfo == '/sobre-mi/' %}class="active"{% endif %}>Sobre mí</a>
+        </nav>
+    </header>
+
+    <main class="es-main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="es-footer">
+        &copy; {{ "now"|date("Y") }} Anna Pownall
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    <script src="/assets/js/lightbox.js"></script>
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

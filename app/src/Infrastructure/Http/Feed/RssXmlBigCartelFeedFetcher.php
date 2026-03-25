@@ -8,6 +8,8 @@ use App\Application\Shared\BigCartelFeedFetcher;
 
 final class RssXmlBigCartelFeedFetcher implements BigCartelFeedFetcher
 {
+    public function __construct(private readonly DescriptionParser $descriptionParser) {}
+
     public function fetch(string $feedUrl): array
     {
         $xmlContent = @file_get_contents($feedUrl);
@@ -47,12 +49,16 @@ final class RssXmlBigCartelFeedFetcher implements BigCartelFeedFetcher
         }
 
         $title       = $g !== null && isset($g->title) ? trim((string) $g->title) : trim((string) $item->title);
+        $description = $this->extractDescription($item, $g);
+        $parsed      = $this->descriptionParser->parse($description);
         $imageUrl    = $this->extractImageUrl($item, $g);
         $price       = $this->extractPrice($item, $namespaces);
 
         return [
             'title'       => $title,
-            'description' => $this->extractDescription($item),
+            'description' => $description,
+            'technique'   => $parsed['technique'],
+            'dimensions'  => $parsed['dimensions'],
             'price'       => $price,
             'shopUrl'     => $shopUrl,
             'imageUrl'    => $imageUrl,
@@ -103,11 +109,16 @@ final class RssXmlBigCartelFeedFetcher implements BigCartelFeedFetcher
         return null;
     }
 
-    private function extractDescription(\SimpleXMLElement $item): string
+    private function extractDescription(\SimpleXMLElement $item, ?\SimpleXMLElement $g): string
     {
-        $description = strip_tags((string) $item->description);
+        if ($g !== null && isset($g->description)) {
+            $text = trim((string) $g->description);
+            if ($text !== '') {
+                return $text;
+            }
+        }
 
-        return trim($description);
+        return trim(strip_tags((string) $item->description));
     }
 
     private function extractAvailability(\SimpleXMLElement $item, array $namespaces): bool

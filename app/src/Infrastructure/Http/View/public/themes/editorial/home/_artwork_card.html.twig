@@ -1,0 +1,25 @@
+<div class="ed-card">
+    <a href="/uploads/artworks/{{ artwork.imageFilename }}"
+       class="glightbox ed-card__link"
+       data-gallery="artworks"
+       data-title="{{ artwork.title.value }}"
+       data-description="<span class='lb-technique'>{{ artwork.technique.value }}</span>{% if artwork.dimensions is not null %}<span class='lb-dimensions'>{{ artwork.dimensions.value }}</span>{% endif %}{% if artwork.year is not null %}<span class='lb-year'>{{ artwork.year.value }}</span>{% endif %}{% if artwork.price is not null %}<span class='lb-price'>{{ artwork.price.value }}€</span>{% endif %}{% if artwork.shopUrl is not null and artwork.isAvailable %}<a href='{{ artwork.shopUrl }}' target='_blank' class='lb-shop-link'>Ver en tienda</a>{% endif %}">
+        <div class="ed-card__image-wrap">
+            <img src="/uploads/artworks/thumbnails/{{ artwork.imageFilename }}"
+                 alt="{{ artwork.title.value }}"
+                 loading="lazy"
+                 class="ed-card__img">
+            {% if artwork.isAvailable and artwork.price is not null %}
+                <span class="ed-card__badge">disponible</span>
+            {% endif %}
+        </div>
+    </a>
+    <div class="ed-card__caption">
+        <p class="ed-card__title">{{ artwork.title.value }}</p>
+        {% if artwork.isAvailable and artwork.price is not null %}
+            <p class="ed-card__price">{{ artwork.price.value|number_format(2, ',', '.') }} €</p>
+        {% elseif not artwork.isAvailable %}
+            <p class="ed-card__price ed-card__price--sold">Vendida</p>
+        {% endif %}
+    </div>
+</div>

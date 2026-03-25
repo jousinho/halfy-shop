@@ -1,0 +1,34 @@
+{% extends 'public/themes/estudio/layout.html.twig' %}
+
+{% block title %}Anna Pownall — Obra gráfica e Ilustración{% endblock %}
+
+{% block content %}
+    {% if categories is not empty %}
+    <nav class="es-filters">
+        <a href="{{ path('home') }}" class="es-filter es-filter--active">Todas</a>
+        {% for category in categories %}
+        <a href="{{ path('gallery_by_category', {slug: category.slug.value}) }}" class="es-filter">
+            {{ category.name.value }}
+        </a>
+        {% endfor %}
+    </nav>
+    <select class="es-filters-select" onchange="window.location=this.value">
+        <option value="{{ path('home') }}" selected>Todas las categorías</option>
+        {% for category in categories %}
+        <option value="{{ path('gallery_by_category', {slug: category.slug.value}) }}">
+            {{ category.name.value }}
+        </option>
+        {% endfor %}
+    </select>
+    {% endif %}
+
+    {% if artworks is not empty %}
+    <div class="es-masonry">
+        {% for artwork in artworks %}
+            {% include 'public/themes/estudio/home/_artwork_card.html.twig' with {artwork: artwork} %}
+        {% endfor %}
+    </div>
+    {% else %}
+        <p class="es-empty">No hay obras disponibles.</p>
+    {% endif %}
+{% endblock %}

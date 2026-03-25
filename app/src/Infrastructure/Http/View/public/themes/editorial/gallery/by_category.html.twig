@@ -1,0 +1,41 @@
+{% extends 'public/themes/editorial/layout.html.twig' %}
+
+{% block title %}{{ activeCategory.name.value }} — Anna Pownall{% endblock %}
+
+{% block sidebar %}
+    {% if categories is not empty %}
+    <aside class="ed-sidebar">
+        <p class="ed-sidebar__heading">Categorías</p>
+        <a href="{{ path('home') }}" class="ed-sidebar__filter">Todas las obras</a>
+        {% for cat in categories %}
+        <a href="{{ path('gallery_by_category', {slug: cat.slug.value}) }}"
+           class="ed-sidebar__filter {% if cat.id.value == activeCategory.id.value %}ed-sidebar__filter--active{% endif %}">
+            {{ cat.name.value }}
+        </a>
+        {% endfor %}
+    </aside>
+    <select class="ed-filters-select" onchange="window.location=this.value">
+        <option value="{{ path('home') }}">Todas las categorías</option>
+        {% for cat in categories %}
+        <option value="{{ path('gallery_by_category', {slug: cat.slug.value}) }}"
+                {% if cat.id.value == activeCategory.id.value %}selected{% endif %}>
+            {{ cat.name.value }}
+        </option>
+        {% endfor %}
+    </select>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="ed-content__header">
+        <h1 class="ed-content__title">{{ activeCategory.name.value }}</h1>
+        <span class="ed-content__count">{{ artworks|length }} piezas</span>
+    </div>
+    <div class="ed-grid">
+        {% for artwork in artworks %}
+            {% include 'public/themes/editorial/home/_artwork_card.html.twig' with {artwork: artwork} %}
+        {% else %}
+            <p class="ed-empty">No hay obras en esta categoría.</p>
+        {% endfor %}
+    </div>
+{% endblock %}
