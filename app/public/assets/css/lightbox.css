@@ -41,19 +41,35 @@
 }
 
 /* Datos de la obra dentro del lightbox */
-.lb-technique,
-.lb-dimensions,
-.lb-year,
-.lb-price {
-    display: inline-block;
-    margin-right: 1rem;
+.lb-technique {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    margin-bottom: 0.35rem;
+}
+
+.lb-dimensions {
+    display: inline;
     font-size: 0.8rem;
     color: var(--color-muted);
 }
 
+.lb-year {
+    display: inline;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+}
+
+.lb-dimensions + .lb-year::before {
+    content: ' · ';
+}
+
 .lb-price {
+    display: block;
+    font-size: 0.95rem;
     color: var(--color-text);
     font-weight: 700;
+    margin-top: 0.6rem;
 }
 
 .lb-shop-link {
