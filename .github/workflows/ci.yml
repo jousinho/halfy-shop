@@ -38,6 +38,8 @@ jobs:
 
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
+        env:
+          DATABASE_URL: postgresql://app:secret@localhost:5432/halfyshop_test?serverVersion=16&charset=utf8
 
       - name: Run migrations
         run: php bin/console doctrine:migrations:migrate --env=test --no-interaction
