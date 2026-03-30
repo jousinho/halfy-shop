@@ -77,8 +77,12 @@ final class ThemeAwareTwigLoader implements LoaderInterface
     private function activeTheme(): string
     {
         if ($this->cachedTheme === null) {
-            $setting           = $this->settingRepository->findByKey('active_theme');
-            $this->cachedTheme = $setting?->value() ?? 'default';
+            try {
+                $setting = $this->settingRepository->findByKey('active_theme');
+                $this->cachedTheme = $setting?->value() ?? 'default';
+            } catch (\Exception) {
+                $this->cachedTheme = 'default';
+            }
         }
 
         return $this->cachedTheme;
