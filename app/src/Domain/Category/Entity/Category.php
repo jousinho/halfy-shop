@@ -43,10 +43,14 @@ final class Category
         return new self($id->value(), $name->value(), $slug->value(), $sortOrder);
     }
 
-    public function update(CategoryName $name, CategorySlug $slug, int $sortOrder): void
+    public function update(CategoryName $name, CategorySlug $slug): void
     {
-        $this->name      = $name->value();
-        $this->slug      = $slug->value();
+        $this->name = $name->value();
+        $this->slug = $slug->value();
+    }
+
+    public function setSortOrder(int $sortOrder): void
+    {
         $this->sortOrder = $sortOrder;
     }
 

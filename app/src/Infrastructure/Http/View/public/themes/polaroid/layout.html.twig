@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Jost:wght@300;400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+    <link rel="stylesheet" href="/assets/css/lightbox.css">
     <link rel="stylesheet" href="/assets/css/main.css">
     <style>
         :root {
@@ -155,15 +156,12 @@
         .pk-card__link { display: block; }
 
         .pk-card__image-wrap {
-            aspect-ratio: 1;
             overflow: hidden;
-            background: var(--pk-border);
         }
 
         .pk-card__img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: auto;
             display: block;
             transition: filter 0.3s;
             filter: sepia(8%) saturate(90%);

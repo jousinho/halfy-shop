@@ -10,11 +10,10 @@ final class UpdateCategoryCommand
         public readonly string $id,
         public readonly string $name,
         public readonly string $slug,
-        public readonly int $sortOrder,
     ) {}
 
-    public static function create(string $id, string $name, string $slug, int $sortOrder): self
+    public static function create(string $id, string $name, string $slug): self
     {
-        return new self($id, $name, $slug, $sortOrder);
+        return new self($id, $name, $slug);
     }
 }

@@ -12,7 +12,7 @@
         <p class="admin-empty">No hay obras. <a href="{{ path('admin_artworks_new') }}">Crear la primera</a>.</p>
     {% else %}
         <p class="admin-hint">Arrastra para reordenar.</p>
-        <ul class="artwork-list sortable-list" id="sortableArtworks">
+        <ul class="artwork-list sortable-list" id="sortableArtworks" data-reorder-url="{{ path('admin_artworks_reorder') }}">
             {% for artwork in artworks %}
             <li class="artwork-list__item" data-id="{{ artwork.id.value }}">
                 <span class="drag-handle">⠿</span>

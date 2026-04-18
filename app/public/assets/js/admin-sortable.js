@@ -1,27 +1,31 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
-    initAdminSortable();
+    document.querySelectorAll('.sortable-list').forEach(list => {
+        initSortable(list);
+    });
 });
 
-function initAdminSortable() {
-    const list = document.getElementById('sortableArtworks');
-    if (!list || typeof Sortable === 'undefined') return;
+function initSortable(list) {
+    if (typeof Sortable === 'undefined') return;
+
+    const url = list.dataset.reorderUrl;
+    if (!url) return;
 
     Sortable.create(list, {
         handle: '.drag-handle',
         animation: 150,
         ghostClass: 'sortable-ghost',
         chosenClass: 'sortable-chosen',
-        onEnd: () => { saveOrder(list); },
+        onEnd: () => saveOrder(list, url),
     });
 }
 
-function saveOrder(list) {
+function saveOrder(list, url) {
     const ids = Array.from(list.querySelectorAll('[data-id]'))
         .map(el => el.dataset.id);
 
-    fetch('/admin/artworks/reorder', {
+    fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ids }),

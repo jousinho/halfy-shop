@@ -8,11 +8,14 @@ use App\Application\Category\Create\CreateCategoryCommand;
 use App\Application\Category\Create\CreateCategoryService;
 use App\Application\Category\Delete\DeleteCategoryCommand;
 use App\Application\Category\Delete\DeleteCategoryService;
+use App\Application\Category\Reorder\ReorderCategoriesCommand;
+use App\Application\Category\Reorder\ReorderCategoriesService;
 use App\Application\Category\Update\UpdateCategoryCommand;
 use App\Application\Category\Update\UpdateCategoryService;
 use App\Domain\Category\Repository\CategoryRepository;
 use App\Domain\Category\ValueObject\CategoryId;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -25,6 +28,7 @@ final class AdminCategoryController extends AbstractController
         private readonly CreateCategoryService $createCategoryService,
         private readonly UpdateCategoryService $updateCategoryService,
         private readonly DeleteCategoryService $deleteCategoryService,
+        private readonly ReorderCategoriesService $reorderCategoriesService,
     ) {}
 
     #[Route('', name: 'admin_categories', methods: ['GET'])]
@@ -45,14 +49,22 @@ final class AdminCategoryController extends AbstractController
     public function create(Request $request): Response
     {
         $this->createCategoryService->execute(CreateCategoryCommand::create(
-            name:      $request->request->getString('name'),
-            slug:      $request->request->getString('slug'),
-            sortOrder: $request->request->getInt('sortOrder'),
+            name: $request->request->getString('name'),
+            slug: $request->request->getString('slug'),
         ));
 
         $this->addFlash('success', 'Categoría creada correctamente.');
 
         return $this->redirectToRoute('admin_categories');
+    }
+
+    #[Route('/reorder', name: 'admin_categories_reorder', methods: ['POST'])]
+    public function reorder(Request $request): JsonResponse
+    {
+        $ids = json_decode($request->getContent(), true)['ids'] ?? [];
+        $this->reorderCategoriesService->execute(ReorderCategoriesCommand::create($ids));
+
+        return new JsonResponse(['ok' => true]);
     }
 
     #[Route('/{id}/edit', name: 'admin_categories_edit', methods: ['GET'])]
@@ -71,10 +83,9 @@ final class AdminCategoryController extends AbstractController
     public function update(string $id, Request $request): Response
     {
         $this->updateCategoryService->execute(UpdateCategoryCommand::create(
-            id:        $id,
-            name:      $request->request->getString('name'),
-            slug:      $request->request->getString('slug'),
-            sortOrder: $request->request->getInt('sortOrder'),
+            id:   $id,
+            name: $request->request->getString('name'),
+            slug: $request->request->getString('slug'),
         ));
 
         $this->addFlash('success', 'Categoría actualizada correctamente.');

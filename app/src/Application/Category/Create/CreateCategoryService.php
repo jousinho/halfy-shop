@@ -24,11 +24,13 @@ final class CreateCategoryService
 
     private function buildCategory(CreateCategoryCommand $command): Category
     {
+        $nextSortOrder = count($this->categoryRepository->findAll()) + 1;
+
         return Category::create(
             id:        CategoryId::generate(),
             name:      CategoryName::create($command->name),
             slug:      CategorySlug::create($command->slug),
-            sortOrder: $command->sortOrder,
+            sortOrder: $nextSortOrder,
         );
     }
 

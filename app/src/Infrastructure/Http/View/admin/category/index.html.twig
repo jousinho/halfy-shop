@@ -11,32 +11,34 @@
     {% if categories is empty %}
         <p class="admin-empty">No hay categorías. <a href="{{ path('admin_categories_new') }}">Crear la primera</a>.</p>
     {% else %}
-        <table class="admin-table">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Slug</th>
-                    <th>Orden</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for category in categories %}
-                <tr>
-                    <td>{{ category.name.value }}</td>
-                    <td><code>{{ category.slug.value }}</code></td>
-                    <td>{{ category.sortOrder }}</td>
-                    <td class="table-actions">
-                        <a href="{{ path('admin_categories_edit', {id: category.id.value}) }}" class="btn btn--sm">Editar</a>
-                        <form method="post" action="{{ path('admin_categories_delete', {id: category.id.value}) }}"
-                              onsubmit="return confirm('¿Eliminar esta categoría?')">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete_category_' ~ category.id.value) }}">
-                            <button type="submit" class="btn btn--sm btn--danger">Eliminar</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <p class="admin-hint">Arrastra para reordenar.</p>
+        <ul class="artwork-list sortable-list" id="sortableCategories" data-reorder-url="{{ path('admin_categories_reorder') }}">
+            {% for category in categories %}
+            <li class="artwork-list__item" data-id="{{ category.id.value }}">
+                <span class="drag-handle">⠿</span>
+                <div class="artwork-list__info">
+                    <span class="artwork-list__title">{{ category.name.value }}</span>
+                    <span class="artwork-list__technique"><code>{{ category.slug.value }}</code></span>
+                </div>
+                <div class="artwork-list__actions">
+                    <a href="{{ path('admin_categories_edit', {id: category.id.value}) }}" class="btn btn--sm">Editar</a>
+                    <form method="post" action="{{ path('admin_categories_delete', {id: category.id.value}) }}"
+                          onsubmit="return confirm('¿Eliminar esta categoría?')">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_category_' ~ category.id.value) }}">
+                        <button type="submit" class="btn btn--sm btn--danger">Eliminar</button>
+                    </form>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
     {% endif %}
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sortablejs@1/Sortable.min.css">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1/Sortable.min.js"></script>
+    <script src="/assets/js/admin-sortable.js"></script>
 {% endblock %}

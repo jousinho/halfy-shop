@@ -11,10 +11,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 final class GdImageProcessor implements ImageProcessor
 {
     private const MAX_WARNING_SIZE_BYTES = 10 * 1024 * 1024;
-    private const THUMBNAIL_WIDTH        = 600;
-    private const THUMBNAIL_HEIGHT       = 400;
-    private const LIGHTBOX_MAX_WIDTH     = 1400;
-    private const JPEG_QUALITY           = 85;
+    private const THUMBNAIL_MAX_WIDTH   = 800;
+    private const LIGHTBOX_MAX_WIDTH    = 1400;
+    private const JPEG_QUALITY          = 85;
 
     public function __construct(
         private readonly string $uploadsDir,
@@ -73,7 +72,7 @@ final class GdImageProcessor implements ImageProcessor
         $dir = $this->uploadsDir . '/' . $destinationDir . '/thumbnails';
         $this->ensureDirectoryExists($dir);
 
-        $thumbnail = $this->cropToFit($source, self::THUMBNAIL_WIDTH, self::THUMBNAIL_HEIGHT);
+        $thumbnail = $this->scaleToWidth($source, self::THUMBNAIL_MAX_WIDTH);
         imagejpeg($thumbnail, $dir . '/' . $filename, self::JPEG_QUALITY);
         imagedestroy($thumbnail);
     }
@@ -86,30 +85,6 @@ final class GdImageProcessor implements ImageProcessor
         $lightbox = $this->scaleToWidth($source, self::LIGHTBOX_MAX_WIDTH);
         imagejpeg($lightbox, $dir . '/' . $filename, self::JPEG_QUALITY);
         imagedestroy($lightbox);
-    }
-
-    private function cropToFit(\GdImage $source, int $targetWidth, int $targetHeight): \GdImage
-    {
-        $srcWidth  = imagesx($source);
-        $srcHeight = imagesy($source);
-
-        $scale = max($targetWidth / $srcWidth, $targetHeight / $srcHeight);
-
-        $cropWidth  = (int) round($targetWidth / $scale);
-        $cropHeight = (int) round($targetHeight / $scale);
-        $cropX      = (int) round(($srcWidth - $cropWidth) / 2);
-        $cropY      = (int) round(($srcHeight - $cropHeight) / 2);
-
-        $thumbnail = imagecreatetruecolor($targetWidth, $targetHeight);
-        imagecopyresampled(
-            $thumbnail, $source,
-            0, 0,
-            $cropX, $cropY,
-            $targetWidth, $targetHeight,
-            $cropWidth, $cropHeight,
-        );
-
-        return $thumbnail;
     }
 
     private function scaleToWidth(\GdImage $source, int $maxWidth): \GdImage

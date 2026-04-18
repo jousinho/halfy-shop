@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+    <link rel="stylesheet" href="/assets/css/lightbox.css">
     <link rel="stylesheet" href="/assets/css/main.css">
     <style>
         :root {
@@ -160,26 +161,22 @@
         /* Card */
         .ne-card {
             position: relative;
-            overflow: hidden;
-            aspect-ratio: 1;
-            background: var(--ne-surface);
             cursor: pointer;
+            overflow: hidden;
         }
 
-        .ne-card__link { display: block; width: 100%; height: 100%; }
+        .ne-card__link { display: block; }
 
         .ne-card__img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: auto;
             display: block;
             filter: grayscale(30%) brightness(0.8);
-            transition: filter 0.4s ease, transform 0.4s ease;
+            transition: filter 0.4s ease;
         }
 
         .ne-card:hover .ne-card__img {
             filter: grayscale(0%) brightness(1);
-            transform: scale(1.05);
         }
 
         .ne-card__glow {

@@ -2,6 +2,69 @@
 
 {% block title %}Sobre mí{% endblock %}
 
+{% block stylesheets %}
+<style>
+.wysiwyg-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 8px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+}
+
+.wysiwyg-toolbar button {
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    padding: 3px 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    line-height: 1;
+    color: #333;
+}
+
+.wysiwyg-toolbar button:hover {
+    background: #e0e0e0;
+    border-color: #ccc;
+}
+
+.wysiwyg-toolbar button.active {
+    background: #d0d0d0;
+    border-color: #aaa;
+}
+
+.wysiwyg-toolbar select {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 3px 6px;
+    font-size: 0.8rem;
+    background: #fff;
+    cursor: pointer;
+}
+
+.wysiwyg-toolbar .separator {
+    width: 1px;
+    height: 20px;
+    background: #ccc;
+    margin: 0 4px;
+}
+
+#wysiwyg-editor {
+    min-height: 200px;
+    padding: 12px 12px 12px 28px;
+    border: 1px solid #ddd;
+    border-radius: 0 0 4px 4px;
+    outline: none;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    background: #fff;
+}
+</style>
+{% endblock %}
+
 {% block content %}
     <div class="admin-page-header">
         <h1>Sobre mí</h1>
@@ -10,12 +73,29 @@
     <form method="post"
           action="{{ path('admin_about_update') }}"
           enctype="multipart/form-data"
-          class="admin-form">
+          class="admin-form"
+          id="about-form">
 
         <div class="form-group">
-            <label for="content">Texto biográfico</label>
-            <textarea id="content" name="content" rows="12">{{ page is not null and page.content is not null ? page.content : '' }}</textarea>
-            <small>Puedes usar HTML básico.</small>
+            <label>Texto biográfico</label>
+            <div class="wysiwyg-toolbar">
+                <button type="button" data-cmd="bold"><b>N</b></button>
+                <button type="button" data-cmd="italic"><i>C</i></button>
+                <button type="button" data-cmd="underline"><u>S</u></button>
+                <div class="separator"></div>
+                <select id="font-size">
+                    <option value="">Tamaño</option>
+                    <option value="1">Pequeño</option>
+                    <option value="3">Normal</option>
+                    <option value="5">Grande</option>
+                    <option value="7">Muy grande</option>
+                </select>
+                <div class="separator"></div>
+                <button type="button" data-cmd="insertUnorderedList">&#8226; Lista</button>
+                <button type="button" data-cmd="removeFormat">Limpiar</button>
+            </div>
+            <div id="wysiwyg-editor" contenteditable="true">{{ page is not null and page.content is not null ? page.content|raw : '' }}</div>
+            <textarea id="content" name="content" style="display:none"></textarea>
         </div>
 
         <div class="form-group">
@@ -37,4 +117,34 @@
             <button type="submit" class="btn btn--primary">Guardar cambios</button>
         </div>
     </form>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+(function () {
+    const editor   = document.getElementById('wysiwyg-editor');
+    const textarea = document.getElementById('content');
+    const form     = document.getElementById('about-form');
+
+    document.querySelectorAll('.wysiwyg-toolbar [data-cmd]').forEach(btn => {
+        btn.addEventListener('mousedown', e => {
+            e.preventDefault();
+            document.execCommand(btn.dataset.cmd, false, null);
+            editor.focus();
+        });
+    });
+
+    document.getElementById('font-size').addEventListener('change', function () {
+        if (this.value) {
+            document.execCommand('fontSize', false, this.value);
+            this.value = '';
+            editor.focus();
+        }
+    });
+
+    form.addEventListener('submit', () => {
+        textarea.value = editor.innerHTML;
+    });
+})();
+</script>
 {% endblock %}
