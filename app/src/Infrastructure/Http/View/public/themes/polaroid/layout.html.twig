@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{ app.request.locale }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Anna Pownall{% endblock %}</title>
+    {% set _route = app.request.attributes.get('_route') %}
+    {% set _route_params = app.request.attributes.get('_route_params') ?? {} %}
+    <link rel="alternate" hreflang="es" href="{{ url(_route, _route_params|merge({'_locale': 'es'})) }}">
+    <link rel="alternate" hreflang="en" href="{{ url(_route, _route_params|merge({'_locale': 'en'})) }}">
+    <link rel="alternate" hreflang="x-default" href="{{ url(_route, _route_params|merge({'_locale': 'es'})) }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Jost:wght@300;400&display=swap" rel="stylesheet">
@@ -39,6 +44,7 @@
 
         /* Header */
         .pk-header {
+            position: relative;
             text-align: center;
             padding: 2.5rem 2rem 1.5rem;
         }
@@ -219,6 +225,25 @@
             .pk-filters        { display: none; }
             .pk-filters-select { display: block; }
         }
+
+        .pk-locale {
+            position: absolute;
+            top: 1rem;
+            right: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.65rem;
+            letter-spacing: 0.12em;
+        }
+        .pk-locale a {
+            color: var(--pk-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .pk-locale a:hover,
+        .pk-locale a.active { color: var(--pk-text); }
+        .pk-locale span { color: var(--pk-border); }
     </style>
     {% block stylesheets %}{% endblock %}
 </head>
@@ -226,10 +251,15 @@
     <header class="pk-header">
         <a href="{{ path('home') }}" class="pk-logo">Anna Pownall</a>
         <nav class="pk-nav">
-            <a href="{{ path('home') }}" {% if app.request.pathInfo == '/' %}class="active"{% endif %}>Obras</a>
-            <a href="{{ path('blog_index') }}" {% if app.request.pathInfo starts with '/blog' %}class="active"{% endif %}>Blog</a>
-            <a href="{{ path('about') }}" {% if app.request.pathInfo == '/sobre-mi/' %}class="active"{% endif %}>Sobre mí</a>
+            <a href="{{ path('home') }}" {% if app.request.attributes.get('_route') == 'home' %}class="active"{% endif %}>{{ 'nav.works'|trans }}</a>
+            <a href="{{ path('blog_index') }}" {% if app.request.attributes.get('_route') starts with 'blog' %}class="active"{% endif %}>{{ 'nav.blog'|trans }}</a>
+            <a href="{{ path('about') }}" {% if app.request.attributes.get('_route') == 'about' %}class="active"{% endif %}>{{ 'nav.about'|trans }}</a>
         </nav>
+        <div class="pk-locale">
+            <a href="{{ path(_route, _route_params|merge({'_locale': 'es'})) }}" {% if app.request.locale == 'es' %}class="active"{% endif %}>ES</a>
+            <span>|</span>
+            <a href="{{ path(_route, _route_params|merge({'_locale': 'en'})) }}" {% if app.request.locale == 'en' %}class="active"{% endif %}>EN</a>
+        </div>
     </header>
 
     <main class="pk-main">{% block content %}{% endblock %}</main>

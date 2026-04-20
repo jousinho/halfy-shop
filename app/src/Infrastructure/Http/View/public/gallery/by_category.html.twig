@@ -9,7 +9,7 @@
         <nav class="category-filter">
             <ul>
                 <li>
-                    <a href="{{ path('home') }}" class="filter-btn">Todas</a>
+                    <a href="{{ path('home') }}" class="filter-btn">{{ 'filter.all'|trans }}</a>
                 </li>
                 {% for cat in categories %}
                 <li>
@@ -27,7 +27,7 @@
             {% for artwork in artworks %}
                 {% include 'public/home/_artwork_card.html.twig' with {artwork: artwork} %}
             {% else %}
-                <p class="gallery-empty">No hay obras en esta categoría.</p>
+                <p class="gallery-empty">{{ 'gallery.empty_category'|trans }}</p>
             {% endfor %}
         </div>
 

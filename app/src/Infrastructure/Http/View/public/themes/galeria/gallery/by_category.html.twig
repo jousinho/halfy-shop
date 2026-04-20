@@ -5,7 +5,7 @@
 {% block content %}
     {% if categories is not empty %}
     <nav class="gl-filters">
-        <a href="{{ path('home') }}" class="gl-filter">Todas</a>
+        <a href="{{ path('home') }}" class="gl-filter">{{ 'filter.all'|trans }}</a>
         {% for cat in categories %}
         <a href="{{ path('gallery_by_category', {slug: cat.slug.value}) }}"
            class="gl-filter {% if cat.id.value == activeCategory.id.value %}gl-filter--active{% endif %}">
@@ -14,7 +14,7 @@
         {% endfor %}
     </nav>
     <select class="gl-filters-select" onchange="window.location=this.value">
-        <option value="{{ path('home') }}">Todas las categorías</option>
+        <option value="{{ path('home') }}">{{ 'filter.all_categories'|trans }}</option>
         {% for cat in categories %}
         <option value="{{ path('gallery_by_category', {slug: cat.slug.value}) }}"
                 {% if cat.id.value == activeCategory.id.value %}selected{% endif %}>
@@ -28,7 +28,7 @@
         {% for artwork in artworks %}
             {% include 'public/themes/galeria/home/_artwork_card.html.twig' with {artwork: artwork} %}
         {% else %}
-            <p class="gl-empty">No hay obras en esta categoría.</p>
+            <p class="gl-empty">{{ 'gallery.empty_category'|trans }}</p>
         {% endfor %}
     </div>
 {% endblock %}

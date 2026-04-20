@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{ app.request.locale }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Anna Pownall{% endblock %}</title>
+    {% set _route = app.request.attributes.get('_route') %}
+    {% set _route_params = app.request.attributes.get('_route_params') ?? {} %}
+    <link rel="alternate" hreflang="es" href="{{ url(_route, _route_params|merge({'_locale': 'es'})) }}">
+    <link rel="alternate" hreflang="en" href="{{ url(_route, _route_params|merge({'_locale': 'en'})) }}">
+    <link rel="alternate" hreflang="x-default" href="{{ url(_route, _route_params|merge({'_locale': 'es'})) }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -42,12 +47,12 @@
             border-bottom: 1px solid var(--es-border);
             display: flex;
             align-items: center;
-            justify-content: space-between;
             padding: 0 2rem;
             height: 52px;
         }
 
         .es-logo {
+            flex: 1;
             font-size: 0.75rem;
             font-weight: 500;
             letter-spacing: 0.22em;
@@ -240,6 +245,24 @@
 
         .section-title    { color: var(--es-muted); }
         .contact-link     { color: var(--es-muted); }
+
+        .es-locale {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.3rem;
+            font-size: 0.65rem;
+            letter-spacing: 0.12em;
+        }
+        .es-locale a {
+            color: var(--es-muted, #888);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .es-locale a:hover,
+        .es-locale a.active { color: var(--es-text, #222); }
+        .es-locale span { color: #ccc; }
     </style>
     {% block stylesheets %}{% endblock %}
 </head>
@@ -248,10 +271,15 @@
     <header class="es-header">
         <a href="{{ path('home') }}" class="es-logo">Anna Pownall</a>
         <nav class="es-nav">
-            <a href="{{ path('home') }}" {% if app.request.pathInfo == '/' %}class="active"{% endif %}>Obras</a>
-            <a href="{{ path('blog_index') }}" {% if app.request.pathInfo starts with '/blog' %}class="active"{% endif %}>Blog</a>
-            <a href="{{ path('about') }}" {% if app.request.pathInfo == '/sobre-mi/' %}class="active"{% endif %}>Sobre mí</a>
+            <a href="{{ path('home') }}" {% if app.request.attributes.get('_route') == 'home' %}class="active"{% endif %}>{{ 'nav.works'|trans }}</a>
+            <a href="{{ path('blog_index') }}" {% if app.request.attributes.get('_route') starts with 'blog' %}class="active"{% endif %}>{{ 'nav.blog'|trans }}</a>
+            <a href="{{ path('about') }}" {% if app.request.attributes.get('_route') == 'about' %}class="active"{% endif %}>{{ 'nav.about'|trans }}</a>
         </nav>
+        <div class="es-locale">
+            <a href="{{ path(_route, _route_params|merge({'_locale': 'es'})) }}" {% if app.request.locale == 'es' %}class="active"{% endif %}>ES</a>
+            <span>|</span>
+            <a href="{{ path(_route, _route_params|merge({'_locale': 'en'})) }}" {% if app.request.locale == 'en' %}class="active"{% endif %}>EN</a>
+        </div>
     </header>
 
     <main class="es-main">

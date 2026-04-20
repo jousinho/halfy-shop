@@ -1,11 +1,11 @@
 {% extends 'public/themes/polaroid/layout.html.twig' %}
 
-{% block title %}Anna Pownall — Obra gráfica e Ilustración{% endblock %}
+{% block title %}{{ 'page.title'|trans }}{% endblock %}
 
 {% block content %}
     {% if categories is not empty %}
     <nav class="pk-filters">
-        <a href="{{ path('home') }}" class="pk-filter pk-filter--active">Todas</a>
+        <a href="{{ path('home') }}" class="pk-filter pk-filter--active">{{ 'filter.all'|trans }}</a>
         {% for category in categories %}
         <a href="{{ path('gallery_by_category', {slug: category.slug.value}) }}" class="pk-filter">
             {{ category.name.value }}
@@ -13,7 +13,7 @@
         {% endfor %}
     </nav>
     <select class="pk-filters-select" onchange="window.location=this.value">
-        <option value="{{ path('home') }}" selected>Todas las categorías</option>
+        <option value="{{ path('home') }}" selected>{{ 'filter.all_categories'|trans }}</option>
         {% for category in categories %}
         <option value="{{ path('gallery_by_category', {slug: category.slug.value}) }}">
             {{ category.name.value }}
@@ -26,7 +26,7 @@
         {% for artwork in artworks %}
             {% include 'public/themes/polaroid/home/_artwork_card.html.twig' with {artwork: artwork} %}
         {% else %}
-            <p class="pk-empty">No hay obras disponibles.</p>
+            <p class="pk-empty">{{ 'gallery.empty'|trans }}</p>
         {% endfor %}
     </div>
 {% endblock %}

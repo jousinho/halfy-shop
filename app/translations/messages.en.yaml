@@ -1,0 +1,38 @@
+nav:
+    works: Works
+    about: About me
+    blog: Blog
+
+page:
+    title: Anna Pownall — Printmaking & Illustration
+
+gallery:
+    empty: No artworks available.
+    empty_category: No artworks in this category.
+
+filter:
+    all: All
+    all_categories: All categories
+    all_works: All works
+    categories: Categories
+    pieces: pieces
+
+badge:
+    sold: Sold
+    sold_neon: '[ sold ]'
+    available: available
+
+shop:
+    view: View in shop
+
+blog:
+    title: Blog
+    no_posts: No published posts.
+    back: '← Back to blog'
+
+about:
+    title: About me
+    fallback: 'Hello, I am Anna Pownall, an artist specialising in printmaking and illustration.'
+
+editorial:
+    eyebrow: Graphic art & illustration

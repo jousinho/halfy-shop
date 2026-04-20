@@ -1,7 +1,20 @@
 # yaml-language-server: $schema=../vendor/symfony/routing/Loader/schema/routing.schema.json
 
-controllers:
+locale_redirect:
+    path: /
+    controller: App\Infrastructure\Http\Controller\Public\LocaleRedirectController::index
+
+public_controllers:
     resource:
-        path: ../src/Infrastructure/Http/Controller/
-        namespace: App\Infrastructure\Http\Controller
+        path: ../src/Infrastructure/Http/Controller/Public/
+        namespace: App\Infrastructure\Http\Controller\Public
+    type: attribute
+    prefix: /{_locale}
+    requirements:
+        _locale: es|en
+
+admin_controllers:
+    resource:
+        path: ../src/Infrastructure/Http/Controller/Admin/
+        namespace: App\Infrastructure\Http\Controller\Admin
     type: attribute

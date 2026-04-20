@@ -58,3 +58,28 @@
     border-bottom-color: var(--color-text);
     text-decoration: none;
 }
+
+/* Locale switcher */
+.locale-switcher {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.68rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+}
+
+.locale-switcher a {
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.locale-switcher a:hover,
+.locale-switcher a.active {
+    color: var(--color-text);
+}
+
+.locale-switcher span {
+    color: var(--color-border);
+}

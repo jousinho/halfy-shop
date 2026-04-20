@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{ app.request.locale }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Anna Pownall{% endblock %}</title>
+    {% set _route = app.request.attributes.get('_route') %}
+    {% set _route_params = app.request.attributes.get('_route_params') ?? {} %}
+    <link rel="alternate" hreflang="es" href="{{ url(_route, _route_params|merge({'_locale': 'es'})) }}">
+    <link rel="alternate" hreflang="en" href="{{ url(_route, _route_params|merge({'_locale': 'en'})) }}">
+    <link rel="alternate" hreflang="x-default" href="{{ url(_route, _route_params|merge({'_locale': 'es'})) }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -277,6 +282,23 @@
             .ne-header         { padding: 0 1rem; }
             .ne-nav            { gap: 1.25rem; }
         }
+
+        .ne-locale {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.65rem;
+            letter-spacing: 0.12em;
+            margin-left: auto;
+        }
+        .ne-locale a {
+            color: var(--ne-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .ne-locale a:hover,
+        .ne-locale a.active { color: var(--ne-neon); }
+        .ne-locale span { color: var(--ne-border); }
     </style>
     {% block stylesheets %}{% endblock %}
 </head>
@@ -284,10 +306,15 @@
     <header class="ne-header">
         <a href="{{ path('home') }}" class="ne-logo">Anna Pownall</a>
         <nav class="ne-nav">
-            <a href="{{ path('home') }}" {% if app.request.pathInfo == '/' %}class="active"{% endif %}>Obras</a>
-            <a href="{{ path('blog_index') }}" {% if app.request.pathInfo starts with '/blog' %}class="active"{% endif %}>Blog</a>
-            <a href="{{ path('about') }}" {% if app.request.pathInfo == '/sobre-mi/' %}class="active"{% endif %}>Sobre mí</a>
+            <a href="{{ path('home') }}" {% if app.request.attributes.get('_route') == 'home' %}class="active"{% endif %}>{{ 'nav.works'|trans }}</a>
+            <a href="{{ path('blog_index') }}" {% if app.request.attributes.get('_route') starts with 'blog' %}class="active"{% endif %}>{{ 'nav.blog'|trans }}</a>
+            <a href="{{ path('about') }}" {% if app.request.attributes.get('_route') == 'about' %}class="active"{% endif %}>{{ 'nav.about'|trans }}</a>
         </nav>
+        <div class="ne-locale">
+            <a href="{{ path(_route, _route_params|merge({'_locale': 'es'})) }}" {% if app.request.locale == 'es' %}class="active"{% endif %}>ES</a>
+            <span style="color:var(--ne-muted)">|</span>
+            <a href="{{ path(_route, _route_params|merge({'_locale': 'en'})) }}" {% if app.request.locale == 'en' %}class="active"{% endif %}>EN</a>
+        </div>
     </header>
 
     <main class="ne-main">{% block content %}{% endblock %}</main>

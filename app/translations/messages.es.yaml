@@ -1,0 +1,38 @@
+nav:
+    works: Obras
+    about: Sobre mí
+    blog: Blog
+
+page:
+    title: Anna Pownall — Grabado e Ilustración
+
+gallery:
+    empty: No hay obras disponibles.
+    empty_category: No hay obras en esta categoría.
+
+filter:
+    all: Todas
+    all_categories: Todas las categorías
+    all_works: Todas las obras
+    categories: Categorías
+    pieces: piezas
+
+badge:
+    sold: Vendida
+    sold_neon: '[ vendida ]'
+    available: disponible
+
+shop:
+    view: Ver en tienda
+
+blog:
+    title: Blog
+    no_posts: No hay entradas publicadas.
+    back: '← Volver al blog'
+
+about:
+    title: Sobre mí
+    fallback: 'Hola, soy Anna Pownall, artista especializada en grabado e ilustración.'
+
+editorial:
+    eyebrow: Obra gráfica e ilustración

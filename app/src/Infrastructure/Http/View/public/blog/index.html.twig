@@ -7,7 +7,7 @@
         <h1 class="section-title">Blog</h1>
 
         {% if posts is empty %}
-            <p class="blog-empty">No hay entradas publicadas.</p>
+            <p class="blog-empty">{{ 'blog.no_posts'|trans }}</p>
         {% else %}
             <ul class="post-list">
                 {% for post in posts %}

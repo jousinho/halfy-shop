@@ -1,6 +1,6 @@
 {% extends 'public/layout.html.twig' %}
 
-{% block title %}Anna Pownall — Grabado e Ilustración{% endblock %}
+{% block title %}{{ 'page.title'|trans }}{% endblock %}
 
 {% block content %}
     <section class="gallery-section">
@@ -29,7 +29,7 @@
             {% for artwork in artworks %}
                 {% include 'public/home/_artwork_card.html.twig' with {artwork: artwork} %}
             {% else %}
-                <p class="gallery-empty">No hay obras disponibles.</p>
+                <p class="gallery-empty">{{ 'gallery.empty'|trans }}</p>
             {% endfor %}
         </div>
 

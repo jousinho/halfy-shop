@@ -16,7 +16,7 @@
                 {% if page is not null and page.content is not null %}
                     {{ page.content|raw }}
                 {% else %}
-                    <p>Hola, soy Anna Pownall, artista especializada en grabado e ilustración.</p>
+                    <p>{{ 'about.fallback'|trans }}</p>
                 {% endif %}
 
                 {% if contactEmail is not null %}
