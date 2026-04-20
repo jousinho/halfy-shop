@@ -22,7 +22,7 @@ final class AboutPageTest extends TestCase
 
     public function test_create_about_page__when_no_photo__should_return_null(): void
     {
-        $page = AboutPage::create(AboutPageId::generate(), 'Contenido', null);
+        $page = AboutPage::create(AboutPageId::generate(), 'Contenido', null, null);
 
         $this->assertNull($page->photoFilename());
     }
@@ -41,7 +41,7 @@ final class AboutPageTest extends TestCase
     {
         $page = $this->buildAboutPage();
 
-        $page->update('<p>Nuevo contenido</p>', 'nueva-foto.jpg');
+        $page->update('<p>Nuevo contenido</p>', null, 'nueva-foto.jpg');
 
         $this->assertSame('<p>Nuevo contenido</p>', $page->content());
         $this->assertSame('nueva-foto.jpg', $page->photoFilename());
@@ -53,7 +53,7 @@ final class AboutPageTest extends TestCase
         $updatedAt = $page->updatedAt();
 
         sleep(1);
-        $page->update('Nuevo contenido', null);
+        $page->update('Nuevo contenido', null, null);
 
         $this->assertGreaterThan($updatedAt, $page->updatedAt());
     }
@@ -62,7 +62,7 @@ final class AboutPageTest extends TestCase
     {
         $page = $this->buildAboutPage();
 
-        $page->update('Contenido', null);
+        $page->update('Contenido', null, null);
 
         $this->assertNull($page->photoFilename());
     }
@@ -72,7 +72,7 @@ final class AboutPageTest extends TestCase
         $id   = AboutPageId::generate();
         $page = $this->buildAboutPage($id);
 
-        $page->update('Nuevo contenido', null);
+        $page->update('Nuevo contenido', null, null);
 
         $this->assertSame($id->value(), $page->id()->value());
     }
@@ -82,6 +82,7 @@ final class AboutPageTest extends TestCase
         return AboutPage::create(
             id:            $id ?? AboutPageId::generate(),
             content:       '<p>Texto biográfico</p>',
+            contentEn:     null,
             photoFilename: 'anna.jpg',
         );
     }

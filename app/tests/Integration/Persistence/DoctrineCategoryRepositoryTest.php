@@ -89,6 +89,7 @@ final class DoctrineCategoryRepositoryTest extends IntegrationTestCase
         return Category::create(
             CategoryId::generate(),
             CategoryName::create($name),
+            null,
             CategorySlug::create($slug),
             $sortOrder,
         );

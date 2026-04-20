@@ -37,8 +37,9 @@ final class UpdateCategoryService
     private function updateCategoryData(Category $category, UpdateCategoryCommand $command): void
     {
         $category->update(
-            name: CategoryName::create($command->name),
-            slug: CategorySlug::create($command->slug),
+            name:   CategoryName::create($command->name),
+            nameEn: $command->nameEn,
+            slug:   CategorySlug::create($command->slug),
         );
     }
 

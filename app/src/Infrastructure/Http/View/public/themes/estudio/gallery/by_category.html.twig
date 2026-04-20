@@ -1,6 +1,6 @@
 {% extends 'public/themes/estudio/layout.html.twig' %}
 
-{% block title %}{{ activeCategory.name.value }} — Anna Pownall{% endblock %}
+{% block title %}{{ activeCategory.nameForLocale(app.request.locale) }} — Anna Pownall{% endblock %}
 
 {% block content %}
     {% if categories is not empty %}
@@ -9,7 +9,7 @@
         {% for cat in categories %}
         <a href="{{ path('gallery_by_category', {slug: cat.slug.value}) }}"
            class="es-filter {% if cat.id.value == activeCategory.id.value %}es-filter--active{% endif %}">
-            {{ cat.name.value }}
+            {{ cat.nameForLocale(app.request.locale) }}
         </a>
         {% endfor %}
     </nav>
@@ -18,7 +18,7 @@
         {% for cat in categories %}
         <option value="{{ path('gallery_by_category', {slug: cat.slug.value}) }}"
                 {% if cat.id.value == activeCategory.id.value %}selected{% endif %}>
-            {{ cat.name.value }}
+            {{ cat.nameForLocale(app.request.locale) }}
         </option>
         {% endfor %}
     </select>

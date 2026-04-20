@@ -54,9 +54,12 @@ final class UpdateArtworkService
     private function updateArtworkData(Artwork $artwork, UpdateArtworkCommand $command): void
     {
         $artwork->update(
-            title:       ArtworkTitle::create($command->title),
-            description: $command->description,
-            technique:   Technique::create($command->technique),
+            title:         ArtworkTitle::create($command->title),
+            titleEn:       $command->titleEn,
+            description:   $command->description,
+            descriptionEn: $command->descriptionEn,
+            technique:     Technique::create($command->technique),
+            techniqueEn:   $command->techniqueEn,
             dimensions:  Dimensions::create($command->dimensions),
             year:        ArtworkYear::create($command->year),
             price:       $command->price !== null ? Price::create($command->price) : null,

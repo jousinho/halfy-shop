@@ -110,4 +110,12 @@ docker compose exec php-cli php bin/phpunit
 
 # Sync con Big Cartel
 docker compose exec php-cli php bin/console app:sync:bigcartel
+
+# Limpiar caché tras modificar templates o clases PHP
+# php-cli y php son contenedores DISTINTOS con OPcache separado.
+# cache:clear solo afecta al contenedor donde se ejecuta.
+# Después de cambios en código PHP o Twig, reiniciar el contenedor php:
+docker compose restart php
+# O limpiar la caché en el contenedor correcto:
+docker compose exec php php bin/console cache:clear
 ```

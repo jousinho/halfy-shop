@@ -21,14 +21,14 @@ final class UpdateAboutService
     {
         $page          = $this->findOrCreateAboutPage();
         $photoFilename = $this->resolvePhotoFilename($page, $command->photoFile, $command->removePhoto);
-        $page->update($command->content, $photoFilename);
+        $page->update($command->content, $command->contentEn, $photoFilename);
         $this->save($page);
     }
 
     private function findOrCreateAboutPage(): AboutPage
     {
         return $this->aboutPageRepository->findPage()
-            ?? AboutPage::create(AboutPageId::generate(), '', null);
+            ?? AboutPage::create(AboutPageId::generate(), '', null, null);
     }
 
     private function resolvePhotoFilename(

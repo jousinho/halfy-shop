@@ -248,9 +248,12 @@ final class CreateArtworkServiceTest extends TestCase
         array $tagIds = [],
     ): CreateArtworkCommand {
         return CreateArtworkCommand::create(
-            title:       'Fluye',
-            description: null,
-            technique:   'Óleo',
+            title:         'Fluye',
+            titleEn:       null,
+            description:   null,
+            descriptionEn: null,
+            technique:     'Óleo',
+            techniqueEn:   null,
             dimensions:  '50x60',
             year:        2024,
             price:       $price,
@@ -267,6 +270,7 @@ final class CreateArtworkServiceTest extends TestCase
         return Category::create(
             CategoryId::generate(),
             CategoryName::create('Ilustración'),
+            null,
             CategorySlug::create('ilustracion'),
             1,
         );

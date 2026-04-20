@@ -1,6 +1,6 @@
 {% extends 'public/themes/editorial/layout.html.twig' %}
 
-{% block title %}{{ activeCategory.name.value }} — Anna Pownall{% endblock %}
+{% block title %}{{ activeCategory.nameForLocale(app.request.locale) }} — Anna Pownall{% endblock %}
 
 {% block sidebar %}
     {% if categories is not empty %}
@@ -10,7 +10,7 @@
         {% for cat in categories %}
         <a href="{{ path('gallery_by_category', {slug: cat.slug.value}) }}"
            class="ed-sidebar__filter {% if cat.id.value == activeCategory.id.value %}ed-sidebar__filter--active{% endif %}">
-            {{ cat.name.value }}
+            {{ cat.nameForLocale(app.request.locale) }}
         </a>
         {% endfor %}
     </aside>
@@ -19,7 +19,7 @@
         {% for cat in categories %}
         <option value="{{ path('gallery_by_category', {slug: cat.slug.value}) }}"
                 {% if cat.id.value == activeCategory.id.value %}selected{% endif %}>
-            {{ cat.name.value }}
+            {{ cat.nameForLocale(app.request.locale) }}
         </option>
         {% endfor %}
     </select>
@@ -28,7 +28,7 @@
 
 {% block content %}
     <div class="ed-content__header">
-        <h1 class="ed-content__title">{{ activeCategory.name.value }}</h1>
+        <h1 class="ed-content__title">{{ activeCategory.nameForLocale(app.request.locale) }}</h1>
         <span class="ed-content__count">{{ artworks|length }} {{ 'filter.pieces'|trans }}</span>
     </div>
     <div class="ed-grid">

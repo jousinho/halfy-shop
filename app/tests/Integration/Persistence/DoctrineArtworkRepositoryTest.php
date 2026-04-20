@@ -102,6 +102,7 @@ final class DoctrineArtworkRepositoryTest extends IntegrationTestCase
         $category = Category::create(
             CategoryId::generate(),
             CategoryName::create('Grabado'),
+            null,
             CategorySlug::create('grabado'),
             1,
         );
@@ -122,8 +123,11 @@ final class DoctrineArtworkRepositoryTest extends IntegrationTestCase
         return Artwork::create(
             id:            ArtworkId::generate(),
             title:         ArtworkTitle::create('Test Artwork'),
+            titleEn:       null,
             description:   null,
+            descriptionEn: null,
             technique:     Technique::create('Óleo'),
+            techniqueEn:   null,
             dimensions:    Dimensions::create('30x40'),
             year:          ArtworkYear::create(2024),
             price:         null,

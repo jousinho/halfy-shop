@@ -489,3 +489,22 @@ code { font-size: 0.82rem; background: var(--admin-bg); padding: 0.1em 0.35em; b
     display: flex;
     align-items: center;
 }
+
+.btn-translate {
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 2px 8px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: #555;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    text-transform: none;
+    letter-spacing: 0;
+    vertical-align: middle;
+}
+
+.btn-translate:hover { background: #e0e0e0; }
+.btn-translate:disabled { opacity: 0.5; cursor: not-allowed; }

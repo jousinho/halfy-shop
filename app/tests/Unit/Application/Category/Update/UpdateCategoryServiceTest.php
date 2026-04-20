@@ -34,12 +34,11 @@ final class UpdateCategoryServiceTest extends TestCase
         $this->categoryRepository->method('save');
 
         $this->service->execute(UpdateCategoryCommand::create(
-            $category->id()->value(), 'Nuevo Nombre', 'nuevo-nombre', 5,
+            $category->id()->value(), 'Nuevo Nombre', null, 'nuevo-nombre',
         ));
 
         $this->assertSame('Nuevo Nombre', $category->name()->value());
         $this->assertSame('nuevo-nombre', $category->slug()->value());
-        $this->assertSame(5, $category->sortOrder());
     }
 
     public function test_execute__should_save_after_update(): void
@@ -50,7 +49,7 @@ final class UpdateCategoryServiceTest extends TestCase
         $this->categoryRepository->expects($this->once())->method('save')->with($category);
 
         $this->service->execute(UpdateCategoryCommand::create(
-            $category->id()->value(), 'Nombre', 'nombre', 1,
+            $category->id()->value(), 'Nombre', null, 'nombre',
         ));
     }
 
@@ -61,7 +60,7 @@ final class UpdateCategoryServiceTest extends TestCase
         $this->expectException(\RuntimeException::class);
 
         $this->service->execute(UpdateCategoryCommand::create(
-            CategoryId::generate()->value(), 'Nombre', 'nombre', 1,
+            CategoryId::generate()->value(), 'Nombre', null, 'nombre',
         ));
     }
 
@@ -74,7 +73,7 @@ final class UpdateCategoryServiceTest extends TestCase
         $this->categoryRepository->method('save');
 
         $this->service->execute(UpdateCategoryCommand::create(
-            $originalId, 'Otro Nombre', 'otro-nombre', 2,
+            $originalId, 'Otro Nombre', null, 'otro-nombre',
         ));
 
         $this->assertSame($originalId, $category->id()->value());
@@ -85,6 +84,7 @@ final class UpdateCategoryServiceTest extends TestCase
         return Category::create(
             CategoryId::generate(),
             CategoryName::create('Original'),
+            null,
             CategorySlug::create('original'),
             1,
         );

@@ -10,8 +10,11 @@ final class CreateArtworkCommand
 {
     private function __construct(
         public readonly string $title,
+        public readonly ?string $titleEn,
         public readonly ?string $description,
+        public readonly ?string $descriptionEn,
         public readonly string $technique,
+        public readonly ?string $techniqueEn,
         public readonly string $dimensions,
         public readonly int $year,
         public readonly ?float $price,
@@ -24,8 +27,11 @@ final class CreateArtworkCommand
 
     public static function create(
         string $title,
+        ?string $titleEn,
         ?string $description,
+        ?string $descriptionEn,
         string $technique,
+        ?string $techniqueEn,
         string $dimensions,
         int $year,
         ?float $price,
@@ -37,8 +43,11 @@ final class CreateArtworkCommand
     ): self {
         return new self(
             $title,
+            $titleEn,
             $description,
+            $descriptionEn,
             $technique,
+            $techniqueEn,
             $dimensions,
             $year,
             $price,

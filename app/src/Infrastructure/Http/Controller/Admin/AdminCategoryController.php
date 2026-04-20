@@ -49,8 +49,9 @@ final class AdminCategoryController extends AbstractController
     public function create(Request $request): Response
     {
         $this->createCategoryService->execute(CreateCategoryCommand::create(
-            name: $request->request->getString('name'),
-            slug: $request->request->getString('slug'),
+            name:   $request->request->getString('name'),
+            nameEn: $request->request->getString('nameEn') ?: null,
+            slug:   $request->request->getString('slug'),
         ));
 
         $this->addFlash('success', 'Categoría creada correctamente.');
@@ -83,9 +84,10 @@ final class AdminCategoryController extends AbstractController
     public function update(string $id, Request $request): Response
     {
         $this->updateCategoryService->execute(UpdateCategoryCommand::create(
-            id:   $id,
-            name: $request->request->getString('name'),
-            slug: $request->request->getString('slug'),
+            id:     $id,
+            name:   $request->request->getString('name'),
+            nameEn: $request->request->getString('nameEn') ?: null,
+            slug:   $request->request->getString('slug'),
         ));
 
         $this->addFlash('success', 'Categoría actualizada correctamente.');

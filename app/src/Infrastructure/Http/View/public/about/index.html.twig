@@ -14,7 +14,7 @@
 
             <div class="about-text">
                 {% if page is not null and page.content is not null %}
-                    {{ page.content|raw }}
+                    {{ page.contentForLocale(app.request.locale)|raw }}
                 {% else %}
                     <p>{{ 'about.fallback'|trans }}</p>
                 {% endif %}

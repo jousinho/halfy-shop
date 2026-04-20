@@ -54,6 +54,7 @@ final class DeleteCategoryServiceTest extends TestCase
         return Category::create(
             CategoryId::generate(),
             CategoryName::create('Ilustración'),
+            null,
             CategorySlug::create('ilustracion'),
             1,
         );

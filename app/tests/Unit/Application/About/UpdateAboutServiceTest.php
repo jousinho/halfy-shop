@@ -40,7 +40,7 @@ final class UpdateAboutServiceTest extends TestCase
 
         $this->aboutPageRepository->expects($this->once())->method('save')->with($page);
 
-        $this->service->execute(UpdateAboutCommand::create('<p>Nuevo contenido</p>', null));
+        $this->service->execute(UpdateAboutCommand::create('<p>Nuevo contenido</p>', null, null));
 
         $this->assertSame('<p>Nuevo contenido</p>', $page->content());
     }
@@ -56,7 +56,7 @@ final class UpdateAboutServiceTest extends TestCase
                 $capturedPage = $page;
             });
 
-        $this->service->execute(UpdateAboutCommand::create('Contenido inicial', null));
+        $this->service->execute(UpdateAboutCommand::create('Contenido inicial', null, null));
 
         $this->assertNotNull($capturedPage);
         $this->assertSame('Contenido inicial', $capturedPage->content());
@@ -76,7 +76,7 @@ final class UpdateAboutServiceTest extends TestCase
             ->with($photoFile, 'about')
             ->willReturn('new-photo.jpg');
 
-        $this->service->execute(UpdateAboutCommand::create('Contenido', $photoFile));
+        $this->service->execute(UpdateAboutCommand::create('Contenido', null, $photoFile));
 
         $this->assertSame('new-photo.jpg', $page->photoFilename());
     }
@@ -89,7 +89,7 @@ final class UpdateAboutServiceTest extends TestCase
         $this->aboutPageRepository->method('save');
         $this->imageProcessor->expects($this->never())->method('process');
 
-        $this->service->execute(UpdateAboutCommand::create('Contenido', null));
+        $this->service->execute(UpdateAboutCommand::create('Contenido', null, null));
 
         $this->assertSame('existing-photo.jpg', $page->photoFilename());
     }
@@ -102,7 +102,7 @@ final class UpdateAboutServiceTest extends TestCase
         $this->aboutPageRepository->method('save');
         $this->imageProcessor->expects($this->never())->method('process');
 
-        $this->service->execute(UpdateAboutCommand::create('Contenido', null, removePhoto: true));
+        $this->service->execute(UpdateAboutCommand::create('Contenido', null, null, removePhoto: true));
 
         $this->assertNull($page->photoFilename());
     }
@@ -117,7 +117,7 @@ final class UpdateAboutServiceTest extends TestCase
 
         $this->imageProcessor->method('process')->willReturn('nueva.jpg');
 
-        $this->service->execute(UpdateAboutCommand::create('Contenido', $photoFile, removePhoto: true));
+        $this->service->execute(UpdateAboutCommand::create('Contenido', null, $photoFile, removePhoto: true));
 
         $this->assertSame('nueva.jpg', $page->photoFilename());
     }
@@ -127,6 +127,7 @@ final class UpdateAboutServiceTest extends TestCase
         return AboutPage::create(
             id:            AboutPageId::generate(),
             content:       '<p>Contenido original</p>',
+            contentEn:     null,
             photoFilename: $photoFilename,
         );
     }

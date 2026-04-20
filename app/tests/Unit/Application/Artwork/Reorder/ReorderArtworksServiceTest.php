@@ -121,8 +121,11 @@ final class ReorderArtworksServiceTest extends TestCase
         return Artwork::create(
             id:            ArtworkId::generate(),
             title:         ArtworkTitle::create('Obra'),
+            titleEn:       null,
             description:   null,
+            descriptionEn: null,
             technique:     Technique::create('Óleo'),
+            techniqueEn:   null,
             dimensions:    Dimensions::create('50x60'),
             year:          ArtworkYear::create(2023),
             price:         null,

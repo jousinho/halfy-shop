@@ -107,8 +107,11 @@ final class SyncWithBigCartelService
         $artwork = Artwork::create(
             id:            ArtworkId::generate(),
             title:         ArtworkTitle::create($item['title']),
+            titleEn:       null,
             description:   $item['description'] !== '' ? $item['description'] : null,
+            descriptionEn: null,
             technique:     Technique::create($item['technique'] ?? '—'),
+            techniqueEn:   null,
             dimensions:    Dimensions::create($item['dimensions'] ?? '—'),
             year:          ArtworkYear::create((int) date('Y')),
             price:         $item['price'] !== null ? Price::create($item['price']) : null,
@@ -124,9 +127,12 @@ final class SyncWithBigCartelService
     private function updateArtworkFromItem(Artwork $artwork, array $item): void
     {
         $artwork->update(
-            title:       ArtworkTitle::create($item['title']),
-            description: $item['description'] !== '' ? $item['description'] : null,
-            technique:   $item['technique'] !== null ? Technique::create($item['technique']) : $artwork->technique(),
+            title:         ArtworkTitle::create($item['title']),
+            titleEn:       $artwork->titleEn(),
+            description:   $item['description'] !== '' ? $item['description'] : null,
+            descriptionEn: $artwork->descriptionEn(),
+            technique:     $item['technique'] !== null ? Technique::create($item['technique']) : $artwork->technique(),
+            techniqueEn:   $artwork->techniqueEn(),
             dimensions:  $item['dimensions'] !== null ? Dimensions::create($item['dimensions']) : $artwork->dimensions(),
             year:        $artwork->year(),
             price:       $item['price'] !== null ? Price::create($item['price']) : null,

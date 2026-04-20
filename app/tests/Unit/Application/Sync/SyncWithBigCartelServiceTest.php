@@ -304,8 +304,11 @@ final class SyncWithBigCartelServiceTest extends TestCase
         return Artwork::create(
             id:            ArtworkId::generate(),
             title:         ArtworkTitle::create($title),
+            titleEn:       null,
             description:   null,
+            descriptionEn: null,
             technique:     Technique::create('—'),
+            techniqueEn:   null,
             dimensions:    Dimensions::create('—'),
             year:          ArtworkYear::create((int) date('Y')),
             price:         $price !== null ? Price::create($price) : null,

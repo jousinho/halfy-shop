@@ -8,11 +8,12 @@ final class CreateCategoryCommand
 {
     private function __construct(
         public readonly string $name,
+        public readonly ?string $nameEn,
         public readonly string $slug,
     ) {}
 
-    public static function create(string $name, string $slug): self
+    public static function create(string $name, ?string $nameEn, string $slug): self
     {
-        return new self($name, $slug);
+        return new self($name, $nameEn, $slug);
     }
 }

@@ -18,8 +18,8 @@ filter:
     pieces: piezas
 
 badge:
-    sold: Vendida
-    sold_neon: '[ vendida ]'
+    sold: Agotado
+    sold_neon: '[ agotado ]'
     available: disponible
 
 shop:

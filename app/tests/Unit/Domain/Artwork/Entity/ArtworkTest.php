@@ -53,7 +53,10 @@ final class ArtworkTest extends TestCase
         $artwork->update(
             ArtworkTitle::create('Nuevo título'),
             null,
+            null,
+            null,
             Technique::create('Acuarela'),
+            null,
             Dimensions::create('20x30 cm'),
             ArtworkYear::create(2020),
             Price::create(50.00),
@@ -113,8 +116,11 @@ final class ArtworkTest extends TestCase
         $artwork = Artwork::create(
             id:            ArtworkId::generate(),
             title:         ArtworkTitle::create('Sin precio'),
+            titleEn:       null,
             description:   null,
+            descriptionEn: null,
             technique:     Technique::create('Fotopolímero'),
+            techniqueEn:   null,
             dimensions:    Dimensions::create('35x37 cm'),
             year:          ArtworkYear::create(2012),
             price:         null,
@@ -147,8 +153,11 @@ final class ArtworkTest extends TestCase
 
         $artwork->update(
             ArtworkTitle::create('Título actualizado'),
+            null,
             'Nueva descripción',
+            null,
             Technique::create('Acuarela'),
+            null,
             Dimensions::create('20x30 cm'),
             ArtworkYear::create(2020),
             Price::create(200.00),
@@ -263,8 +272,11 @@ final class ArtworkTest extends TestCase
         return Artwork::create(
             id:            $id ?? ArtworkId::generate(),
             title:         ArtworkTitle::create('Podría volar'),
+            titleEn:       null,
             description:   'Una obra de grabado',
+            descriptionEn: null,
             technique:     Technique::create('Fotopolímero'),
+            techniqueEn:   null,
             dimensions:    Dimensions::create('35x37 cm'),
             year:          ArtworkYear::create(2012),
             price:         Price::create(120.00),
@@ -280,6 +292,7 @@ final class ArtworkTest extends TestCase
         return Category::create(
             CategoryId::generate(),
             CategoryName::create('Grabados'),
+            null,
             CategorySlug::create('grabados'),
             1,
         );

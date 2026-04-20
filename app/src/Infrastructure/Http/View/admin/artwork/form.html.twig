@@ -13,16 +13,36 @@
           enctype="multipart/form-data"
           class="admin-form">
 
-        <div class="form-group">
-            <label for="title">Título *</label>
-            <input type="text" id="title" name="title" required
-                   value="{{ artwork is not null ? artwork.title.value : '' }}">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="title">Título (ES) *</label>
+                <input type="text" id="title" name="title" required
+                       value="{{ artwork is not null ? artwork.title.value : '' }}">
+            </div>
+            <div class="form-group">
+                <label for="titleEn">
+                    Título (EN)
+                    <button type="button" class="btn-translate" data-src="title" data-dst="titleEn">Traducir →</button>
+                </label>
+                <input type="text" id="titleEn" name="titleEn"
+                       value="{{ artwork is not null and artwork.titleEn is not null ? artwork.titleEn : '' }}">
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="technique">Técnica *</label>
-            <input type="text" id="technique" name="technique" required
-                   value="{{ artwork is not null ? artwork.technique.value : '' }}">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="technique">Técnica (ES) *</label>
+                <input type="text" id="technique" name="technique" required
+                       value="{{ artwork is not null ? artwork.technique.value : '' }}">
+            </div>
+            <div class="form-group">
+                <label for="techniqueEn">
+                    Técnica (EN)
+                    <button type="button" class="btn-translate" data-src="technique" data-dst="techniqueEn">Traducir →</button>
+                </label>
+                <input type="text" id="techniqueEn" name="techniqueEn"
+                       value="{{ artwork is not null and artwork.techniqueEn is not null ? artwork.techniqueEn : '' }}">
+            </div>
         </div>
 
         <div class="form-row">
@@ -62,8 +82,16 @@
         </div>
 
         <div class="form-group">
-            <label for="description">Descripción</label>
+            <label for="description">Descripción (ES)</label>
             <textarea id="description" name="description" rows="4">{{ artwork is not null and artwork.description is not null ? artwork.description : '' }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="descriptionEn">
+                Descripción (EN)
+                <button type="button" class="btn-translate" data-src="description" data-dst="descriptionEn">Traducir →</button>
+            </label>
+            <textarea id="descriptionEn" name="descriptionEn" rows="4">{{ artwork is not null and artwork.descriptionEn is not null ? artwork.descriptionEn : '' }}</textarea>
         </div>
 
         <div class="form-group">
@@ -118,4 +146,32 @@
             </button>
         </div>
     </form>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+document.querySelectorAll('.btn-translate').forEach(btn => {
+    btn.addEventListener('click', async () => {
+        const src  = document.getElementById(btn.dataset.src);
+        const dst  = document.getElementById(btn.dataset.dst);
+        const text = src.value.trim();
+        if (!text) return;
+
+        btn.disabled    = true;
+        btn.textContent = '…';
+
+        try {
+            const url  = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=en&dt=t&q=' + encodeURIComponent(text);
+            const res  = await fetch(url);
+            const data = await res.json();
+            dst.value  = data[0].map(s => s[0]).join('');
+        } catch (e) {
+            alert('Error al traducir. Inténtalo de nuevo.');
+        } finally {
+            btn.disabled    = false;
+            btn.textContent = 'Traducir →';
+        }
+    });
+});
+</script>
 {% endblock %}

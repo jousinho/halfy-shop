@@ -29,6 +29,7 @@ final class CreateCategoryService
         return Category::create(
             id:        CategoryId::generate(),
             name:      CategoryName::create($command->name),
+            nameEn:    $command->nameEn,
             slug:      CategorySlug::create($command->slug),
             sortOrder: $nextSortOrder,
         );

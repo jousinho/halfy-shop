@@ -33,6 +33,7 @@ final class AdminAboutController extends AbstractController
     {
         $this->updateAboutService->execute(UpdateAboutCommand::create(
             content:     $request->request->getString('content'),
+            contentEn:   $request->request->getString('contentEn') ?: null,
             photoFile:   $request->files->get('photoFile'),
             removePhoto: $request->request->getBoolean('removePhoto'),
         ));

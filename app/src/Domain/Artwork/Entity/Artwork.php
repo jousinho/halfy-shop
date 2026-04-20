@@ -30,11 +30,20 @@ final class Artwork
     #[ORM\Column(type: 'string', length: 255)]
     private string $title;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $titleEn;
+
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $descriptionEn;
+
     #[ORM\Column(type: 'string', length: 100)]
     private string $technique;
+
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    private ?string $techniqueEn;
 
     #[ORM\Column(type: 'string', length: 50)]
     private string $dimensions;
@@ -73,8 +82,11 @@ final class Artwork
     private function __construct(
         ArtworkId $id,
         ArtworkTitle $title,
+        ?string $titleEn,
         ?string $description,
+        ?string $descriptionEn,
         Technique $technique,
+        ?string $techniqueEn,
         Dimensions $dimensions,
         ArtworkYear $year,
         ?Price $price,
@@ -85,8 +97,11 @@ final class Artwork
     ) {
         $this->id            = $id->value();
         $this->title         = $title->value();
+        $this->titleEn       = $titleEn !== null ? trim($titleEn) ?: null : null;
         $this->description   = $description;
+        $this->descriptionEn = $descriptionEn;
         $this->technique     = $technique->value();
+        $this->techniqueEn   = $techniqueEn !== null ? trim($techniqueEn) ?: null : null;
         $this->dimensions    = $dimensions->value();
         $this->year          = $year->value();
         $this->price         = $price?->value() !== null ? (string) $price->value() : null;
@@ -102,8 +117,11 @@ final class Artwork
     public static function create(
         ArtworkId $id,
         ArtworkTitle $title,
+        ?string $titleEn,
         ?string $description,
+        ?string $descriptionEn,
         Technique $technique,
+        ?string $techniqueEn,
         Dimensions $dimensions,
         ArtworkYear $year,
         ?Price $price,
@@ -113,8 +131,8 @@ final class Artwork
         int $sortOrder,
     ): self {
         $artwork = new self(
-            $id, $title, $description, $technique,
-            $dimensions, $year, $price, $imageFilename,
+            $id, $title, $titleEn, $description, $descriptionEn,
+            $technique, $techniqueEn, $dimensions, $year, $price, $imageFilename,
             $shopUrl, $isAvailable, $sortOrder,
         );
 
@@ -125,17 +143,23 @@ final class Artwork
 
     public function update(
         ArtworkTitle $title,
+        ?string $titleEn,
         ?string $description,
+        ?string $descriptionEn,
         Technique $technique,
+        ?string $techniqueEn,
         Dimensions $dimensions,
         ArtworkYear $year,
         ?Price $price,
         ?string $shopUrl,
         bool $isAvailable,
     ): void {
-        $this->title       = $title->value();
-        $this->description = $description;
-        $this->technique   = $technique->value();
+        $this->title         = $title->value();
+        $this->titleEn       = $titleEn !== null ? trim($titleEn) ?: null : null;
+        $this->description   = $description;
+        $this->descriptionEn = $descriptionEn;
+        $this->technique     = $technique->value();
+        $this->techniqueEn   = $techniqueEn !== null ? trim($techniqueEn) ?: null : null;
         $this->dimensions  = $dimensions->value();
         $this->year        = $year->value();
         $this->price       = $price?->value() !== null ? (string) $price->value() : null;
@@ -197,14 +221,50 @@ final class Artwork
         return ArtworkTitle::create($this->title);
     }
 
+    public function titleEn(): ?string
+    {
+        return $this->titleEn;
+    }
+
+    public function titleForLocale(string $locale): string
+    {
+        return ($locale === 'en' && $this->titleEn !== null && $this->titleEn !== '')
+            ? $this->titleEn
+            : $this->title;
+    }
+
     public function description(): ?string
     {
         return $this->description;
     }
 
+    public function descriptionEn(): ?string
+    {
+        return $this->descriptionEn;
+    }
+
+    public function descriptionForLocale(string $locale): ?string
+    {
+        return ($locale === 'en' && $this->descriptionEn !== null && $this->descriptionEn !== '')
+            ? $this->descriptionEn
+            : $this->description;
+    }
+
     public function technique(): Technique
     {
         return Technique::create($this->technique);
+    }
+
+    public function techniqueEn(): ?string
+    {
+        return $this->techniqueEn;
+    }
+
+    public function techniqueForLocale(string $locale): string
+    {
+        return ($locale === 'en' && $this->techniqueEn !== null && $this->techniqueEn !== '')
+            ? $this->techniqueEn
+            : $this->technique;
     }
 
     public function dimensions(): Dimensions

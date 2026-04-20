@@ -65,10 +65,13 @@ final class AdminArtworkController extends AbstractController
         }
 
         $this->createArtworkService->execute(CreateArtworkCommand::create(
-            title:       $request->request->getString('title'),
-            description: $request->request->getString('description') ?: null,
-            technique:   $request->request->getString('technique'),
-            dimensions:  $request->request->getString('dimensions'),
+            title:         $request->request->getString('title'),
+            titleEn:       $request->request->getString('titleEn') ?: null,
+            description:   $request->request->getString('description') ?: null,
+            descriptionEn: $request->request->getString('descriptionEn') ?: null,
+            technique:     $request->request->getString('technique'),
+            techniqueEn:   $request->request->getString('techniqueEn') ?: null,
+            dimensions:    $request->request->getString('dimensions'),
             year:        $request->request->getInt('year'),
             price:       $this->parsePrice($request->request->getString('price')),
             imageFile:   $imageFile,
@@ -103,11 +106,14 @@ final class AdminArtworkController extends AbstractController
     public function update(string $id, Request $request): Response
     {
         $this->updateArtworkService->execute(UpdateArtworkCommand::create(
-            id:          $id,
-            title:       $request->request->getString('title'),
-            description: $request->request->getString('description') ?: null,
-            technique:   $request->request->getString('technique'),
-            dimensions:  $request->request->getString('dimensions'),
+            id:            $id,
+            title:         $request->request->getString('title'),
+            titleEn:       $request->request->getString('titleEn') ?: null,
+            description:   $request->request->getString('description') ?: null,
+            descriptionEn: $request->request->getString('descriptionEn') ?: null,
+            technique:     $request->request->getString('technique'),
+            techniqueEn:   $request->request->getString('techniqueEn') ?: null,
+            dimensions:    $request->request->getString('dimensions'),
             year:        $request->request->getInt('year'),
             price:       $this->parsePrice($request->request->getString('price')),
             imageFile:   $request->files->get('imageFile'),

@@ -20,16 +20,20 @@ final class Category
     #[ORM\Column(type: 'string', length: 100)]
     private string $name;
 
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    private ?string $nameEn;
+
     #[ORM\Column(type: 'string', length: 100, unique: true)]
     private string $slug;
 
     #[ORM\Column(type: 'integer')]
     private int $sortOrder;
 
-    private function __construct(string $id, string $name, string $slug, int $sortOrder)
+    private function __construct(string $id, string $name, ?string $nameEn, string $slug, int $sortOrder)
     {
         $this->id        = $id;
         $this->name      = $name;
+        $this->nameEn    = $nameEn !== null ? trim($nameEn) ?: null : null;
         $this->slug      = $slug;
         $this->sortOrder = $sortOrder;
     }
@@ -37,16 +41,18 @@ final class Category
     public static function create(
         CategoryId $id,
         CategoryName $name,
+        ?string $nameEn,
         CategorySlug $slug,
         int $sortOrder,
     ): self {
-        return new self($id->value(), $name->value(), $slug->value(), $sortOrder);
+        return new self($id->value(), $name->value(), $nameEn, $slug->value(), $sortOrder);
     }
 
-    public function update(CategoryName $name, CategorySlug $slug): void
+    public function update(CategoryName $name, ?string $nameEn, CategorySlug $slug): void
     {
-        $this->name = $name->value();
-        $this->slug = $slug->value();
+        $this->name   = $name->value();
+        $this->nameEn = $nameEn !== null ? trim($nameEn) ?: null : null;
+        $this->slug   = $slug->value();
     }
 
     public function setSortOrder(int $sortOrder): void
@@ -62,6 +68,18 @@ final class Category
     public function name(): CategoryName
     {
         return CategoryName::create($this->name);
+    }
+
+    public function nameEn(): ?string
+    {
+        return $this->nameEn;
+    }
+
+    public function nameForLocale(string $locale): string
+    {
+        return ($locale === 'en' && $this->nameEn !== null && $this->nameEn !== '')
+            ? $this->nameEn
+            : $this->name;
     }
 
     public function slug(): CategorySlug

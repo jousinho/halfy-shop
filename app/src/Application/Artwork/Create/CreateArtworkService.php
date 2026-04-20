@@ -47,8 +47,11 @@ final class CreateArtworkService
         return Artwork::create(
             id:            ArtworkId::generate(),
             title:         ArtworkTitle::create($command->title),
+            titleEn:       $command->titleEn,
             description:   $command->description,
+            descriptionEn: $command->descriptionEn,
             technique:     Technique::create($command->technique),
+            techniqueEn:   $command->techniqueEn,
             dimensions:    Dimensions::create($command->dimensions),
             year:          ArtworkYear::create($command->year),
             price:         $command->price !== null ? Price::create($command->price) : null,

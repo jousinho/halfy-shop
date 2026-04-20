@@ -28,7 +28,7 @@ final class CreateCategoryServiceTest extends TestCase
     {
         $this->categoryRepository->expects($this->once())->method('save');
 
-        $this->service->execute(CreateCategoryCommand::create('Ilustración', 'ilustracion', 1));
+        $this->service->execute(CreateCategoryCommand::create('Ilustración', null, 'ilustracion'));
     }
 
     public function test_execute__should_save_category_with_correct_data(): void
@@ -40,11 +40,11 @@ final class CreateCategoryServiceTest extends TestCase
                 $capturedCategory = $category;
             });
 
-        $this->service->execute(CreateCategoryCommand::create('Grabado', 'grabado', 3));
+        $this->service->execute(CreateCategoryCommand::create('Grabado', null, 'grabado'));
 
         $this->assertSame('Grabado', $capturedCategory->name()->value());
         $this->assertSame('grabado', $capturedCategory->slug()->value());
-        $this->assertSame(3, $capturedCategory->sortOrder());
+        $this->assertSame(1, $capturedCategory->sortOrder());
     }
 
     public function test_execute__should_generate_a_new_id_each_time(): void
@@ -56,8 +56,8 @@ final class CreateCategoryServiceTest extends TestCase
                 $ids[] = $category->id()->value();
             });
 
-        $this->service->execute(CreateCategoryCommand::create('Cat A', 'cat-a', 1));
-        $this->service->execute(CreateCategoryCommand::create('Cat B', 'cat-b', 2));
+        $this->service->execute(CreateCategoryCommand::create('Cat A', null, 'cat-a'));
+        $this->service->execute(CreateCategoryCommand::create('Cat B', null, 'cat-b'));
 
         $this->assertNotSame($ids[0], $ids[1]);
     }
@@ -66,13 +66,13 @@ final class CreateCategoryServiceTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        $this->service->execute(CreateCategoryCommand::create('', 'slug', 1));
+        $this->service->execute(CreateCategoryCommand::create('', null, 'slug'));
     }
 
     public function test_execute__when_slug_is_invalid__should_throw_exception(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        $this->service->execute(CreateCategoryCommand::create('Nombre', 'Slug Con Mayúsculas!', 1));
+        $this->service->execute(CreateCategoryCommand::create('Nombre', null, 'Slug Con Mayúsculas!'));
     }
 }

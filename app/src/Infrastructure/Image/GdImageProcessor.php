@@ -11,7 +11,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 final class GdImageProcessor implements ImageProcessor
 {
     private const MAX_WARNING_SIZE_BYTES = 10 * 1024 * 1024;
-    private const THUMBNAIL_MAX_WIDTH   = 800;
+    private const THUMBNAIL_WIDTH       = 600;
+    private const THUMBNAIL_HEIGHT      = 400;
     private const LIGHTBOX_MAX_WIDTH    = 1400;
     private const JPEG_QUALITY          = 85;
 
@@ -72,7 +73,7 @@ final class GdImageProcessor implements ImageProcessor
         $dir = $this->uploadsDir . '/' . $destinationDir . '/thumbnails';
         $this->ensureDirectoryExists($dir);
 
-        $thumbnail = $this->scaleToWidth($source, self::THUMBNAIL_MAX_WIDTH);
+        $thumbnail = $this->cropToSize($source, self::THUMBNAIL_WIDTH, self::THUMBNAIL_HEIGHT);
         imagejpeg($thumbnail, $dir . '/' . $filename, self::JPEG_QUALITY);
         imagedestroy($thumbnail);
     }
@@ -85,6 +86,33 @@ final class GdImageProcessor implements ImageProcessor
         $lightbox = $this->scaleToWidth($source, self::LIGHTBOX_MAX_WIDTH);
         imagejpeg($lightbox, $dir . '/' . $filename, self::JPEG_QUALITY);
         imagedestroy($lightbox);
+    }
+
+    private function cropToSize(\GdImage $source, int $targetWidth, int $targetHeight): \GdImage
+    {
+        $srcWidth  = imagesx($source);
+        $srcHeight = imagesy($source);
+
+        $scaleX = $targetWidth  / $srcWidth;
+        $scaleY = $targetHeight / $srcHeight;
+        $scale  = max($scaleX, $scaleY);
+
+        $scaledWidth  = (int) round($srcWidth  * $scale);
+        $scaledHeight = (int) round($srcHeight * $scale);
+
+        $offsetX = (int) round(($scaledWidth  - $targetWidth)  / 2);
+        $offsetY = (int) round(($scaledHeight - $targetHeight) / 2);
+
+        $canvas = imagecreatetruecolor($targetWidth, $targetHeight);
+        imagecopyresampled(
+            $canvas, $source,
+            0, 0,
+            (int) round($offsetX / $scale), (int) round($offsetY / $scale),
+            $targetWidth, $targetHeight,
+            (int) round($targetWidth  / $scale), (int) round($targetHeight / $scale),
+        );
+
+        return $canvas;
     }
 
     private function scaleToWidth(\GdImage $source, int $maxWidth): \GdImage

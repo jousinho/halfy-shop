@@ -206,10 +206,13 @@ final class UpdateArtworkServiceTest extends TestCase
         array $tagIds = [],
     ): UpdateArtworkCommand {
         return UpdateArtworkCommand::create(
-            id:          $id ?: ArtworkId::generate()->value(),
-            title:       $title,
-            description: null,
-            technique:   $technique,
+            id:            $id ?: ArtworkId::generate()->value(),
+            title:         $title,
+            titleEn:       null,
+            description:   null,
+            descriptionEn: null,
+            technique:     $technique,
+            techniqueEn:   null,
             dimensions:  '50x60',
             year:        $year,
             price:       $price,
@@ -226,8 +229,11 @@ final class UpdateArtworkServiceTest extends TestCase
         return Artwork::create(
             id:            ArtworkId::generate(),
             title:         ArtworkTitle::create('Título original'),
+            titleEn:       null,
             description:   null,
+            descriptionEn: null,
             technique:     Technique::create('Óleo'),
+            techniqueEn:   null,
             dimensions:    Dimensions::create('50x60'),
             year:          ArtworkYear::create(2023),
             price:         $price,
@@ -243,6 +249,7 @@ final class UpdateArtworkServiceTest extends TestCase
         return Category::create(
             CategoryId::generate(),
             CategoryName::create($name),
+            null,
             CategorySlug::create($slug),
             1,
         );

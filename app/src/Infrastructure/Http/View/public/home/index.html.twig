@@ -17,7 +17,7 @@
                 <li>
                     <a href="{{ path('gallery_by_category', {slug: category.slug.value}) }}"
                        class="filter-btn {% if activeCategory is defined and activeCategory is not null and activeCategory.id.value == category.id.value %}active{% endif %}">
-                        {{ category.name.value }}
+                        {{ category.nameForLocale(app.request.locale) }}
                     </a>
                 </li>
                 {% endfor %}

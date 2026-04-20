@@ -29,13 +29,12 @@ final class CategoryTest extends TestCase
 
         $category->update(
             CategoryName::create('Ilustraciones'),
+            null,
             CategorySlug::create('ilustraciones'),
-            2,
         );
 
         $this->assertSame('Ilustraciones', $category->name()->value());
         $this->assertSame('ilustraciones', $category->slug()->value());
-        $this->assertSame(2, $category->sortOrder());
     }
 
     public function test_update_category__should_not_change_id(): void
@@ -45,8 +44,8 @@ final class CategoryTest extends TestCase
 
         $category->update(
             CategoryName::create('Ilustraciones'),
+            null,
             CategorySlug::create('ilustraciones'),
-            2,
         );
 
         $this->assertSame($id->value(), $category->id()->value());
@@ -57,6 +56,7 @@ final class CategoryTest extends TestCase
         return Category::create(
             id:        $id ?? CategoryId::generate(),
             name:      CategoryName::create('Grabados'),
+            nameEn:    null,
             slug:      CategorySlug::create('grabados'),
             sortOrder: 1,
         );

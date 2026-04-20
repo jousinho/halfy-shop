@@ -71,8 +71,11 @@ final class SyncWithBigCartelServiceIntegrationTest extends IntegrationTestCase
         $existing = Artwork::create(
             id:            ArtworkId::generate(),
             title:         ArtworkTitle::create('Obra Existente'),
+            titleEn:       null,
             description:   null,
+            descriptionEn: null,
             technique:     Technique::create('Óleo'),
+            techniqueEn:   null,
             dimensions:    Dimensions::create('30x40'),
             year:          ArtworkYear::create(2024),
             price:         null,
@@ -106,8 +109,11 @@ final class SyncWithBigCartelServiceIntegrationTest extends IntegrationTestCase
         $existing = Artwork::create(
             id:            ArtworkId::generate(),
             title:         ArtworkTitle::create('Título Antiguo'),
+            titleEn:       null,
             description:   null,
+            descriptionEn: null,
             technique:     Technique::create('Óleo'),
+            techniqueEn:   null,
             dimensions:    Dimensions::create('30x40'),
             year:          ArtworkYear::create(2024),
             price:         null,
