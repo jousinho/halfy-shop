@@ -1,7 +1,7 @@
 nav:
     works: Obras
     about: Sobre mí
-    blog: Blog
+    novedades: Novedades
 
 page:
     title: Anna Pownall — Grabado e Ilustración
@@ -25,10 +25,12 @@ badge:
 shop:
     view: Ver en tienda
 
-blog:
-    title: Blog
-    no_posts: No hay entradas publicadas.
-    back: '← Volver al blog'
+novedades:
+    title: Novedades
+    empty: No hay novedades publicadas.
+    back: '← Volver a novedades'
+    tipo_noticia: Noticia
+    tipo_evento: Evento
 
 about:
     title: Sobre mí

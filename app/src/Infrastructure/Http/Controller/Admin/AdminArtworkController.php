@@ -15,7 +15,6 @@ use App\Application\Artwork\Update\UpdateArtworkService;
 use App\Domain\Artwork\Repository\ArtworkRepository;
 use App\Domain\Artwork\ValueObject\ArtworkId;
 use App\Domain\Category\Repository\CategoryRepository;
-use App\Domain\Tag\Repository\TagRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +28,6 @@ final class AdminArtworkController extends AbstractController
     public function __construct(
         private readonly ArtworkRepository $artworkRepository,
         private readonly CategoryRepository $categoryRepository,
-        private readonly TagRepository $tagRepository,
         private readonly CreateArtworkService $createArtworkService,
         private readonly UpdateArtworkService $updateArtworkService,
         private readonly DeleteArtworkService $deleteArtworkService,
@@ -50,7 +48,6 @@ final class AdminArtworkController extends AbstractController
         return $this->render('admin/artwork/form.html.twig', [
             'artwork'    => null,
             'categories' => $this->categoryRepository->findAll(),
-            'tags'       => $this->tagRepository->findAll(),
         ]);
     }
 
@@ -78,7 +75,6 @@ final class AdminArtworkController extends AbstractController
             shopUrl:     $request->request->getString('shopUrl') ?: null,
             isAvailable: $request->request->getBoolean('isAvailable'),
             categoryIds: $request->request->all('categoryIds'),
-            tagIds:      $request->request->all('tagIds'),
         ));
 
         $this->addFlash('success', 'Obra creada correctamente.');
@@ -98,7 +94,6 @@ final class AdminArtworkController extends AbstractController
         return $this->render('admin/artwork/form.html.twig', [
             'artwork'    => $artwork,
             'categories' => $this->categoryRepository->findAll(),
-            'tags'       => $this->tagRepository->findAll(),
         ]);
     }
 
@@ -120,7 +115,6 @@ final class AdminArtworkController extends AbstractController
             shopUrl:     $request->request->getString('shopUrl') ?: null,
             isAvailable: $request->request->getBoolean('isAvailable'),
             categoryIds: $request->request->all('categoryIds'),
-            tagIds:      $request->request->all('tagIds'),
         ));
 
         $this->addFlash('success', 'Obra actualizada correctamente.');

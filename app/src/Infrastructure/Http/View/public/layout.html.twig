@@ -29,7 +29,7 @@
             <nav class="site-nav">
                 <ul>
                     <li><a href="{{ path('home') }}" {% if app.request.attributes.get('_route') == 'home' %}class="active"{% endif %}>{{ 'nav.works'|trans }}</a></li>
-                    <li><a href="{{ path('blog_index') }}" {% if app.request.attributes.get('_route') starts with 'blog' %}class="active"{% endif %}>{{ 'nav.blog'|trans }}</a></li>
+                    <li><a href="{{ path('novedades') }}" {% if app.request.attributes.get('_route') starts with 'novedades' %}class="active"{% endif %}>{{ 'nav.novedades'|trans }}</a></li>
                     <li><a href="{{ path('about') }}" {% if app.request.attributes.get('_route') == 'about' %}class="active"{% endif %}>{{ 'nav.about'|trans }}</a></li>
                 </ul>
             </nav>

@@ -14,7 +14,6 @@ use App\Domain\Artwork\ValueObject\Dimensions;
 use App\Domain\Artwork\ValueObject\Price;
 use App\Domain\Artwork\ValueObject\Technique;
 use App\Domain\Category\Entity\Category;
-use App\Domain\Tag\Entity\Tag;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -73,10 +72,6 @@ final class Artwork
     #[ORM\JoinTable(name: 'artwork_category')]
     private Collection $categories;
 
-    #[ORM\ManyToMany(targetEntity: Tag::class)]
-    #[ORM\JoinTable(name: 'artwork_tag')]
-    private Collection $tags;
-
     private array $domainEvents = [];
 
     private function __construct(
@@ -109,9 +104,8 @@ final class Artwork
         $this->shopUrl       = $shopUrl;
         $this->isAvailable   = $isAvailable;
         $this->sortOrder     = $sortOrder;
-        $this->createdAt     = new \DateTimeImmutable();
-        $this->categories    = new ArrayCollection();
-        $this->tags          = new ArrayCollection();
+        $this->createdAt  = new \DateTimeImmutable();
+        $this->categories = new ArrayCollection();
     }
 
     public static function create(
@@ -189,18 +183,6 @@ final class Artwork
     public function removeCategory(Category $category): void
     {
         $this->categories->removeElement($category);
-    }
-
-    public function assignTag(Tag $tag): void
-    {
-        if (!$this->tags->contains($tag)) {
-            $this->tags->add($tag);
-        }
-    }
-
-    public function removeTag(Tag $tag): void
-    {
-        $this->tags->removeElement($tag);
     }
 
     public function pullDomainEvents(): array
@@ -315,10 +297,5 @@ final class Artwork
     public function categories(): Collection
     {
         return $this->categories;
-    }
-
-    public function tags(): Collection
-    {
-        return $this->tags;
     }
 }

@@ -18,9 +18,6 @@ use App\Domain\Category\Entity\Category;
 use App\Domain\Category\ValueObject\CategoryId;
 use App\Domain\Category\ValueObject\CategoryName;
 use App\Domain\Category\ValueObject\CategorySlug;
-use App\Domain\Tag\Entity\Tag;
-use App\Domain\Tag\ValueObject\TagId;
-use App\Domain\Tag\ValueObject\TagName;
 use PHPUnit\Framework\TestCase;
 
 final class ArtworkTest extends TestCase
@@ -141,7 +138,6 @@ final class ArtworkTest extends TestCase
         $artwork = $this->buildArtwork();
 
         $this->assertCount(0, $artwork->categories());
-        $this->assertCount(0, $artwork->tags());
     }
 
     // --- Update ---
@@ -230,41 +226,6 @@ final class ArtworkTest extends TestCase
         $this->assertCount(0, $artwork->categories());
     }
 
-    // --- Tags ---
-
-    public function test_assign_tag__should_add_to_collection(): void
-    {
-        $artwork = $this->buildArtwork();
-        $tag     = $this->buildTag();
-
-        $artwork->assignTag($tag);
-
-        $this->assertCount(1, $artwork->tags());
-        $this->assertTrue($artwork->tags()->contains($tag));
-    }
-
-    public function test_assign_tag__when_already_assigned__should_not_duplicate(): void
-    {
-        $artwork = $this->buildArtwork();
-        $tag     = $this->buildTag();
-
-        $artwork->assignTag($tag);
-        $artwork->assignTag($tag);
-
-        $this->assertCount(1, $artwork->tags());
-    }
-
-    public function test_remove_tag__should_remove_from_collection(): void
-    {
-        $artwork = $this->buildArtwork();
-        $tag     = $this->buildTag();
-
-        $artwork->assignTag($tag);
-        $artwork->removeTag($tag);
-
-        $this->assertCount(0, $artwork->tags());
-    }
-
     // --- Helpers ---
 
     private function buildArtwork(?ArtworkId $id = null): Artwork
@@ -298,12 +259,4 @@ final class ArtworkTest extends TestCase
         );
     }
 
-    private function buildTag(): Tag
-    {
-        return Tag::create(
-            TagId::generate(),
-            TagName::create('acuarela'),
-            'acuarela',
-        );
-    }
 }

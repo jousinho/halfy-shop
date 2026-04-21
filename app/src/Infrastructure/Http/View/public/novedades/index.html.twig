@@ -1,0 +1,42 @@
+{% extends 'public/layout.html.twig' %}
+
+{% block title %}{{ 'novedades.title'|trans }} — Anna Pownall{% endblock %}
+
+{% block content %}
+<div class="novedades-section">
+    <h1 class="novedades-section__title">{{ 'novedades.title'|trans }}</h1>
+
+    {% if novedades is empty %}
+        <p class="novedades-section__empty">{{ 'novedades.empty'|trans }}</p>
+    {% else %}
+        <ul class="novedades-list">
+            {% for novedad in novedades %}
+            <li class="novedad-card">
+                <a href="{{ path('novedad_show', {slug: novedad.slug, _locale: app.request.locale}) }}" class="novedad-card__link">
+                    {% if novedad.imagen is not null %}
+                        <div class="novedad-card__img">
+                            <img src="/uploads/novedades/{{ novedad.imagen }}" alt="{{ novedad.tituloForLocale(app.request.locale) }}">
+                        </div>
+                    {% endif %}
+                    <div class="novedad-card__body">
+                        <div class="novedad-card__meta">
+                            <span class="novedad-card__tipo novedad-card__tipo--{{ novedad.tipo.value }}">{{ ('novedades.tipo_' ~ novedad.tipo.value)|trans }}</span>
+                            <span class="novedad-card__fecha">
+                                {{ novedad.fecha|date('d/m/Y') }}
+                                {% if novedad.fechaFin is not null %}
+                                    — {{ novedad.fechaFin|date('d/m/Y') }}
+                                {% endif %}
+                            </span>
+                        </div>
+                        <h2 class="novedad-card__titulo">{{ novedad.tituloForLocale(app.request.locale) }}</h2>
+                        {% if novedad.lugar is not null %}
+                            <span class="novedad-card__lugar">{{ novedad.lugar }}</span>
+                        {% endif %}
+                    </div>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+{% endblock %}

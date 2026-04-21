@@ -15,8 +15,6 @@ use App\Domain\Artwork\ValueObject\Price;
 use App\Domain\Artwork\ValueObject\Technique;
 use App\Domain\Category\Repository\CategoryRepository;
 use App\Domain\Category\ValueObject\CategoryId;
-use App\Domain\Tag\Repository\TagRepository;
-use App\Domain\Tag\ValueObject\TagId;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -25,7 +23,6 @@ final class UpdateArtworkService
     public function __construct(
         private readonly ArtworkRepository $artworkRepository,
         private readonly CategoryRepository $categoryRepository,
-        private readonly TagRepository $tagRepository,
         private readonly ImageProcessor $imageProcessor,
         private readonly EventDispatcherInterface $dispatcher,
     ) {}
@@ -35,7 +32,7 @@ final class UpdateArtworkService
         $artwork = $this->findArtworkOrFail($command->id);
         $this->updateArtworkData($artwork, $command);
         $this->updateImageIfProvided($artwork, $command->imageFile);
-        $this->syncCategoriesAndTags($artwork, $command->categoryIds, $command->tagIds);
+        $this->syncCategories($artwork, $command->categoryIds);
         $this->save($artwork);
         $this->dispatchEvents($artwork);
     }
@@ -74,31 +71,19 @@ final class UpdateArtworkService
             return;
         }
 
-        $imageFilename = $this->imageProcessor->process($imageFile, 'artworks');
-        $artwork->updateImage($imageFilename);
+        $artwork->updateImage($this->imageProcessor->process($imageFile, 'artworks'));
     }
 
-    private function syncCategoriesAndTags(Artwork $artwork, array $categoryIds, array $tagIds): void
+    private function syncCategories(Artwork $artwork, array $categoryIds): void
     {
         foreach ($artwork->categories()->toArray() as $category) {
             $artwork->removeCategory($category);
-        }
-
-        foreach ($artwork->tags()->toArray() as $tag) {
-            $artwork->removeTag($tag);
         }
 
         foreach ($categoryIds as $categoryId) {
             $category = $this->categoryRepository->findById(CategoryId::create($categoryId));
             if ($category !== null) {
                 $artwork->assignCategory($category);
-            }
-        }
-
-        foreach ($tagIds as $tagId) {
-            $tag = $this->tagRepository->findById(TagId::create($tagId));
-            if ($tag !== null) {
-                $artwork->assignTag($tag);
             }
         }
     }

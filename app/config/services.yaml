@@ -20,11 +20,8 @@ services:
     App\Domain\Category\Repository\CategoryRepository:
         alias: App\Infrastructure\Persistence\Doctrine\DoctrineCategoryRepository
 
-    App\Domain\Tag\Repository\TagRepository:
-        alias: App\Infrastructure\Persistence\Doctrine\DoctrineTagRepository
-
-    App\Domain\Blog\Repository\PostRepository:
-        alias: App\Infrastructure\Persistence\Doctrine\DoctrinePostRepository
+    App\Domain\Novedad\Repository\NovedadRepository:
+        alias: App\Infrastructure\Persistence\Doctrine\DoctrineNovedadRepository
 
     App\Domain\About\Repository\AboutPageRepository:
         alias: App\Infrastructure\Persistence\Doctrine\DoctrineAboutPageRepository
