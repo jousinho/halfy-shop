@@ -6,12 +6,13 @@ namespace App\Domain\Setting\ValueObject;
 
 enum Theme: string
 {
-    case Default  = 'default';
-    case Galeria  = 'galeria';
-    case Estudio  = 'estudio';
-    case Polaroid = 'polaroid';
-    case Neon     = 'neon';
+    case Default   = 'default';
+    case Galeria   = 'galeria';
+    case Estudio   = 'estudio';
+    case Polaroid  = 'polaroid';
+    case Neon      = 'neon';
     case Editorial = 'editorial';
+    case Custom    = 'custom';
 
     public function label(): string
     {
@@ -22,6 +23,7 @@ enum Theme: string
             Theme::Polaroid  => 'Polaroid',
             Theme::Neon      => 'Neon',
             Theme::Editorial => 'Editorial',
+            Theme::Custom    => 'Custom',
         };
     }
 
@@ -34,6 +36,7 @@ enum Theme: string
             Theme::Polaroid  => 'Fotos Polaroid rotadas sobre fondo crema. Fuente handwriting.',
             Theme::Neon      => 'Fondo negro profundo, monospace, glow y glitch en hover.',
             Theme::Editorial => 'Sidebar fija, tipografía condensada bold, grid de revista.',
+            Theme::Custom    => 'Diseño personalizado. Base Estudio con fondo blanco.',
         };
     }
 }

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Anna Pownall{% endblock %}</title>
+    {% set _route = app.request.attributes.get('_route') %}
+    {% set _route_params = app.request.attributes.get('_route_params') ?? {} %}
+    <link rel="alternate" hreflang="es" href="{{ url(_route, _route_params|merge({'_locale': 'es'})) }}">
+    <link rel="alternate" hreflang="en" href="{{ url(_route, _route_params|merge({'_locale': 'en'})) }}">
+    <link rel="alternate" hreflang="x-default" href="{{ url(_route, _route_params|merge({'_locale': 'es'})) }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+    <link rel="stylesheet" href="/assets/css/lightbox.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <style>
+        :root {
+            --es-bg:       #ffffff;
+            --es-surface:  #f5f5f5;
+            --es-text:     #1a1a1a;
+            --es-muted:    #888880;
+            --es-border:   #e0e0e0;
+            --es-accent:   #b89a6e;
+            --es-font:     'Inter', system-ui, sans-serif;
+        }
+
+        body {
+            background: var(--es-bg);
+            color: var(--es-text);
+            font-family: var(--es-font);
+            font-weight: 300;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* Header */
+        .es-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: var(--es-bg);
+            border-bottom: 1px solid var(--es-border);
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            height: 90px;
+            transition: height 0.35s ease;
+        }
+
+        .es-header.is-scrolled {
+            height: 52px;
+        }
+
+        .es-main {
+            padding-top: 90px;
+        }
+
+        .es-logo {
+            flex: 1;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--es-text);
+            display: flex;
+            align-items: center;
+        }
+
+        .es-logo__img {
+            max-height: 58px;
+            width: auto;
+            display: block;
+            transition: max-height 0.35s ease;
+        }
+
+        .es-header.is-scrolled .es-logo__img {
+            max-height: 32px;
+        }
+
+        .es-nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .es-nav a {
+            font-size: 0.68rem;
+            font-weight: 400;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--es-muted);
+            transition: color 0.2s;
+        }
+
+        .es-nav a:hover,
+        .es-nav a.active {
+            color: var(--es-accent);
+        }
+
+        /* Category filter — desktop */
+        .es-filters {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 0.75rem 2rem;
+            border-bottom: 1px solid var(--es-border);
+        }
+
+        .es-filter {
+            font-size: 0.65rem;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #1a1a1a;
+            background: #f0ece4;
+            padding: 0.4rem 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .es-filter:first-child { padding-left: 1rem; }
+
+        .es-filter:hover { background: #e5dfd5; }
+
+        .es-filter--active {
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+
+        /* Category filter — mobile select */
+        .es-filters-select {
+            display: none;
+            width: 100%;
+            background: #f0ece4;
+            color: #1a1a1a;
+            border: none;
+            border-bottom: 1px solid var(--es-border);
+            padding: 0.75rem 1.25rem;
+            font-family: var(--es-font);
+            font-size: 0.72rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231a1a1a' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1.25rem center;
+            cursor: pointer;
+        }
+
+        .es-filters-select:focus { outline: none; }
+
+        @media (max-width: 640px) {
+            .es-filters        { display: none; }
+            .es-filters-select { display: block; }
+            .es-header         { padding: 0 1rem; }
+            .es-nav            { gap: 1.25rem; }
+            .es-masonry        { columns: 2; }
+            .es-footer         { padding: 1.25rem 1rem; }
+        }
+
+        /* Masonry grid */
+        .es-masonry {
+            columns: 3;
+            column-gap: 3px;
+            padding: 3px 2rem;
+        }
+
+        @media (max-width: 900px) { .es-masonry { columns: 2; } }
+        @media (max-width: 500px) { .es-masonry { columns: 1; } }
+
+        /* Artwork card */
+        .es-card {
+            break-inside: avoid;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 3px;
+            cursor: pointer;
+        }
+
+        .es-card__link {
+            display: block;
+        }
+
+        .es-card__img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.6s ease, filter 0.4s ease;
+            filter: brightness(0.97);
+        }
+
+        .es-card:hover .es-card__img {
+            transform: scale(1.02);
+            filter: brightness(1);
+        }
+
+        .es-card__caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem 1rem 0.75rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.72));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .es-card:hover .es-card__caption {
+            opacity: 1;
+        }
+
+        .es-card__title {
+            font-size: 0.72rem;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            color: #f0ebe3;
+        }
+
+        .es-card__price {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.65);
+            margin-top: 0.15rem;
+            letter-spacing: 0.06em;
+        }
+
+        .es-empty {
+            text-align: center;
+            color: var(--es-muted);
+            padding: 5rem 2rem;
+            font-size: 0.85rem;
+            letter-spacing: 0.06em;
+        }
+
+        /* Main / Footer */
+        .es-main { flex: 1; }
+
+        .es-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--es-border);
+            font-size: 0.65rem;
+            color: var(--es-muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* Blog / About */
+        .blog-section,
+        .blog-post,
+        .about-section {
+            font-family: var(--es-font);
+            color: var(--es-text);
+        }
+
+        .blog-post__title { color: var(--es-text); }
+        .blog-post__date  { color: var(--es-muted); }
+
+        .post-list__link  { border-bottom-color: var(--es-border); }
+        .post-list__date  { color: var(--es-muted); }
+
+        .about-photo img  { border-color: var(--es-border); }
+        .back-link        { color: var(--es-muted); }
+
+        .section-title    { color: var(--es-muted); }
+        .contact-link     { color: var(--es-muted); }
+
+        .es-locale {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.3rem;
+            font-size: 0.65rem;
+            letter-spacing: 0.12em;
+        }
+        .es-locale a {
+            color: var(--es-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .es-locale a:hover,
+        .es-locale a.active { color: var(--es-text); }
+        .es-locale span { color: var(--es-border); }
+
+        .site-search {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-right: 0.5rem;
+        }
+        .site-search__toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            font-family: var(--es-font);
+            font-size: 0.65rem;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--es-muted);
+            transition: color 0.2s;
+            white-space: nowrap;
+        }
+        .site-search__toggle:hover { color: var(--es-accent); }
+        .site-search__form {
+            position: absolute;
+            right: calc(100% + 0.5rem);
+            top: 50%;
+            transform: translateY(-50%);
+            overflow: hidden;
+            max-width: 0;
+            opacity: 0;
+            transition: max-width 0.3s ease, opacity 0.2s ease;
+        }
+        .site-search.is-open .site-search__form {
+            max-width: 200px;
+            opacity: 1;
+        }
+        .site-search__input {
+            font-family: var(--es-font);
+            font-size: 0.72rem;
+            color: var(--es-text);
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--es-border);
+            outline: none;
+            padding: 0.1rem 0;
+            width: 160px;
+        }
+        .site-search__input::placeholder { color: var(--es-muted); }
+
+        .es-instagram {
+            display: flex;
+            align-items: center;
+            margin-left: 0.25rem;
+            margin-right: 1.25rem;
+            color: var(--es-muted);
+            transition: color 0.2s;
+        }
+        .es-instagram:hover { color: var(--es-text); }
+        .es-instagram svg { width: 16px; height: 16px; }
+    </style>
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+
+    <header class="es-header">
+        <a href="{{ path('home') }}" class="es-logo">
+            {% if siteLogo %}
+                <img src="/uploads/logo/{{ siteLogo }}" alt="Anna Pownall" class="es-logo__img">
+            {% else %}
+                Anna Pownall
+            {% endif %}
+        </a>
+        <nav class="es-nav">
+            <a href="{{ path('home') }}" {% if app.request.attributes.get('_route') == 'home' %}class="active"{% endif %}>{{ 'nav.works'|trans }}</a>
+            <a href="{{ path('novedades') }}" {% if app.request.attributes.get('_route') starts with 'novedades' %}class="active"{% endif %}>{{ 'nav.novedades'|trans }}</a>
+            <a href="{{ path('about') }}" {% if app.request.attributes.get('_route') == 'about' %}class="active"{% endif %}>{{ 'nav.about'|trans }}</a>
+            <a href="{{ path('contact') }}" {% if app.request.attributes.get('_route') == 'contact' %}class="active"{% endif %}>{{ 'nav.contact'|trans }}</a>
+        </nav>
+        <div class="es-locale">
+            <div class="site-search" id="siteSearch">
+                <form class="site-search__form" action="{{ path('search', {_locale: app.request.locale}) }}" method="get" id="searchForm">
+                    <input class="site-search__input" type="search" name="q" placeholder="{{ 'search.placeholder'|trans }}" value="{{ app.request.query.get('q') }}" autocomplete="off" id="searchInput">
+                </form>
+                <button class="site-search__toggle" id="searchToggle">{{ 'search.label'|trans }}</button>
+            </div>
+            {% if siteInstagram %}
+            <a href="{{ siteInstagram }}" target="_blank" rel="noopener" class="es-instagram" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                    <circle cx="12" cy="12" r="4"/>
+                    <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
+                </svg>
+            </a>
+            {% endif %}
+            <span>|</span>
+            <a href="{{ path(_route, _route_params|merge({'_locale': 'es'})) }}" {% if app.request.locale == 'es' %}class="active"{% endif %}>ES</a>
+            <span>|</span>
+            <a href="{{ path(_route, _route_params|merge({'_locale': 'en'})) }}" {% if app.request.locale == 'en' %}class="active"{% endif %}>EN</a>
+        </div>
+    </header>
+
+    <main class="es-main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="es-footer">
+        &copy; {{ "now"|date("Y") }} Anna Pownall
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    <script src="/assets/js/lightbox.js"></script>
+    <script>
+    (function () {
+        var toggle = document.getElementById('searchToggle');
+        var search = document.getElementById('siteSearch');
+        var input  = document.getElementById('searchInput');
+        if (input.value.trim()) { search.classList.add('is-open'); }
+        toggle.addEventListener('click', function () {
+            search.classList.toggle('is-open');
+            if (search.classList.contains('is-open')) { input.focus(); }
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') { search.classList.remove('is-open'); }
+        });
+
+        var header = document.querySelector('.es-header');
+        function onScroll() {
+            header.classList.toggle('is-scrolled', window.scrollY > 20);
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+    })();
+    </script>
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

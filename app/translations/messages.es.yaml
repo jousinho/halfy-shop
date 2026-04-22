@@ -2,6 +2,7 @@ nav:
     works: Obras
     about: Sobre mí
     novedades: Novedades
+    contact: Contacto
 
 page:
     title: Anna Pownall — Grabado e Ilustración
@@ -43,6 +44,11 @@ search:
 
 about:
     title: Sobre mí
+
+contact:
+    title: Contacto
+    email_label: Correo electrónico
+    instagram_label: Instagram
     fallback: 'Hola, soy Anna Pownall, artista especializada en grabado e ilustración.'
 
 editorial:
