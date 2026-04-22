@@ -32,6 +32,15 @@ novedades:
     tipo_noticia: Noticia
     tipo_evento: Evento
 
+search:
+    label: Buscar
+    placeholder: Buscar…
+    title: Búsqueda
+    results_for: 'Resultados para'
+    no_results: No se han encontrado resultados.
+    section_artworks: Obras
+    section_novedades: Novedades
+
 about:
     title: Sobre mí
     fallback: 'Hola, soy Anna Pownall, artista especializada en grabado e ilustración.'

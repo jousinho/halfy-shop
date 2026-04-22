@@ -32,6 +32,15 @@ novedades:
     tipo_noticia: News
     tipo_evento: Event
 
+search:
+    label: Search
+    placeholder: Search…
+    title: Search
+    results_for: 'Results for'
+    no_results: No results found.
+    section_artworks: Works
+    section_novedades: News
+
 about:
     title: About me
     fallback: 'Hello, I am Anna Pownall, an artist specialising in printmaking and illustration.'

@@ -21,7 +21,7 @@ final class HomeController extends AbstractController
     public function index(): Response
     {
         return $this->render('public/home/index.html.twig', [
-            'artworks'   => $this->artworkRepository->findAll(),
+            'artworks'   => $this->artworkRepository->findAllVisible(),
             'categories' => $this->categoryRepository->findAll(),
         ]);
     }

@@ -136,6 +136,25 @@ final class AdminArtworkController extends AbstractController
         return $this->redirectToRoute('admin_artworks');
     }
 
+    #[Route('/{id}/toggle-visibility', name: 'admin_artworks_toggle_visibility', methods: ['POST'])]
+    public function toggleVisibility(string $id, Request $request): Response
+    {
+        if (!$this->isCsrfTokenValid('toggle_artwork_' . $id, $request->request->getString('_token'))) {
+            throw $this->createAccessDeniedException('CSRF token inválido.');
+        }
+
+        $artwork = $this->artworkRepository->findById(ArtworkId::create($id));
+
+        if ($artwork === null) {
+            throw $this->createNotFoundException('Obra no encontrada.');
+        }
+
+        $artwork->toggleVisibility();
+        $this->artworkRepository->save($artwork);
+
+        return $this->redirectToRoute('admin_artworks');
+    }
+
     #[Route('/reorder', name: 'admin_artworks_reorder', methods: ['POST'])]
     public function reorder(Request $request): JsonResponse
     {

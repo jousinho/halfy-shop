@@ -62,4 +62,28 @@ final class DoctrineNovedadRepository implements NovedadRepository
 
         return (int) $qb->getQuery()->getSingleScalarResult() > 0;
     }
+
+    public function search(string $query): array
+    {
+        $term = '%' . mb_strtolower($query) . '%';
+
+        return $this->em->createQueryBuilder()
+            ->select('n')
+            ->from(Novedad::class, 'n')
+            ->where('n.publicado = true')
+            ->andWhere(
+                $this->em->createQueryBuilder()->expr()->orX(
+                    'LOWER(n.titulo) LIKE :term',
+                    'LOWER(n.tituloEn) LIKE :term',
+                    'LOWER(n.contenido) LIKE :term',
+                    'LOWER(n.contenidoEn) LIKE :term',
+                    'LOWER(n.lugar) LIKE :term',
+                    'LOWER(n.tipo) LIKE :term',
+                )
+            )
+            ->setParameter('term', $term)
+            ->orderBy('n.fecha', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

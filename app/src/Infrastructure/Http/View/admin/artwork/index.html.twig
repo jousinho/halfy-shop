@@ -28,6 +28,12 @@
                 </div>
                 <div class="artwork-list__actions">
                     <a href="{{ path('admin_artworks_edit', {id: artwork.id.value}) }}" class="btn btn--sm">Editar</a>
+                    <form method="post" action="{{ path('admin_artworks_toggle_visibility', {id: artwork.id.value}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('toggle_artwork_' ~ artwork.id.value) }}">
+                        <button type="submit" class="btn btn--sm {{ artwork.isVisible ? 'btn--muted' : 'btn--warning' }}">
+                            {{ artwork.isVisible ? 'Ocultar' : 'Mostrar' }}
+                        </button>
+                    </form>
                     <form method="post" action="{{ path('admin_artworks_delete', {id: artwork.id.value}) }}"
                           onsubmit="return confirm('¿Eliminar esta obra?')">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete_artwork_' ~ artwork.id.value) }}">

@@ -24,4 +24,7 @@ interface NovedadRepository
     public function delete(Novedad $novedad): void;
 
     public function slugExists(string $slug, ?string $excludeId = null): bool;
+
+    /** @return Novedad[] */
+    public function search(string $query): array;
 }

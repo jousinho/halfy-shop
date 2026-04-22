@@ -62,6 +62,9 @@ final class Artwork
     #[ORM\Column(type: 'boolean')]
     private bool $isAvailable;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $visible;
+
     #[ORM\Column(type: 'integer')]
     private int $sortOrder;
 
@@ -103,6 +106,7 @@ final class Artwork
         $this->imageFilename = $imageFilename;
         $this->shopUrl       = $shopUrl;
         $this->isAvailable   = $isAvailable;
+        $this->visible       = true;
         $this->sortOrder     = $sortOrder;
         $this->createdAt  = new \DateTimeImmutable();
         $this->categories = new ArrayCollection();
@@ -277,6 +281,16 @@ final class Artwork
     public function isAvailable(): bool
     {
         return $this->isAvailable;
+    }
+
+    public function isVisible(): bool
+    {
+        return $this->visible;
+    }
+
+    public function toggleVisibility(): void
+    {
+        $this->visible = !$this->visible;
     }
 
     public function sortOrder(): int

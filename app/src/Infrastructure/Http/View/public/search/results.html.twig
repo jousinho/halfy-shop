@@ -1,0 +1,71 @@
+{% extends 'public/layout.html.twig' %}
+
+{% block title %}{{ 'search.title'|trans }} — Anna Pownall{% endblock %}
+
+{% block content %}
+<div class="search-results">
+    <h1 class="search-results__heading">
+        {% if term is not empty %}
+            {{ 'search.results_for'|trans }} <em>{{ term }}</em>
+        {% else %}
+            {{ 'search.title'|trans }}
+        {% endif %}
+    </h1>
+
+    {% set total = results.artworks|length + results.novedades|length %}
+
+    {% if term is not empty and total == 0 %}
+        <p class="search-results__empty">{{ 'search.no_results'|trans }}</p>
+    {% endif %}
+
+    {% if results.artworks is not empty %}
+        <section class="search-section">
+            <h2 class="search-section__title">{{ 'search.section_artworks'|trans }}</h2>
+            <ul class="search-list">
+                {% for item in results.artworks %}
+                <li class="search-item">
+                    <a href="{{ item.url }}" class="search-item__link">
+                        <div class="search-item__img">
+                            <img src="/uploads/{{ item.imageDir }}/{{ item.imageFilename }}" alt="{{ item.title }}">
+                        </div>
+                        <div class="search-item__body">
+                            <span class="search-item__title">{{ item.title }}</span>
+                            {% if item.subtitle is not null %}
+                                <span class="search-item__subtitle">{{ item.subtitle }}</span>
+                            {% endif %}
+                        </div>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% endif %}
+
+    {% if results.novedades is not empty %}
+        <section class="search-section">
+            <h2 class="search-section__title">{{ 'search.section_novedades'|trans }}</h2>
+            <ul class="search-list">
+                {% for item in results.novedades %}
+                <li class="search-item">
+                    <a href="{{ item.url }}" class="search-item__link">
+                        {% if item.imageFilename is not null %}
+                            <div class="search-item__img">
+                                <img src="/uploads/{{ item.imageDir }}/{{ item.imageFilename }}" alt="{{ item.title }}">
+                            </div>
+                        {% else %}
+                            <div class="search-item__img search-item__img--empty"></div>
+                        {% endif %}
+                        <div class="search-item__body">
+                            <span class="search-item__title">{{ item.title }}</span>
+                            {% if item.subtitle is not null %}
+                                <span class="search-item__subtitle">{{ item.subtitle }}</span>
+                            {% endif %}
+                        </div>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% endif %}
+</div>
+{% endblock %}

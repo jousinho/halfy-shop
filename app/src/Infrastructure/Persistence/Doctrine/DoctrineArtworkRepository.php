@@ -41,12 +41,29 @@ final class DoctrineArtworkRepository extends ServiceEntityRepository implements
         return $this->findBy([], ['sortOrder' => 'ASC']);
     }
 
+    public function findAllVisible(): array
+    {
+        return $this->findBy(['visible' => true], ['sortOrder' => 'ASC']);
+    }
+
     /** @return Artwork[] */
     public function findByCategory(CategoryId $id): array
     {
         return $this->createQueryBuilder('a')
             ->join('a.categories', 'c')
             ->where('c.id = :categoryId')
+            ->setParameter('categoryId', $id->value())
+            ->orderBy('a.sortOrder', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findVisibleByCategory(CategoryId $id): array
+    {
+        return $this->createQueryBuilder('a')
+            ->join('a.categories', 'c')
+            ->where('c.id = :categoryId')
+            ->andWhere('a.visible = true')
             ->setParameter('categoryId', $id->value())
             ->orderBy('a.sortOrder', 'ASC')
             ->getQuery()
@@ -66,5 +83,26 @@ final class DoctrineArtworkRepository extends ServiceEntityRepository implements
     public function findByShopUrl(string $shopUrl): ?Artwork
     {
         return $this->findOneBy(['shopUrl' => $shopUrl]);
+    }
+
+    public function search(string $query): array
+    {
+        $term = '%' . mb_strtolower($query) . '%';
+
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.categories', 'c')
+            ->where('LOWER(a.title) LIKE :term')
+            ->orWhere('LOWER(a.titleEn) LIKE :term')
+            ->orWhere('LOWER(a.description) LIKE :term')
+            ->orWhere('LOWER(a.descriptionEn) LIKE :term')
+            ->orWhere('LOWER(a.technique) LIKE :term')
+            ->orWhere('LOWER(a.techniqueEn) LIKE :term')
+            ->orWhere('LOWER(a.dimensions) LIKE :term')
+            ->orWhere('LOWER(c.name) LIKE :term')
+            ->setParameter('term', $term)
+            ->orderBy('a.sortOrder', 'ASC')
+            ->distinct()
+            ->getQuery()
+            ->getResult();
     }
 }
