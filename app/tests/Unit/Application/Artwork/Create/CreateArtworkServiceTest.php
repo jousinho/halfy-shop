@@ -15,10 +15,6 @@ use App\Domain\Category\Repository\CategoryRepository;
 use App\Domain\Category\ValueObject\CategoryId;
 use App\Domain\Category\ValueObject\CategoryName;
 use App\Domain\Category\ValueObject\CategorySlug;
-use App\Domain\Tag\Entity\Tag;
-use App\Domain\Tag\Repository\TagRepository;
-use App\Domain\Tag\ValueObject\TagId;
-use App\Domain\Tag\ValueObject\TagName;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -30,7 +26,6 @@ final class CreateArtworkServiceTest extends TestCase
 {
     private ArtworkRepository&MockObject $artworkRepository;
     private CategoryRepository&MockObject $categoryRepository;
-    private TagRepository&MockObject $tagRepository;
     private ImageProcessor&MockObject $imageProcessor;
     private EventDispatcherInterface&MockObject $dispatcher;
     private CreateArtworkService $service;
@@ -39,14 +34,12 @@ final class CreateArtworkServiceTest extends TestCase
     {
         $this->artworkRepository  = $this->createMock(ArtworkRepository::class);
         $this->categoryRepository = $this->createMock(CategoryRepository::class);
-        $this->tagRepository      = $this->createMock(TagRepository::class);
         $this->imageProcessor     = $this->createMock(ImageProcessor::class);
         $this->dispatcher         = $this->createMock(EventDispatcherInterface::class);
 
         $this->service = new CreateArtworkService(
             $this->artworkRepository,
             $this->categoryRepository,
-            $this->tagRepository,
             $this->imageProcessor,
             $this->dispatcher,
         );
@@ -77,7 +70,6 @@ final class CreateArtworkServiceTest extends TestCase
             ->willReturn('img.jpg');
 
         $this->artworkRepository->method('findNextSortOrder')->willReturn(1);
-        $this->artworkRepository->method('save');
         $this->dispatcher->method('dispatch');
 
         $this->service->execute($this->buildCommand(imageFile: $imageFile));
@@ -85,7 +77,7 @@ final class CreateArtworkServiceTest extends TestCase
 
     public function test_execute__should_use_filename_returned_by_image_processor(): void
     {
-        $this->imageProcessor->method('process')->willReturn('processed-result.jpg');
+        $this->imageProcessor->method('process')->willReturn('processed.jpg');
         $this->artworkRepository->method('findNextSortOrder')->willReturn(1);
         $this->dispatcher->method('dispatch');
 
@@ -98,13 +90,13 @@ final class CreateArtworkServiceTest extends TestCase
 
         $this->service->execute($this->buildCommand());
 
-        $this->assertSame('processed-result.jpg', $capturedArtwork->imageFilename());
+        $this->assertSame('processed.jpg', $capturedArtwork->imageFilename());
     }
 
     public function test_execute__should_use_next_sort_order_from_repository(): void
     {
         $this->imageProcessor->method('process')->willReturn('img.jpg');
-        $this->artworkRepository->method('findNextSortOrder')->willReturn(7);
+        $this->artworkRepository->method('findNextSortOrder')->willReturn(5);
         $this->dispatcher->method('dispatch');
 
         $capturedArtwork = null;
@@ -116,7 +108,7 @@ final class CreateArtworkServiceTest extends TestCase
 
         $this->service->execute($this->buildCommand());
 
-        $this->assertSame(7, $capturedArtwork->sortOrder());
+        $this->assertSame(5, $capturedArtwork->sortOrder());
     }
 
     public function test_execute__when_price_is_null__should_create_artwork_without_price(): void
@@ -156,27 +148,6 @@ final class CreateArtworkServiceTest extends TestCase
         $this->service->execute($this->buildCommand(categoryIds: [CategoryId::generate()->value()]));
 
         $this->assertCount(1, $capturedArtwork->categories());
-    }
-
-    public function test_execute__when_tag_given__should_assign_tag_to_artwork(): void
-    {
-        $tag = $this->buildTag();
-
-        $this->imageProcessor->method('process')->willReturn('img.jpg');
-        $this->artworkRepository->method('findNextSortOrder')->willReturn(1);
-        $this->tagRepository->method('findById')->willReturn($tag);
-        $this->dispatcher->method('dispatch');
-
-        $capturedArtwork = null;
-        $this->artworkRepository
-            ->method('save')
-            ->willReturnCallback(function (Artwork $artwork) use (&$capturedArtwork): void {
-                $capturedArtwork = $artwork;
-            });
-
-        $this->service->execute($this->buildCommand(tagIds: [TagId::generate()->value()]));
-
-        $this->assertCount(1, $capturedArtwork->tags());
     }
 
     public function test_execute__when_multiple_categories_given__should_assign_all(): void
@@ -222,30 +193,10 @@ final class CreateArtworkServiceTest extends TestCase
         $this->assertCount(0, $capturedArtwork->categories());
     }
 
-    public function test_execute__when_tag_not_found__should_skip_it(): void
-    {
-        $this->imageProcessor->method('process')->willReturn('img.jpg');
-        $this->artworkRepository->method('findNextSortOrder')->willReturn(1);
-        $this->tagRepository->method('findById')->willReturn(null);
-        $this->dispatcher->method('dispatch');
-
-        $capturedArtwork = null;
-        $this->artworkRepository
-            ->method('save')
-            ->willReturnCallback(function (Artwork $artwork) use (&$capturedArtwork): void {
-                $capturedArtwork = $artwork;
-            });
-
-        $this->service->execute($this->buildCommand(tagIds: [TagId::generate()->value()]));
-
-        $this->assertCount(0, $capturedArtwork->tags());
-    }
-
     private function buildCommand(
         ?UploadedFile $imageFile = null,
         ?float $price = 100.00,
         array $categoryIds = [],
-        array $tagIds = [],
     ): CreateArtworkCommand {
         return CreateArtworkCommand::create(
             title:         'Fluye',
@@ -261,7 +212,6 @@ final class CreateArtworkServiceTest extends TestCase
             shopUrl:     null,
             isAvailable: true,
             categoryIds: $categoryIds,
-            tagIds:      $tagIds,
         );
     }
 
@@ -274,10 +224,5 @@ final class CreateArtworkServiceTest extends TestCase
             CategorySlug::create('ilustracion'),
             1,
         );
-    }
-
-    private function buildTag(): Tag
-    {
-        return Tag::create(TagId::generate(), TagName::create('abstracto'), 'abstracto');
     }
 }

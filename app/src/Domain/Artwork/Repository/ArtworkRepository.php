@@ -20,9 +20,18 @@ interface ArtworkRepository
     public function findAll(): array;
 
     /** @return Artwork[] */
+    public function findAllVisible(): array;
+
+    /** @return Artwork[] */
     public function findByCategory(CategoryId $id): array;
+
+    /** @return Artwork[] */
+    public function findVisibleByCategory(CategoryId $id): array;
 
     public function findNextSortOrder(): int;
 
     public function findByShopUrl(string $shopUrl): ?Artwork;
+
+    /** @return Artwork[] */
+    public function search(string $query): array;
 }

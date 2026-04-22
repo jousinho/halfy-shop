@@ -22,7 +22,6 @@ final class CreateArtworkCommand
         public readonly ?string $shopUrl,
         public readonly bool $isAvailable,
         public readonly array $categoryIds,
-        public readonly array $tagIds,
     ) {}
 
     public static function create(
@@ -39,7 +38,6 @@ final class CreateArtworkCommand
         ?string $shopUrl,
         bool $isAvailable,
         array $categoryIds,
-        array $tagIds,
     ): self {
         return new self(
             $title,
@@ -55,7 +53,6 @@ final class CreateArtworkCommand
             $shopUrl,
             $isAvailable,
             $categoryIds,
-            $tagIds,
         );
     }
 }

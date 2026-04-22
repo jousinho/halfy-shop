@@ -356,6 +356,54 @@
         .ed-locale a:hover,
         .ed-locale a.active { color: var(--ed-paper); }
         .ed-locale span { color: var(--ed-rule); }
+
+        .site-search {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-right: 0.5rem;
+        }
+        .site-search__toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            font-family: var(--ed-font-b);
+            font-size: 0.65rem;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--ed-muted);
+            transition: color 0.2s;
+            white-space: nowrap;
+        }
+        .site-search__toggle:hover { color: var(--ed-paper); }
+        .site-search__form {
+            position: absolute;
+            right: calc(100% + 0.5rem);
+            top: 50%;
+            transform: translateY(-50%);
+            overflow: hidden;
+            max-width: 0;
+            opacity: 0;
+            transition: max-width 0.3s ease, opacity 0.2s ease;
+        }
+        .site-search.is-open .site-search__form {
+            max-width: 200px;
+            opacity: 1;
+        }
+        .site-search__input {
+            font-family: var(--ed-font-b);
+            font-size: 0.72rem;
+            color: var(--ed-paper);
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--ed-rule);
+            outline: none;
+            padding: 0.1rem 0;
+            width: 160px;
+        }
+        .site-search__input::placeholder { color: var(--ed-muted); }
     </style>
     {% block stylesheets %}{% endblock %}
 </head>
@@ -366,10 +414,17 @@
         <div class="ed-masthead__rule"></div>
         <nav class="ed-nav">
             <a href="{{ path('home') }}" {% if app.request.attributes.get('_route') == 'home' %}class="active"{% endif %}>{{ 'nav.works'|trans }}</a>
-            <a href="{{ path('blog_index') }}" {% if app.request.attributes.get('_route') starts with 'blog' %}class="active"{% endif %}>{{ 'nav.blog'|trans }}</a>
+            <a href="{{ path('novedades') }}" {% if app.request.attributes.get('_route') starts with 'novedades' %}class="active"{% endif %}>{{ 'nav.novedades'|trans }}</a>
             <a href="{{ path('about') }}" {% if app.request.attributes.get('_route') == 'about' %}class="active"{% endif %}>{{ 'nav.about'|trans }}</a>
         </nav>
         <div class="ed-locale">
+            <div class="site-search" id="siteSearch">
+                <form class="site-search__form" action="{{ path('search', {_locale: app.request.locale}) }}" method="get" id="searchForm">
+                    <input class="site-search__input" type="search" name="q" placeholder="{{ 'search.placeholder'|trans }}" value="{{ app.request.query.get('q') }}" autocomplete="off" id="searchInput">
+                </form>
+                <button class="site-search__toggle" id="searchToggle">{{ 'search.label'|trans }}</button>
+            </div>
+            <span>|</span>
             <a href="{{ path(_route, _route_params|merge({'_locale': 'es'})) }}" {% if app.request.locale == 'es' %}class="active"{% endif %}>ES</a>
             <span>|</span>
             <a href="{{ path(_route, _route_params|merge({'_locale': 'en'})) }}" {% if app.request.locale == 'en' %}class="active"{% endif %}>EN</a>
@@ -385,6 +440,21 @@
 
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
     <script src="/assets/js/lightbox.js"></script>
+    <script>
+    (function () {
+        var toggle = document.getElementById('searchToggle');
+        var search = document.getElementById('siteSearch');
+        var input  = document.getElementById('searchInput');
+        if (input.value.trim()) { search.classList.add('is-open'); }
+        toggle.addEventListener('click', function () {
+            search.classList.toggle('is-open');
+            if (search.classList.contains('is-open')) { input.focus(); }
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') { search.classList.remove('is-open'); }
+        });
+    })();
+    </script>
     {% block javascripts %}{% endblock %}
 </body>
 </html>

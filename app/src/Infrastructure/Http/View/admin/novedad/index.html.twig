@@ -1,0 +1,50 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Novedades{% endblock %}
+
+{% block content %}
+    <div class="admin-page-header">
+        <h1>Novedades</h1>
+        <a href="{{ path('admin_novedades_new') }}" class="btn btn--primary">+ Nueva novedad</a>
+    </div>
+
+    {% if novedades is empty %}
+        <p class="admin-empty">No hay novedades todavía.</p>
+    {% else %}
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Tipo</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for novedad in novedades %}
+                <tr>
+                    <td>{{ novedad.titulo }}</td>
+                    <td>{{ novedad.tipo.value|capitalize }}</td>
+                    <td>{{ novedad.fecha|date('d/m/Y') }}</td>
+                    <td>
+                        {% if novedad.publicado %}
+                            <span class="badge badge--green">Publicada</span>
+                        {% else %}
+                            <span class="badge badge--grey">Borrador</span>
+                        {% endif %}
+                    </td>
+                    <td class="admin-table__actions">
+                        <a href="{{ path('admin_novedades_edit', {id: novedad.id.value}) }}" class="btn btn--secondary btn--sm">Editar</a>
+                        <form method="post" action="{{ path('admin_novedades_delete', {id: novedad.id.value}) }}"
+                              onsubmit="return confirm('¿Eliminar esta novedad?')">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_novedad_' ~ novedad.id.value) }}">
+                            <button type="submit" class="btn btn--danger btn--sm">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

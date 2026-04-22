@@ -21,7 +21,6 @@ use App\Domain\Category\Repository\CategoryRepository;
 use App\Domain\Category\ValueObject\CategoryId;
 use App\Domain\Category\ValueObject\CategoryName;
 use App\Domain\Category\ValueObject\CategorySlug;
-use App\Domain\Tag\Repository\TagRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -33,7 +32,6 @@ final class UpdateArtworkServiceTest extends TestCase
 {
     private ArtworkRepository&MockObject $artworkRepository;
     private CategoryRepository&MockObject $categoryRepository;
-    private TagRepository&MockObject $tagRepository;
     private ImageProcessor&MockObject $imageProcessor;
     private EventDispatcherInterface&MockObject $dispatcher;
     private UpdateArtworkService $service;
@@ -42,14 +40,12 @@ final class UpdateArtworkServiceTest extends TestCase
     {
         $this->artworkRepository  = $this->createMock(ArtworkRepository::class);
         $this->categoryRepository = $this->createMock(CategoryRepository::class);
-        $this->tagRepository      = $this->createMock(TagRepository::class);
         $this->imageProcessor     = $this->createMock(ImageProcessor::class);
         $this->dispatcher         = $this->createMock(EventDispatcherInterface::class);
 
         $this->service = new UpdateArtworkService(
             $this->artworkRepository,
             $this->categoryRepository,
-            $this->tagRepository,
             $this->imageProcessor,
             $this->dispatcher,
         );
@@ -203,7 +199,6 @@ final class UpdateArtworkServiceTest extends TestCase
         ?float $price = 100.00,
         ?UploadedFile $imageFile = null,
         array $categoryIds = [],
-        array $tagIds = [],
     ): UpdateArtworkCommand {
         return UpdateArtworkCommand::create(
             id:            $id ?: ArtworkId::generate()->value(),
@@ -220,7 +215,6 @@ final class UpdateArtworkServiceTest extends TestCase
             shopUrl:     null,
             isAvailable: true,
             categoryIds: $categoryIds,
-            tagIds:      $tagIds,
         );
     }
 

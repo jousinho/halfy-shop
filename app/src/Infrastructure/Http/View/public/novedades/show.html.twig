@@ -1,0 +1,41 @@
+{% extends 'public/layout.html.twig' %}
+
+{% block title %}{{ novedad.tituloForLocale(app.request.locale) }} — Anna Pownall{% endblock %}
+
+{% block content %}
+<div class="novedad-detail">
+
+    <div class="novedad-detail__meta">
+        <span class="novedad-detail__tipo novedad-detail__tipo--{{ novedad.tipo.value }}">{{ ('novedades.tipo_' ~ novedad.tipo.value)|trans }}</span>
+        <span class="novedad-detail__fecha">
+            {{ novedad.fecha|date('d/m/Y') }}
+            {% if novedad.fechaFin is not null %}
+                — {{ novedad.fechaFin|date('d/m/Y') }}
+            {% endif %}
+        </span>
+        {% if novedad.lugar is not null %}
+            <span class="novedad-detail__lugar">{{ novedad.lugar }}</span>
+        {% endif %}
+    </div>
+
+    <h1 class="novedad-detail__titulo">{{ novedad.tituloForLocale(app.request.locale) }}</h1>
+
+    {% if novedad.contenidoForLocale(app.request.locale) is not null %}
+        <div class="novedad-detail__contenido">
+            {{ novedad.contenidoForLocale(app.request.locale)|raw }}
+        </div>
+    {% endif %}
+
+    {% if novedad.url is not null %}
+        <a href="{{ novedad.url }}" target="_blank" rel="noopener noreferrer" class="novedad-detail__url">{{ novedad.url }}</a>
+    {% endif %}
+
+    {% if novedad.imagen is not null %}
+        <div class="novedad-detail__img">
+            <img src="/uploads/novedades/{{ novedad.imagen }}" alt="{{ novedad.tituloForLocale(app.request.locale) }}">
+        </div>
+    {% endif %}
+
+    <a href="{{ path('novedades', {_locale: app.request.locale}) }}" class="novedad-detail__back">{{ 'novedades.back'|trans }}</a>
+</div>
+{% endblock %}

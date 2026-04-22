@@ -14,7 +14,6 @@ use App\Domain\Artwork\ValueObject\Dimensions;
 use App\Domain\Artwork\ValueObject\Price;
 use App\Domain\Artwork\ValueObject\Technique;
 use App\Domain\Category\Entity\Category;
-use App\Domain\Tag\Entity\Tag;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -63,6 +62,9 @@ final class Artwork
     #[ORM\Column(type: 'boolean')]
     private bool $isAvailable;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $visible;
+
     #[ORM\Column(type: 'integer')]
     private int $sortOrder;
 
@@ -72,10 +74,6 @@ final class Artwork
     #[ORM\ManyToMany(targetEntity: Category::class)]
     #[ORM\JoinTable(name: 'artwork_category')]
     private Collection $categories;
-
-    #[ORM\ManyToMany(targetEntity: Tag::class)]
-    #[ORM\JoinTable(name: 'artwork_tag')]
-    private Collection $tags;
 
     private array $domainEvents = [];
 
@@ -108,10 +106,10 @@ final class Artwork
         $this->imageFilename = $imageFilename;
         $this->shopUrl       = $shopUrl;
         $this->isAvailable   = $isAvailable;
+        $this->visible       = true;
         $this->sortOrder     = $sortOrder;
-        $this->createdAt     = new \DateTimeImmutable();
-        $this->categories    = new ArrayCollection();
-        $this->tags          = new ArrayCollection();
+        $this->createdAt  = new \DateTimeImmutable();
+        $this->categories = new ArrayCollection();
     }
 
     public static function create(
@@ -189,18 +187,6 @@ final class Artwork
     public function removeCategory(Category $category): void
     {
         $this->categories->removeElement($category);
-    }
-
-    public function assignTag(Tag $tag): void
-    {
-        if (!$this->tags->contains($tag)) {
-            $this->tags->add($tag);
-        }
-    }
-
-    public function removeTag(Tag $tag): void
-    {
-        $this->tags->removeElement($tag);
     }
 
     public function pullDomainEvents(): array
@@ -297,6 +283,16 @@ final class Artwork
         return $this->isAvailable;
     }
 
+    public function isVisible(): bool
+    {
+        return $this->visible;
+    }
+
+    public function toggleVisibility(): void
+    {
+        $this->visible = !$this->visible;
+    }
+
     public function sortOrder(): int
     {
         return $this->sortOrder;
@@ -315,10 +311,5 @@ final class Artwork
     public function categories(): Collection
     {
         return $this->categories;
-    }
-
-    public function tags(): Collection
-    {
-        return $this->tags;
     }
 }

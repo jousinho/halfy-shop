@@ -14,7 +14,7 @@ use App\Domain\Artwork\ValueObject\Dimensions;
 use App\Domain\Artwork\ValueObject\Price;
 use App\Domain\Artwork\ValueObject\Technique;
 use App\Domain\Category\Repository\CategoryRepository;
-use App\Domain\Tag\Repository\TagRepository;
+use App\Domain\Category\ValueObject\CategoryId;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -23,7 +23,6 @@ final class CreateArtworkService
     public function __construct(
         private readonly ArtworkRepository $artworkRepository,
         private readonly CategoryRepository $categoryRepository,
-        private readonly TagRepository $tagRepository,
         private readonly ImageProcessor $imageProcessor,
         private readonly EventDispatcherInterface $dispatcher,
     ) {}
@@ -32,7 +31,7 @@ final class CreateArtworkService
     {
         $imageFilename = $this->processAndStoreImage($command->imageFile);
         $artwork       = $this->buildArtwork($command, $imageFilename);
-        $this->assignCategoriesAndTags($artwork, $command->categoryIds, $command->tagIds);
+        $this->assignCategories($artwork, $command->categoryIds);
         $this->save($artwork);
         $this->dispatchEvents($artwork);
     }
@@ -62,23 +61,12 @@ final class CreateArtworkService
         );
     }
 
-    private function assignCategoriesAndTags(Artwork $artwork, array $categoryIds, array $tagIds): void
+    private function assignCategories(Artwork $artwork, array $categoryIds): void
     {
         foreach ($categoryIds as $categoryId) {
-            $category = $this->categoryRepository->findById(
-                \App\Domain\Category\ValueObject\CategoryId::create($categoryId)
-            );
+            $category = $this->categoryRepository->findById(CategoryId::create($categoryId));
             if ($category !== null) {
                 $artwork->assignCategory($category);
-            }
-        }
-
-        foreach ($tagIds as $tagId) {
-            $tag = $this->tagRepository->findById(
-                \App\Domain\Tag\ValueObject\TagId::create($tagId)
-            );
-            if ($tag !== null) {
-                $artwork->assignTag($tag);
             }
         }
     }

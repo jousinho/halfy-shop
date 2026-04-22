@@ -1,7 +1,7 @@
 nav:
     works: Works
     about: About me
-    blog: Blog
+    novedades: News
 
 page:
     title: Anna Pownall — Printmaking & Illustration
@@ -25,10 +25,21 @@ badge:
 shop:
     view: View in shop
 
-blog:
-    title: Blog
-    no_posts: No published posts.
-    back: '← Back to blog'
+novedades:
+    title: News
+    empty: No news published yet.
+    back: '← Back to news'
+    tipo_noticia: News
+    tipo_evento: Event
+
+search:
+    label: Search
+    placeholder: Search…
+    title: Search
+    results_for: 'Results for'
+    no_results: No results found.
+    section_artworks: Works
+    section_novedades: News
 
 about:
     title: About me

@@ -28,7 +28,7 @@ final class GalleryController extends AbstractController
         }
 
         return $this->render('public/gallery/by_category.html.twig', [
-            'artworks'       => $this->artworkRepository->findByCategory($category->id()),
+            'artworks'       => $this->artworkRepository->findVisibleByCategory($category->id()),
             'activeCategory' => $category,
             'categories'     => $this->categoryRepository->findAll(),
         ]);
