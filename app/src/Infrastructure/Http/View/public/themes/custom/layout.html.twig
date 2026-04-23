@@ -171,22 +171,21 @@
 
         /* Masonry grid */
         .es-masonry {
-            columns: 3;
-            column-gap: 3px;
-            padding: 3px 2rem;
+            position: relative;
+            margin: 3px 2rem 0;
         }
-
-        @media (max-width: 900px) { .es-masonry { columns: 2; } }
-        @media (max-width: 500px) { .es-masonry { columns: 1; } }
 
         /* Artwork card */
         .es-card {
-            break-inside: avoid;
             position: relative;
             overflow: hidden;
+            width: calc(33.333% - 2px);
             margin-bottom: 3px;
             cursor: pointer;
         }
+
+        @media (max-width: 900px) { .es-card { width: calc(50% - 1.5px); } }
+        @media (max-width: 500px) { .es-card { width: 100%; } }
 
         .es-card__link {
             display: block;
@@ -504,6 +503,21 @@
         }
         window.addEventListener('scroll', onScroll, { passive: true });
         onScroll();
+    })();
+    </script>
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+    <script>
+    (function () {
+        var grid = document.querySelector('.es-masonry');
+        if (!grid) return;
+        imagesLoaded(grid, function () {
+            new Masonry(grid, {
+                itemSelector: '.es-card',
+                percentPosition: true,
+                gutter: 3
+            });
+        });
     })();
     </script>
     {% block javascripts %}{% endblock %}
