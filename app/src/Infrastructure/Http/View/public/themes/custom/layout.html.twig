@@ -163,29 +163,82 @@
         @media (max-width: 640px) {
             .es-filters        { display: none; }
             .es-filters-select { display: block; }
-            .es-header         { padding: 0 1rem; }
-            .es-nav            { gap: 1.25rem; }
-            .es-masonry        { columns: 2; }
             .es-footer         { padding: 1.25rem 1rem; }
         }
 
-        /* Masonry grid */
+        /* Hamburger */
+        .es-hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            flex-direction: column;
+            gap: 5px;
+            align-items: center;
+            justify-content: center;
+        }
+        .es-hamburger span {
+            display: block;
+            width: 20px;
+            height: 1.5px;
+            background: var(--es-text);
+            transition: transform 0.25s ease, opacity 0.2s ease;
+        }
+        .es-hamburger.is-open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+        .es-hamburger.is-open span:nth-child(2) { opacity: 0; }
+        .es-hamburger.is-open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+        @media (max-width: 640px) {
+            .es-header { padding: 0 1rem; }
+            .es-hamburger { display: flex; }
+            .es-nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                gap: 0;
+                background: var(--es-bg);
+                border-bottom: 1px solid var(--es-border);
+                padding: 0.5rem 1.5rem 1rem;
+                z-index: 99;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            }
+            .es-nav.is-open { display: flex; }
+            .es-nav a {
+                padding: 0.75rem 0;
+                border-bottom: 1px solid var(--es-border);
+                font-size: 0.75rem;
+            }
+            .es-nav a:last-child { border-bottom: none; }
+        }
+
+        /* Masonry grid — mobile first */
         .es-masonry {
             position: relative;
-            margin: 3px 2rem 0;
+            margin: 3px 1rem 0;
         }
 
         /* Artwork card */
         .es-card {
             position: relative;
             overflow: hidden;
-            width: calc(33.333% - 2px);
+            width: 100%;
             margin-bottom: 3px;
             cursor: pointer;
         }
 
-        @media (max-width: 900px) { .es-card { width: calc(50% - 1.5px); } }
-        @media (max-width: 500px) { .es-card { width: 100%; } }
+        @media (min-width: 500px) {
+            .es-masonry { margin: 3px 1.5rem 0; }
+            .es-card    { width: calc(50% - 1.5px); }
+        }
+
+        @media (min-width: 900px) {
+            .es-masonry { margin: 3px 2rem 0; }
+            .es-card    { width: calc(33.333% - 2px); }
+        }
 
         .es-card__link {
             display: block;
@@ -231,6 +284,15 @@
             color: rgba(255, 255, 255, 0.65);
             margin-top: 0.15rem;
             letter-spacing: 0.06em;
+        }
+
+        .es-card__sold {
+            font-size: 0.6rem;
+            font-weight: 500;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 0.15rem;
         }
 
         .es-empty {
@@ -401,6 +463,56 @@
         }
         .es-instagram:hover { color: var(--es-text); }
         .es-instagram svg { width: 16px; height: 16px; }
+
+        .es-cookie {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 500;
+            background: var(--es-bg);
+            border-top: 1px solid var(--es-border);
+            padding: 0.85rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .es-cookie__text {
+            font-size: 0.65rem;
+            color: var(--es-muted);
+            letter-spacing: 0.06em;
+        }
+        .es-cookie__actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-shrink: 0;
+        }
+        .es-cookie__btn {
+            background: none;
+            border: 1px solid var(--es-border);
+            cursor: pointer;
+            font-family: var(--es-font);
+            font-size: 0.6rem;
+            font-weight: 400;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            padding: 0.35rem 0.85rem;
+            color: var(--es-muted);
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+        .es-cookie__btn:hover { color: var(--es-text); border-color: var(--es-text); }
+        .es-cookie__btn--accept {
+            background: var(--es-text);
+            color: var(--es-bg);
+            border-color: var(--es-text);
+        }
+        .es-cookie__btn--accept:hover { background: var(--es-accent); border-color: var(--es-accent); color: #fff; }
+        @media (max-width: 500px) {
+            .es-cookie { padding: 0.85rem 1rem; }
+            .es-cookie__text { font-size: 0.62rem; }
+        }
     </style>
     {% block stylesheets %}{% endblock %}
 </head>
@@ -441,6 +553,11 @@
                 </svg>
             </a>
             {% endif %}
+            <button class="es-hamburger" id="hamburger" aria-expanded="false" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <div class="es-lang" id="langDropdown">
                 <button class="es-lang__trigger" id="langToggle" aria-expanded="false">
                     {{ app.request.locale|upper }}
@@ -510,16 +627,65 @@
     <script>
     (function () {
         var grid = document.querySelector('.es-masonry');
-        if (!grid) return;
-        imagesLoaded(grid, function () {
-            new Masonry(grid, {
-                itemSelector: '.es-card',
-                percentPosition: true,
-                gutter: 3
+        if (grid) {
+            imagesLoaded(grid, function () {
+                var msnry = new Masonry(grid, {
+                    itemSelector: '.es-card',
+                    percentPosition: true,
+                    gutter: 3
+                });
+                var resizeTimer;
+                window.addEventListener('resize', function () {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(function () { msnry.layout(); }, 200);
+                });
             });
-        });
+        }
+
+        var hamburger = document.getElementById('hamburger');
+        var nav       = document.querySelector('.es-nav');
+        if (hamburger && nav) {
+            hamburger.addEventListener('click', function (e) {
+                e.stopPropagation();
+                var open = nav.classList.toggle('is-open');
+                hamburger.classList.toggle('is-open', open);
+                hamburger.setAttribute('aria-expanded', open);
+            });
+            document.addEventListener('click', function (e) {
+                if (!hamburger.contains(e.target) && !nav.contains(e.target)) {
+                    nav.classList.remove('is-open');
+                    hamburger.classList.remove('is-open');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
     })();
     </script>
     {% block javascripts %}{% endblock %}
+
+    <div class="es-cookie" id="cookieBanner" style="display:none">
+        <span class="es-cookie__text">{{ 'cookies.text'|trans }}</span>
+        <div class="es-cookie__actions">
+            <button class="es-cookie__btn es-cookie__btn--accept" id="cookieAccept">{{ 'cookies.accept'|trans }}</button>
+            <button class="es-cookie__btn es-cookie__btn--decline" id="cookieDecline">{{ 'cookies.decline'|trans }}</button>
+        </div>
+    </div>
+
+    <script>
+    (function () {
+        var banner = document.getElementById('cookieBanner');
+        if (!localStorage.getItem('cookies_decision')) {
+            banner.style.display = 'flex';
+        }
+        document.getElementById('cookieAccept').addEventListener('click', function () {
+            localStorage.setItem('cookies_decision', 'accepted');
+            banner.style.display = 'none';
+        });
+        document.getElementById('cookieDecline').addEventListener('click', function () {
+            localStorage.setItem('cookies_decision', 'declined');
+            banner.style.display = 'none';
+        });
+    })();
+    </script>
 </body>
 </html>
