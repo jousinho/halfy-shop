@@ -279,7 +279,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            gap: 0.3rem;
+            gap: 1.25rem;
             font-size: 0.65rem;
             letter-spacing: 0.12em;
         }
@@ -292,17 +292,17 @@
         .es-locale a.active { color: var(--es-text); }
         .es-locale span { color: var(--es-border); }
 
-        .site-search {
+        .es-lang {
             position: relative;
-            display: flex;
-            align-items: center;
-            margin-right: 0.5rem;
         }
-        .site-search__toggle {
+        .es-lang__trigger {
             background: none;
             border: none;
             cursor: pointer;
             padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
             font-family: var(--es-font);
             font-size: 0.65rem;
             font-weight: 400;
@@ -310,7 +310,55 @@
             text-transform: uppercase;
             color: var(--es-muted);
             transition: color 0.2s;
-            white-space: nowrap;
+        }
+        .es-lang__trigger:hover { color: var(--es-text); }
+        .es-lang__arrow {
+            transition: transform 0.2s ease;
+        }
+        .es-lang.is-open .es-lang__arrow {
+            transform: rotate(180deg);
+        }
+        .es-lang__menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            right: 0;
+            background: var(--es-bg);
+            border: 1px solid var(--es-border);
+            min-width: 56px;
+            z-index: 200;
+        }
+        .es-lang.is-open .es-lang__menu {
+            display: block;
+        }
+        .es-lang__menu a {
+            display: block;
+            padding: 0.45rem 0.75rem;
+            font-size: 0.65rem;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--es-muted);
+            text-decoration: none;
+            transition: color 0.2s, background 0.2s;
+        }
+        .es-lang__menu a:hover { background: var(--es-surface); color: var(--es-text); }
+        .es-lang__menu a.active { color: var(--es-text); font-weight: 500; }
+
+        .site-search {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .site-search__toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            color: var(--es-muted);
+            transition: color 0.2s;
         }
         .site-search__toggle:hover { color: var(--es-accent); }
         .site-search__form {
@@ -329,7 +377,10 @@
         }
         .site-search__input {
             font-family: var(--es-font);
-            font-size: 0.72rem;
+            font-size: 0.65rem;
+            font-weight: 300;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
             color: var(--es-text);
             background: transparent;
             border: none;
@@ -338,13 +389,14 @@
             padding: 0.1rem 0;
             width: 160px;
         }
-        .site-search__input::placeholder { color: var(--es-muted); }
+        .site-search__input::placeholder {
+            color: var(--es-muted);
+            letter-spacing: 0.14em;
+        }
 
         .es-instagram {
             display: flex;
             align-items: center;
-            margin-left: 0.25rem;
-            margin-right: 1.25rem;
             color: var(--es-muted);
             transition: color 0.2s;
         }
@@ -374,7 +426,12 @@
                 <form class="site-search__form" action="{{ path('search', {_locale: app.request.locale}) }}" method="get" id="searchForm">
                     <input class="site-search__input" type="search" name="q" placeholder="{{ 'search.placeholder'|trans }}" value="{{ app.request.query.get('q') }}" autocomplete="off" id="searchInput">
                 </form>
-                <button class="site-search__toggle" id="searchToggle">{{ 'search.label'|trans }}</button>
+                <button class="site-search__toggle" id="searchToggle" aria-label="{{ 'search.label'|trans }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+                        <circle cx="11" cy="11" r="8"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                </button>
             </div>
             {% if siteInstagram %}
             <a href="{{ siteInstagram }}" target="_blank" rel="noopener" class="es-instagram" aria-label="Instagram">
@@ -385,10 +442,18 @@
                 </svg>
             </a>
             {% endif %}
-            <span>|</span>
-            <a href="{{ path(_route, _route_params|merge({'_locale': 'es'})) }}" {% if app.request.locale == 'es' %}class="active"{% endif %}>ES</a>
-            <span>|</span>
-            <a href="{{ path(_route, _route_params|merge({'_locale': 'en'})) }}" {% if app.request.locale == 'en' %}class="active"{% endif %}>EN</a>
+            <div class="es-lang" id="langDropdown">
+                <button class="es-lang__trigger" id="langToggle" aria-expanded="false">
+                    {{ app.request.locale|upper }}
+                    <svg class="es-lang__arrow" viewBox="0 0 10 6" fill="currentColor" width="8" height="8">
+                        <path d="M0 0l5 6 5-6z"/>
+                    </svg>
+                </button>
+                <div class="es-lang__menu" id="langMenu">
+                    <a href="{{ path(_route, _route_params|merge({'_locale': 'es'})) }}" {% if app.request.locale == 'es' %}class="active"{% endif %}>ES</a>
+                    <a href="{{ path(_route, _route_params|merge({'_locale': 'en'})) }}" {% if app.request.locale == 'en' %}class="active"{% endif %}>EN</a>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -413,8 +478,25 @@
             if (search.classList.contains('is-open')) { input.focus(); }
         });
         document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') { search.classList.remove('is-open'); }
+            if (e.key === 'Escape') {
+                search.classList.remove('is-open');
+                langDropdown.classList.remove('is-open');
+                langToggle.setAttribute('aria-expanded', 'false');
+            }
         });
+
+        var langDropdown = document.getElementById('langDropdown');
+        var langToggle   = document.getElementById('langToggle');
+        langToggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var open = langDropdown.classList.toggle('is-open');
+            langToggle.setAttribute('aria-expanded', open);
+        });
+        document.addEventListener('click', function () {
+            langDropdown.classList.remove('is-open');
+            langToggle.setAttribute('aria-expanded', 'false');
+        });
+        langDropdown.addEventListener('click', function (e) { e.stopPropagation(); });
 
         var header = document.querySelector('.es-header');
         function onScroll() {
