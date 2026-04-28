@@ -86,3 +86,126 @@
 .lb-shop-link:hover {
     opacity: 0.7;
 }
+
+.lb-sold {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+}
+
+/* Móvil (≤769px): imagen arriba, descripción debajo en flujo normal */
+@media (max-width: 769px) {
+    /* Permitir scroll vertical en el contenedor principal */
+    .glightbox-container .gcontainer {
+        overflow-y: auto !important;
+    }
+
+    .glightbox-container .gslider {
+        height: auto !important;
+        align-items: flex-start !important;
+        overflow: visible !important;
+    }
+
+    /* Inner container: columna, altura automática */
+    .glightbox-container .ginner-container {
+        flex-direction: column !important;
+        height: auto !important;
+        min-height: 100vh;
+        align-items: stretch !important;
+    }
+
+    /* Imagen: ancho completo, máximo 65% del viewport */
+    .glightbox-container .gslide-media {
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+    }
+
+    .glightbox-container .gslide-media img {
+        width: 100% !important;
+        height: auto !important;
+        max-height: 65vh !important;
+        object-fit: contain;
+        display: block;
+    }
+
+    /* Override clave: GLightbox añade .glightbox-mobile cuando detecta
+       user-agent móvil, lo que pone la descripción en position:absolute
+       sobre la imagen. Aquí lo devolvemos al flujo normal. */
+    .glightbox-mobile .glightbox-container .gslide-description {
+        position: relative !important;
+        bottom: auto !important;
+        max-height: none !important;
+        background: #fff !important;
+        background-image: none !important;
+        padding: 1.2rem 1.5rem 2rem !important;
+        overflow: visible !important;
+    }
+
+    .glightbox-clean .gslide-description {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        background: #fff !important;
+    }
+
+    /* En desktop, .gdesc-inner tiene position:absolute;height:100% para
+       el panel lateral. En mobile eso hace que el contenido desaparezca
+       porque el padre tiene height:auto → 100% se resuelve a 0. */
+    .glightbox-clean .description-right .gdesc-inner {
+        position: relative !important;
+        height: auto !important;
+    }
+
+    /* Restaurar colores y display de los campos de la obra en mobile */
+    .glightbox-mobile .glightbox-container .gslide-title {
+        color: var(--color-text) !important;
+    }
+
+    .glightbox-mobile .glightbox-container .gslide-desc {
+        color: var(--color-muted) !important;
+    }
+
+    .glightbox-mobile .glightbox-container .gslide-desc .lb-technique {
+        display: block !important;
+        color: var(--color-muted) !important;
+        margin-bottom: 0.35rem !important;
+    }
+
+    .glightbox-mobile .glightbox-container .gslide-desc .lb-dimensions,
+    .glightbox-mobile .glightbox-container .gslide-desc .lb-year {
+        display: inline !important;
+        color: var(--color-muted) !important;
+    }
+
+    .glightbox-mobile .glightbox-container .gslide-desc .lb-price {
+        display: block !important;
+        color: var(--color-text) !important;
+        font-weight: 700 !important;
+        margin-top: 0.6rem !important;
+    }
+
+    .glightbox-mobile .glightbox-container .gslide-desc .lb-shop-link {
+        display: inline-block !important;
+        color: var(--color-text) !important;
+        border-bottom-color: var(--color-text) !important;
+        margin-top: 0.75rem !important;
+    }
+
+    /* X de cierre: fija arriba, fondo oscuro para que se vea sobre cualquier imagen */
+    .glightbox-clean .gclose {
+        position: fixed !important;
+        top: 0.75rem !important;
+        right: 0.75rem !important;
+        z-index: 1000 !important;
+        background: rgba(0, 0, 0, 0.55) !important;
+        border-radius: 4px !important;
+    }
+
+    .glightbox-clean .gclose path {
+        fill: #fff !important;
+    }
+}

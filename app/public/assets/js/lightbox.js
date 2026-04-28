@@ -14,6 +14,7 @@ function initLightbox() {
         autoplayVideos: false,
         skin: 'clean',
         descPosition: 'right',
+        moreLength: 0,
         width: '90vw',
         height: 'auto',
     });
