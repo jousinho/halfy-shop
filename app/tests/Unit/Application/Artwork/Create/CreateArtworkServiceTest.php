@@ -205,13 +205,14 @@ final class CreateArtworkServiceTest extends TestCase
             descriptionEn: null,
             technique:     'Óleo',
             techniqueEn:   null,
-            dimensions:  '50x60',
-            year:        2024,
-            price:       $price,
-            imageFile:   $imageFile ?? $this->createMock(UploadedFile::class),
-            shopUrl:     null,
-            isAvailable: true,
-            categoryIds: $categoryIds,
+            dimensions:    '50x60',
+            year:          2024,
+            price:         $price,
+            imageFile:     $imageFile ?? $this->createMock(UploadedFile::class),
+            shopUrl:       null,
+            isAvailable:   true,
+            isVisible:     true,
+            categoryIds:   $categoryIds,
         );
     }
 

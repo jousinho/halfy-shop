@@ -59,6 +59,7 @@ final class ArtworkTest extends TestCase
             Price::create(50.00),
             null,
             true,
+            true,
         );
 
         $events = $artwork->pullDomainEvents();
@@ -159,6 +160,7 @@ final class ArtworkTest extends TestCase
             Price::create(200.00),
             'https://nueva-tienda.com/obra',
             false,
+            true,
         );
 
         $this->assertSame('Título actualizado', $artwork->title()->value());

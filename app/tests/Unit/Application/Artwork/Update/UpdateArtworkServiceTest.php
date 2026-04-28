@@ -208,13 +208,14 @@ final class UpdateArtworkServiceTest extends TestCase
             descriptionEn: null,
             technique:     $technique,
             techniqueEn:   null,
-            dimensions:  '50x60',
-            year:        $year,
-            price:       $price,
-            imageFile:   $imageFile,
-            shopUrl:     null,
-            isAvailable: true,
-            categoryIds: $categoryIds,
+            dimensions:    '50x60',
+            year:          $year,
+            price:         $price,
+            imageFile:     $imageFile,
+            shopUrl:       null,
+            isAvailable:   true,
+            isVisible:     true,
+            categoryIds:   $categoryIds,
         );
     }
 
