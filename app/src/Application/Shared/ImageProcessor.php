@@ -9,4 +9,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 interface ImageProcessor
 {
     public function process(UploadedFile $file, string $destinationDir): string;
+
+    public function delete(string $filename, string $destinationDir): void;
 }

@@ -21,11 +21,7 @@
                     <td>{{ lastSync.created }}</td>
                 </tr>
                 <tr>
-                    <th>Actualizadas</th>
-                    <td>{{ lastSync.updated }}</td>
-                </tr>
-                <tr>
-                    <th>Sin cambios</th>
+                    <th>Ya existían</th>
                     <td>{{ lastSync.unchanged }}</td>
                 </tr>
             </table>
@@ -37,7 +33,7 @@
 
     <div class="sync-action">
         <h2>Sincronizar ahora</h2>
-        <p>Importa las obras desde Big Cartel. Las obras existentes se actualizarán si han cambiado.</p>
+        <p>Importa las obras nuevas desde Big Cartel. Las obras ya existentes no se modificarán.</p>
         <form method="post" action="{{ path('admin_sync_run') }}">
             <input type="hidden" name="_token" value="{{ csrf_token('run_sync') }}">
             <button type="submit" class="btn btn--primary">Ejecutar sincronización</button>

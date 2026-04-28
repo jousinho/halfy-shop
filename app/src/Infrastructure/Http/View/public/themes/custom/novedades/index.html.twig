@@ -86,14 +86,19 @@
         align-items: center;
         justify-content: space-between;
         gap: 2rem;
-        padding: 1.5rem 0;
+        padding: 1.5rem 2rem;
+        margin: 0 -2rem;
         text-decoration: none;
         color: inherit;
+        transition: background 0.25s ease;
+    }
+
+    .cn-card__link:hover {
+        background: var(--es-surface);
     }
 
     .cn-card__link:hover .cn-card__titulo {
-        text-decoration: underline;
-        text-underline-offset: 3px;
+        color: var(--es-accent);
     }
 
     .cn-card__body {
@@ -108,6 +113,7 @@
         font-weight: 400;
         line-height: 1.35;
         color: var(--es-text);
+        transition: color 0.25s ease;
     }
 
     .cn-card__meta {

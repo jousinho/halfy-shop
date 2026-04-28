@@ -41,6 +41,9 @@ final class UpdateAboutService
         }
 
         if ($removePhoto) {
+            if ($page->photoFilename() !== null) {
+                $this->imageProcessor->delete($page->photoFilename(), 'about');
+            }
             return null;
         }
 

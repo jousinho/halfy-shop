@@ -6,6 +6,7 @@ namespace App\Infrastructure\Http\Controller\Admin;
 
 use App\Application\Setting\GetSiteContactEmail\GetSiteContactEmailService;
 use App\Application\Setting\GetSiteContactImage\GetSiteContactImageService;
+use App\Application\Setting\GetSiteInstagram\GetSiteInstagramService;
 use App\Application\Setting\UpdateSiteContactEmail\UpdateSiteContactEmailCommand;
 use App\Application\Setting\UpdateSiteContactEmail\UpdateSiteContactEmailService;
 use App\Application\Setting\UpdateSiteContactImage\UpdateSiteContactImageCommand;
@@ -24,6 +25,7 @@ final class AdminContactController extends AbstractController
         private readonly UpdateSiteContactImageService $updateSiteContactImageService,
         private readonly GetSiteContactEmailService $getSiteContactEmailService,
         private readonly UpdateSiteContactEmailService $updateSiteContactEmailService,
+        private readonly GetSiteInstagramService $getSiteInstagramService,
         private readonly string $uploadsDir,
     ) {}
 
@@ -31,8 +33,9 @@ final class AdminContactController extends AbstractController
     public function index(): Response
     {
         return $this->render('admin/contact/index.html.twig', [
-            'contactImage' => $this->getSiteContactImageService->execute(),
-            'contactEmail' => $this->getSiteContactEmailService->execute(),
+            'contactImage'   => $this->getSiteContactImageService->execute(),
+            'contactEmail'   => $this->getSiteContactEmailService->execute(),
+            'siteInstagram'  => $this->getSiteInstagramService->execute(),
         ]);
     }
 

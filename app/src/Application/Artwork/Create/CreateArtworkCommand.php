@@ -13,14 +13,15 @@ final class CreateArtworkCommand
         public readonly ?string $titleEn,
         public readonly ?string $description,
         public readonly ?string $descriptionEn,
-        public readonly string $technique,
+        public readonly ?string $technique,
         public readonly ?string $techniqueEn,
-        public readonly string $dimensions,
-        public readonly int $year,
+        public readonly ?string $dimensions,
+        public readonly ?int $year,
         public readonly ?float $price,
-        public readonly UploadedFile $imageFile,
+        public readonly ?UploadedFile $imageFile,
         public readonly ?string $shopUrl,
         public readonly bool $isAvailable,
+        public readonly bool $isVisible,
         public readonly array $categoryIds,
     ) {}
 
@@ -29,14 +30,15 @@ final class CreateArtworkCommand
         ?string $titleEn,
         ?string $description,
         ?string $descriptionEn,
-        string $technique,
+        ?string $technique,
         ?string $techniqueEn,
-        string $dimensions,
-        int $year,
+        ?string $dimensions,
+        ?int $year,
         ?float $price,
-        UploadedFile $imageFile,
+        ?UploadedFile $imageFile,
         ?string $shopUrl,
         bool $isAvailable,
+        bool $isVisible,
         array $categoryIds,
     ): self {
         return new self(
@@ -52,6 +54,7 @@ final class CreateArtworkCommand
             $imageFile,
             $shopUrl,
             $isAvailable,
+            $isVisible,
             $categoryIds,
         );
     }

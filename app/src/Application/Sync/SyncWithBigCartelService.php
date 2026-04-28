@@ -6,7 +6,6 @@ namespace App\Application\Sync;
 
 use App\Application\Shared\BigCartelFeedFetcher;
 use App\Application\Shared\RemoteImageDownloader;
-use App\Domain\Artwork\Entity\Artwork;
 use App\Domain\Artwork\Repository\ArtworkRepository;
 use App\Domain\Artwork\ValueObject\ArtworkId;
 use App\Domain\Artwork\ValueObject\ArtworkTitle;
@@ -73,31 +72,13 @@ final class SyncWithBigCartelService
     {
         $existing = $this->artworkRepository->findByShopUrl($item['shopUrl']);
 
-        if ($existing === null) {
-            $this->createArtworkFromItem($item);
-
-            return 'created';
+        if ($existing !== null) {
+            return 'unchanged';
         }
 
-        if ($this->hasChanged($existing, $item)) {
-            $this->updateArtworkFromItem($existing, $item);
+        $this->createArtworkFromItem($item);
 
-            return 'updated';
-        }
-
-        return 'unchanged';
-    }
-
-    private function hasChanged(Artwork $artwork, array $item): bool
-    {
-        $newTechnique  = $item['technique'] ?? $artwork->technique()->value();
-        $newDimensions = $item['dimensions'] ?? $artwork->dimensions()->value();
-
-        return $artwork->title()->value() !== $item['title']
-            || $artwork->isAvailable() !== $item['isAvailable']
-            || $artwork->price()?->value() !== $item['price']
-            || $artwork->technique()->value() !== $newTechnique
-            || $artwork->dimensions()->value() !== $newDimensions;
+        return 'created';
     }
 
     private function createArtworkFromItem(array $item): void
@@ -119,25 +100,6 @@ final class SyncWithBigCartelService
             shopUrl:       $item['shopUrl'],
             isAvailable:   $item['isAvailable'],
             sortOrder:     $this->artworkRepository->findNextSortOrder(),
-        );
-
-        $this->artworkRepository->save($artwork);
-    }
-
-    private function updateArtworkFromItem(Artwork $artwork, array $item): void
-    {
-        $artwork->update(
-            title:         ArtworkTitle::create($item['title']),
-            titleEn:       $artwork->titleEn(),
-            description:   $item['description'] !== '' ? $item['description'] : null,
-            descriptionEn: $artwork->descriptionEn(),
-            technique:     $item['technique'] !== null ? Technique::create($item['technique']) : $artwork->technique(),
-            techniqueEn:   $artwork->techniqueEn(),
-            dimensions:  $item['dimensions'] !== null ? Dimensions::create($item['dimensions']) : $artwork->dimensions(),
-            year:        $artwork->year(),
-            price:       $item['price'] !== null ? Price::create($item['price']) : null,
-            shopUrl:     $item['shopUrl'],
-            isAvailable: $item['isAvailable'],
         );
 
         $this->artworkRepository->save($artwork);

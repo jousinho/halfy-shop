@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Anna Pownall{% endblock %}</title>
+    {% if siteFavicon %}<link rel="icon" href="/uploads/favicon/{{ siteFavicon }}">{% endif %}
     {% set _route = app.request.attributes.get('_route') %}
     {% set _route_params = app.request.attributes.get('_route_params') ?? {} %}
     <link rel="alternate" hreflang="es" href="{{ url(_route, _route_params|merge({'_locale': 'es'})) }}">
     <link rel="alternate" hreflang="en" href="{{ url(_route, _route_params|merge({'_locale': 'en'})) }}">
     <link rel="alternate" hreflang="x-default" href="{{ url(_route, _route_params|merge({'_locale': 'es'})) }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
     <link rel="stylesheet" href="/assets/css/lightbox.css">
     <link rel="stylesheet" href="/assets/css/main.css">
@@ -23,7 +21,7 @@
             --es-muted:    #888880;
             --es-border:   #e0e0e0;
             --es-accent:   #b89a6e;
-            --es-font:     'Inter', system-ui, sans-serif;
+            --es-font:     'Inter', system-ui, -apple-system, sans-serif;
         }
 
         body {
@@ -37,6 +35,7 @@
         }
 
         a { color: inherit; text-decoration: none; }
+        a:hover { text-decoration: none; }
 
         /* Header */
         .es-header {
@@ -107,6 +106,7 @@
         .es-filters {
             display: flex;
             align-items: center;
+            justify-content: center;
             flex-wrap: wrap;
             gap: 6px;
             padding: 0.75rem 2rem;
@@ -463,56 +463,6 @@
         }
         .es-instagram:hover { color: var(--es-text); }
         .es-instagram svg { width: 16px; height: 16px; }
-
-        .es-cookie {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 500;
-            background: var(--es-bg);
-            border-top: 1px solid var(--es-border);
-            padding: 0.85rem 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-        }
-        .es-cookie__text {
-            font-size: 0.65rem;
-            color: var(--es-muted);
-            letter-spacing: 0.06em;
-        }
-        .es-cookie__actions {
-            display: flex;
-            gap: 0.75rem;
-            flex-shrink: 0;
-        }
-        .es-cookie__btn {
-            background: none;
-            border: 1px solid var(--es-border);
-            cursor: pointer;
-            font-family: var(--es-font);
-            font-size: 0.6rem;
-            font-weight: 400;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            padding: 0.35rem 0.85rem;
-            color: var(--es-muted);
-            transition: background 0.2s, color 0.2s, border-color 0.2s;
-        }
-        .es-cookie__btn:hover { color: var(--es-text); border-color: var(--es-text); }
-        .es-cookie__btn--accept {
-            background: var(--es-text);
-            color: var(--es-bg);
-            border-color: var(--es-text);
-        }
-        .es-cookie__btn--accept:hover { background: var(--es-accent); border-color: var(--es-accent); color: #fff; }
-        @media (max-width: 500px) {
-            .es-cookie { padding: 0.85rem 1rem; }
-            .es-cookie__text { font-size: 0.62rem; }
-        }
     </style>
     {% block stylesheets %}{% endblock %}
 </head>
@@ -663,29 +613,5 @@
     </script>
     {% block javascripts %}{% endblock %}
 
-    <div class="es-cookie" id="cookieBanner" style="display:none">
-        <span class="es-cookie__text">{{ 'cookies.text'|trans }}</span>
-        <div class="es-cookie__actions">
-            <button class="es-cookie__btn es-cookie__btn--accept" id="cookieAccept">{{ 'cookies.accept'|trans }}</button>
-            <button class="es-cookie__btn es-cookie__btn--decline" id="cookieDecline">{{ 'cookies.decline'|trans }}</button>
-        </div>
-    </div>
-
-    <script>
-    (function () {
-        var banner = document.getElementById('cookieBanner');
-        if (!localStorage.getItem('cookies_decision')) {
-            banner.style.display = 'flex';
-        }
-        document.getElementById('cookieAccept').addEventListener('click', function () {
-            localStorage.setItem('cookies_decision', 'accepted');
-            banner.style.display = 'none';
-        });
-        document.getElementById('cookieDecline').addEventListener('click', function () {
-            localStorage.setItem('cookies_decision', 'declined');
-            banner.style.display = 'none';
-        });
-    })();
-    </script>
 </body>
 </html>

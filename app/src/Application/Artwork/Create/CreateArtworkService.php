@@ -29,8 +29,9 @@ final class CreateArtworkService
 
     public function execute(CreateArtworkCommand $command): void
     {
-        $imageFilename = $this->processAndStoreImage($command->imageFile);
+        $imageFilename = $command->imageFile !== null ? $this->processAndStoreImage($command->imageFile) : null;
         $artwork       = $this->buildArtwork($command, $imageFilename);
+        $artwork->setVisible($command->isVisible);
         $this->assignCategories($artwork, $command->categoryIds);
         $this->save($artwork);
         $this->dispatchEvents($artwork);
@@ -41,7 +42,7 @@ final class CreateArtworkService
         return $this->imageProcessor->process($file, 'artworks');
     }
 
-    private function buildArtwork(CreateArtworkCommand $command, string $imageFilename): Artwork
+    private function buildArtwork(CreateArtworkCommand $command, ?string $imageFilename): Artwork
     {
         return Artwork::create(
             id:            ArtworkId::generate(),
@@ -49,10 +50,10 @@ final class CreateArtworkService
             titleEn:       $command->titleEn,
             description:   $command->description,
             descriptionEn: $command->descriptionEn,
-            technique:     Technique::create($command->technique),
+            technique:     $command->technique !== null ? Technique::create($command->technique) : null,
             techniqueEn:   $command->techniqueEn,
-            dimensions:    Dimensions::create($command->dimensions),
-            year:          ArtworkYear::create($command->year),
+            dimensions:    $command->dimensions !== null ? Dimensions::create($command->dimensions) : null,
+            year:          $command->year !== null ? ArtworkYear::create($command->year) : null,
             price:         $command->price !== null ? Price::create($command->price) : null,
             imageFilename: $imageFilename,
             shopUrl:       $command->shopUrl,

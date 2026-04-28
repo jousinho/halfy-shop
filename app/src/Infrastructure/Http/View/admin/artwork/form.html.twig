@@ -31,9 +31,9 @@
 
         <div class="form-row">
             <div class="form-group">
-                <label for="technique">Técnica (ES) *</label>
-                <input type="text" id="technique" name="technique" required
-                       value="{{ artwork is not null ? artwork.technique.value : '' }}">
+                <label for="technique">Técnica (ES)</label>
+                <input type="text" id="technique" name="technique"
+                       value="{{ artwork is not null and artwork.technique is not null ? artwork.technique.value : '' }}">
             </div>
             <div class="form-group">
                 <label for="techniqueEn">
@@ -66,12 +66,24 @@
                 <input type="number" id="price" name="price" step="0.01" min="0"
                        value="{{ artwork is not null and artwork.price is not null ? artwork.price.value : '' }}">
             </div>
+        </div>
+
+        <div class="form-row form-row--checks">
             <div class="form-group form-group--check">
                 <label>
                     <input type="checkbox" name="isAvailable" value="1"
                            {{ artwork is null or artwork.isAvailable ? 'checked' : '' }}>
                     Disponible en tienda
                 </label>
+                <span class="form-hint">Si no está disponible, saldrá como Sold Out.</span>
+            </div>
+            <div class="form-group form-group--check">
+                <label>
+                    <input type="checkbox" name="isHidden" value="1"
+                           {{ artwork is not null and not artwork.isVisible ? 'checked' : '' }}>
+                    Ocultar
+                </label>
+                <span class="form-hint">Si está oculto, no aparecerá en ninguna galería de la web.</span>
             </div>
         </div>
 
@@ -95,15 +107,14 @@
         </div>
 
         <div class="form-group">
-            <label for="imageFile">Imagen{% if artwork is null %} *{% endif %}</label>
-            {% if artwork is not null %}
+            <label for="imageFile">Imagen</label>
+            {% if artwork is not null and artwork.imageFilename is not null %}
             <div class="current-image">
                 <img src="/uploads/artworks/thumbnails/{{ artwork.imageFilename }}" alt="Imagen actual">
                 <span>Imagen actual. Sube otra para reemplazarla.</span>
             </div>
             {% endif %}
-            <input type="file" id="imageFile" name="imageFile" accept="image/jpeg,image/png,image/webp"
-                   {{ artwork is null ? 'required' : '' }}>
+            <input type="file" id="imageFile" name="imageFile" accept="image/jpeg,image/png,image/webp">
         </div>
 
         <div class="form-group">

@@ -34,6 +34,25 @@
     </div>
 
     <div class="admin-section">
+        <h2 class="admin-section__title">Instagram</h2>
+        <p class="admin-section__desc">URL completa del perfil. Se mostrará como icono en el header y en la sección de Contacto.</p>
+
+        <form method="post" action="{{ path('admin_personalizacion_instagram') }}" class="admin-form">
+            <input type="hidden" name="_token" value="{{ csrf_token('update_instagram') }}">
+            <div class="form-group">
+                <label for="instagram_url" class="form-label">URL de Instagram</label>
+                <input type="url" id="instagram_url" name="instagram_url"
+                       value="{{ siteInstagram ?? '' }}"
+                       placeholder="https://www.instagram.com/usuario"
+                       class="form-input">
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn--primary">Guardar Instagram</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="admin-section">
         <h2 class="admin-section__title">Email de contacto</h2>
         <p class="admin-section__desc">Se mostrará como enlace en la página de contacto.</p>
 
