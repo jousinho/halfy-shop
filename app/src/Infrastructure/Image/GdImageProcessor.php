@@ -136,6 +136,20 @@ final class GdImageProcessor implements ImageProcessor
         return $lightbox;
     }
 
+    public function delete(string $filename, string $destinationDir): void
+    {
+        $paths = [
+            $this->uploadsDir . '/' . $destinationDir . '/' . $filename,
+            $this->uploadsDir . '/' . $destinationDir . '/thumbnails/' . $filename,
+        ];
+
+        foreach ($paths as $path) {
+            if (file_exists($path)) {
+                unlink($path);
+            }
+        }
+    }
+
     private function ensureDirectoryExists(string $dir): void
     {
         if (!is_dir($dir)) {

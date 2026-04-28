@@ -1,0 +1,118 @@
+{% extends 'public/themes/custom/layout.html.twig' %}
+
+{% block title %}{{ novedad.tituloForLocale(app.request.locale) }} — Anna Pownall{% endblock %}
+
+{% block content %}
+<div class="cn-detail">
+
+    <a href="{{ path('novedades', {_locale: app.request.locale}) }}" class="cn-detail__back">← {{ 'novedades.back'|trans }}</a>
+
+    <div class="cn-detail__meta">
+        <span class="cn-card__tipo cn-card__tipo--{{ novedad.tipo.value }}">{{ ('novedades.tipo_' ~ novedad.tipo.value)|trans }}</span>
+        <span class="cn-detail__fecha">
+            {{ novedad.fecha|date('d/m/Y') }}
+            {% if novedad.fechaFin is not null %}
+                — {{ novedad.fechaFin|date('d/m/Y') }}
+            {% endif %}
+        </span>
+        {% if novedad.lugar is not null %}
+            <span class="cn-detail__lugar">{{ novedad.lugar }}</span>
+        {% endif %}
+    </div>
+
+    <h1 class="cn-detail__titulo">{{ novedad.tituloForLocale(app.request.locale) }}</h1>
+
+    {% if novedad.contenidoForLocale(app.request.locale) is not null %}
+        <div class="cn-detail__contenido">
+            {{ novedad.contenidoForLocale(app.request.locale)|raw }}
+        </div>
+    {% endif %}
+
+    {% if novedad.imagen is not null %}
+        <div class="cn-detail__img">
+            <img src="/uploads/novedades/{{ novedad.imagen }}" alt="{{ novedad.tituloForLocale(app.request.locale) }}">
+        </div>
+    {% endif %}
+
+    {% if novedad.url is not null %}
+        <a href="{{ novedad.url }}" target="_blank" rel="noopener noreferrer" class="cn-detail__url">{{ novedad.url }}</a>
+    {% endif %}
+
+    <a href="{{ path('novedades', {_locale: app.request.locale}) }}" class="cn-detail__back">← {{ 'novedades.back'|trans }}</a>
+
+</div>
+
+<style>
+    .cn-detail {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 3rem 2rem 5rem;
+    }
+
+    .cn-detail__back {
+        display: inline-block;
+        font-size: 0.65rem;
+        font-weight: 400;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--es-muted);
+        transition: color 0.2s;
+        margin-bottom: 2.5rem;
+    }
+
+    .cn-detail__back:hover { color: var(--es-text); }
+
+    .cn-detail__meta {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+    }
+
+    .cn-detail__fecha,
+    .cn-detail__lugar {
+        font-size: 0.75rem;
+        color: var(--es-muted);
+    }
+
+    .cn-detail__titulo {
+        font-size: 1.6rem;
+        font-weight: 300;
+        line-height: 1.3;
+        color: var(--es-text);
+        margin-bottom: 2rem;
+    }
+
+    .cn-detail__img {
+        margin-bottom: 2rem;
+    }
+
+    .cn-detail__img img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .cn-detail__contenido {
+        font-size: 0.9rem;
+        line-height: 1.75;
+        color: var(--es-text);
+        margin-bottom: 2rem;
+    }
+
+    .cn-detail__url {
+        display: inline-block;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        color: var(--es-accent);
+        margin-bottom: 3rem;
+        word-break: break-all;
+    }
+
+    @media (max-width: 640px) {
+        .cn-detail { padding: 2rem 1.25rem 4rem; }
+        .cn-detail__titulo { font-size: 1.3rem; }
+    }
+</style>
+{% endblock %}

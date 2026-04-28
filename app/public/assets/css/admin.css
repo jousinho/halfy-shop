@@ -422,6 +422,8 @@ a { color: inherit; text-decoration: none; }
 }
 
 .badge--unavailable { background: #fdecea; color: #b71c1c; }
+.badge--hidden      { background: #f3f0ff; color: #6200ea; }
+.badge--warning     { background: #fff9c4; color: #f57f17; }
 .badge--draft       { background: #f3f3f5; color: var(--admin-muted); }
 
 /* --- Sync page --- */

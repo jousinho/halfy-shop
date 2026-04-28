@@ -1,0 +1,174 @@
+{% extends 'public/themes/custom/layout.html.twig' %}
+
+{% block title %}{{ 'novedades.title'|trans }} — Anna Pownall{% endblock %}
+
+{% block content %}
+<div class="cn-section">
+    <h1 class="cn-section__title">{{ 'novedades.title'|trans }}</h1>
+
+    {% if novedades is empty %}
+        <p class="cn-empty">{{ 'novedades.empty'|trans }}</p>
+    {% else %}
+        <ul class="cn-list">
+            {% for novedad in novedades %}
+            <li class="cn-card">
+                <a href="{{ path('novedad_show', {slug: novedad.slug, _locale: app.request.locale}) }}" class="cn-card__link">
+                    <div class="cn-card__body">
+                        <h2 class="cn-card__titulo">{{ novedad.tituloForLocale(app.request.locale) }}</h2>
+                        <div class="cn-card__meta">
+                            <span class="cn-card__tipo cn-card__tipo--{{ novedad.tipo.value }}">{{ ('novedades.tipo_' ~ novedad.tipo.value)|trans }}</span>
+                            <span class="cn-card__fecha">
+                                {{ novedad.fecha|date('d/m/Y') }}
+                                {% if novedad.fechaFin is not null %}
+                                    — {{ novedad.fechaFin|date('d/m/Y') }}
+                                {% endif %}
+                            </span>
+                            {% if novedad.lugar is not null %}
+                                <span class="cn-card__lugar">{{ novedad.lugar }}</span>
+                            {% endif %}
+                        </div>
+                        {% set desc = novedad.contenidoForLocale(app.request.locale) %}
+                        {% if desc %}
+                            <p class="cn-card__desc">{{ desc|striptags|slice(0, 80) }}{% if desc|striptags|length > 80 %}…{% endif %}</p>
+                        {% endif %}
+                    </div>
+                    {% if novedad.imagen is not null %}
+                        <div class="cn-card__img">
+                            <img src="/uploads/novedades/{{ novedad.imagen }}" alt="{{ novedad.tituloForLocale(app.request.locale) }}">
+                        </div>
+                    {% endif %}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+
+<style>
+    .cn-section {
+        max-width: 820px;
+        margin: 0 auto;
+        padding: 3rem 2rem 4rem;
+    }
+
+    .cn-section__title {
+        font-size: 0.7rem;
+        font-weight: 400;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--es-muted);
+        margin-bottom: 2.5rem;
+    }
+
+    .cn-empty {
+        color: var(--es-muted);
+        font-size: 0.9rem;
+    }
+
+    .cn-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .cn-card {
+        border-bottom: 1px solid var(--es-border);
+    }
+
+    .cn-card:first-child {
+        border-top: 1px solid var(--es-border);
+    }
+
+    .cn-card__link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+        padding: 1.5rem 2rem;
+        margin: 0 -2rem;
+        text-decoration: none;
+        color: inherit;
+        transition: background 0.25s ease;
+    }
+
+    .cn-card__link:hover {
+        background: var(--es-surface);
+    }
+
+    .cn-card__link:hover .cn-card__titulo {
+        color: var(--es-accent);
+    }
+
+    .cn-card__body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .cn-card__titulo {
+        font-size: 1.05rem;
+        font-weight: 400;
+        line-height: 1.35;
+        color: var(--es-text);
+        transition: color 0.25s ease;
+    }
+
+    .cn-card__meta {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .cn-card__tipo {
+        font-size: 0.62rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--es-muted);
+        border: 1px solid var(--es-border);
+        padding: 0.1rem 0.5rem;
+    }
+
+    .cn-card__tipo--evento {
+        color: var(--es-text);
+        border-color: var(--es-text);
+    }
+
+    .cn-card__fecha {
+        font-size: 0.75rem;
+        color: var(--es-muted);
+    }
+
+    .cn-card__lugar {
+        font-size: 0.75rem;
+        color: var(--es-muted);
+    }
+
+    .cn-card__desc {
+        font-size: 0.8rem;
+        color: var(--es-muted);
+        line-height: 1.4;
+    }
+
+    .cn-card__img {
+        flex-shrink: 0;
+        width: 120px;
+        height: 80px;
+        overflow: hidden;
+    }
+
+    .cn-card__img img {
+        width: 80%;
+        height: 80%;
+        object-fit: cover;
+    }
+
+    @media (max-width: 640px) {
+        .cn-card__img { width: 80px; height: 60px; }
+        .cn-card__titulo { font-size: 0.95rem; }
+    }
+</style>
+{% endblock %}

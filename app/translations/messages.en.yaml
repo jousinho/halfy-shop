@@ -2,6 +2,7 @@ nav:
     works: Works
     about: About me
     novedades: News
+    contact: Contact
 
 page:
     title: Anna Pownall — Printmaking & Illustration
@@ -43,7 +44,17 @@ search:
 
 about:
     title: About me
+
+contact:
+    title: Contact
+    email_label: Email
+    instagram_label: Instagram
     fallback: 'Hello, I am Anna Pownall, an artist specialising in printmaking and illustration.'
 
 editorial:
     eyebrow: Graphic art & illustration
+
+cookies:
+    text: 'This site uses Google Fonts cookies to load typefaces.'
+    accept: Accept
+    decline: Decline

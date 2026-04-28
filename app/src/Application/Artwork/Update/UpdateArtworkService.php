@@ -55,13 +55,14 @@ final class UpdateArtworkService
             titleEn:       $command->titleEn,
             description:   $command->description,
             descriptionEn: $command->descriptionEn,
-            technique:     Technique::create($command->technique),
+            technique:     $command->technique !== null ? Technique::create($command->technique) : null,
             techniqueEn:   $command->techniqueEn,
-            dimensions:  Dimensions::create($command->dimensions),
-            year:        ArtworkYear::create($command->year),
-            price:       $command->price !== null ? Price::create($command->price) : null,
-            shopUrl:     $command->shopUrl,
-            isAvailable: $command->isAvailable,
+            dimensions:    $command->dimensions !== null ? Dimensions::create($command->dimensions) : null,
+            year:          $command->year !== null ? ArtworkYear::create($command->year) : null,
+            price:         $command->price !== null ? Price::create($command->price) : null,
+            shopUrl:       $command->shopUrl,
+            isAvailable:   $command->isAvailable,
+            isVisible:     $command->isVisible,
         );
     }
 

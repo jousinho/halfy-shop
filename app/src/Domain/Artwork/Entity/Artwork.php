@@ -38,23 +38,23 @@ final class Artwork
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $descriptionEn;
 
-    #[ORM\Column(type: 'string', length: 100)]
-    private string $technique;
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    private ?string $technique;
 
     #[ORM\Column(type: 'string', length: 100, nullable: true)]
     private ?string $techniqueEn;
 
-    #[ORM\Column(type: 'string', length: 50)]
-    private string $dimensions;
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    private ?string $dimensions;
 
-    #[ORM\Column(type: 'integer')]
-    private int $year;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $year;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
     private ?string $price;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $imageFilename;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $imageFilename;
 
     #[ORM\Column(type: 'string', length: 500, nullable: true)]
     private ?string $shopUrl;
@@ -83,12 +83,12 @@ final class Artwork
         ?string $titleEn,
         ?string $description,
         ?string $descriptionEn,
-        Technique $technique,
+        ?Technique $technique,
         ?string $techniqueEn,
-        Dimensions $dimensions,
-        ArtworkYear $year,
+        ?Dimensions $dimensions,
+        ?ArtworkYear $year,
         ?Price $price,
-        string $imageFilename,
+        ?string $imageFilename,
         ?string $shopUrl,
         bool $isAvailable,
         int $sortOrder,
@@ -98,10 +98,10 @@ final class Artwork
         $this->titleEn       = $titleEn !== null ? trim($titleEn) ?: null : null;
         $this->description   = $description;
         $this->descriptionEn = $descriptionEn;
-        $this->technique     = $technique->value();
+        $this->technique     = $technique?->value();
         $this->techniqueEn   = $techniqueEn !== null ? trim($techniqueEn) ?: null : null;
-        $this->dimensions    = $dimensions->value();
-        $this->year          = $year->value();
+        $this->dimensions    = $dimensions?->value();
+        $this->year          = $year?->value();
         $this->price         = $price?->value() !== null ? (string) $price->value() : null;
         $this->imageFilename = $imageFilename;
         $this->shopUrl       = $shopUrl;
@@ -118,12 +118,12 @@ final class Artwork
         ?string $titleEn,
         ?string $description,
         ?string $descriptionEn,
-        Technique $technique,
+        ?Technique $technique,
         ?string $techniqueEn,
-        Dimensions $dimensions,
-        ArtworkYear $year,
+        ?Dimensions $dimensions,
+        ?ArtworkYear $year,
         ?Price $price,
-        string $imageFilename,
+        ?string $imageFilename,
         ?string $shopUrl,
         bool $isAvailable,
         int $sortOrder,
@@ -144,27 +144,34 @@ final class Artwork
         ?string $titleEn,
         ?string $description,
         ?string $descriptionEn,
-        Technique $technique,
+        ?Technique $technique,
         ?string $techniqueEn,
-        Dimensions $dimensions,
-        ArtworkYear $year,
+        ?Dimensions $dimensions,
+        ?ArtworkYear $year,
         ?Price $price,
         ?string $shopUrl,
         bool $isAvailable,
+        bool $isVisible,
     ): void {
         $this->title         = $title->value();
         $this->titleEn       = $titleEn !== null ? trim($titleEn) ?: null : null;
         $this->description   = $description;
         $this->descriptionEn = $descriptionEn;
-        $this->technique     = $technique->value();
+        $this->technique     = $technique?->value();
         $this->techniqueEn   = $techniqueEn !== null ? trim($techniqueEn) ?: null : null;
-        $this->dimensions  = $dimensions->value();
-        $this->year        = $year->value();
+        $this->dimensions  = $dimensions?->value();
+        $this->year        = $year?->value();
         $this->price       = $price?->value() !== null ? (string) $price->value() : null;
         $this->shopUrl     = $shopUrl;
         $this->isAvailable = $isAvailable;
+        $this->visible     = $isVisible;
 
         $this->domainEvents[] = ArtworkUpdated::create($this->id);
+    }
+
+    public function setVisible(bool $visible): void
+    {
+        $this->visible = $visible;
     }
 
     public function updateImage(string $imageFilename): void
@@ -236,9 +243,9 @@ final class Artwork
             : $this->description;
     }
 
-    public function technique(): Technique
+    public function technique(): ?Technique
     {
-        return Technique::create($this->technique);
+        return $this->technique !== null ? Technique::create($this->technique) : null;
     }
 
     public function techniqueEn(): ?string
@@ -246,21 +253,23 @@ final class Artwork
         return $this->techniqueEn;
     }
 
-    public function techniqueForLocale(string $locale): string
+    public function techniqueForLocale(string $locale): ?string
     {
-        return ($locale === 'en' && $this->techniqueEn !== null && $this->techniqueEn !== '')
-            ? $this->techniqueEn
-            : $this->technique;
+        if ($locale === 'en' && $this->techniqueEn !== null && $this->techniqueEn !== '') {
+            return $this->techniqueEn;
+        }
+
+        return $this->technique;
     }
 
-    public function dimensions(): Dimensions
+    public function dimensions(): ?Dimensions
     {
-        return Dimensions::create($this->dimensions);
+        return $this->dimensions !== null ? Dimensions::create($this->dimensions) : null;
     }
 
-    public function year(): ArtworkYear
+    public function year(): ?ArtworkYear
     {
-        return ArtworkYear::create($this->year);
+        return $this->year !== null ? ArtworkYear::create($this->year) : null;
     }
 
     public function price(): ?Price
@@ -268,7 +277,7 @@ final class Artwork
         return $this->price !== null ? Price::create((float) $this->price) : null;
     }
 
-    public function imageFilename(): string
+    public function imageFilename(): ?string
     {
         return $this->imageFilename;
     }

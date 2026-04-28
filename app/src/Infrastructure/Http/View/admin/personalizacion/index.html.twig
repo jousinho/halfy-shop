@@ -1,0 +1,72 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Personalización{% endblock %}
+
+{% block content %}
+    <div class="admin-page-header">
+        <h1>Personalización</h1>
+        <p class="admin-page-subtitle">Ajusta la identidad visual de la web.</p>
+    </div>
+
+    <div class="admin-section">
+        <h2 class="admin-section__title">Logo de la web</h2>
+        <p class="admin-section__desc">Se mostrará en el header en lugar del nombre de texto. Recomendado: PNG con fondo transparente.</p>
+
+        {% if siteLogo %}
+            <div class="logo-preview">
+                <img src="/uploads/logo/{{ siteLogo }}" alt="Logo actual" class="logo-preview__img">
+                <p class="logo-preview__caption">Logo actual</p>
+            </div>
+        {% else %}
+            <p class="admin-section__empty">No hay logo configurado. Se muestra el nombre de texto.</p>
+        {% endif %}
+
+        <form method="post" action="{{ path('admin_personalizacion_logo') }}" enctype="multipart/form-data" class="admin-form">
+            <input type="hidden" name="_token" value="{{ csrf_token('update_logo') }}">
+            <div class="form-group">
+                <label for="logo" class="form-label">{{ siteLogo ? 'Cambiar logo' : 'Subir logo' }}</label>
+                <input type="file" id="logo" name="logo" accept="image/png,image/jpeg,image/webp" class="form-input" required>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn--primary">Guardar logo</button>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="admin-section">
+        <h2 class="admin-section__title">Favicon</h2>
+        <p class="admin-section__desc">Icono que aparece en la pestaña del navegador. Recomendado: PNG o ICO, 32×32 px.</p>
+
+        {% if siteFavicon %}
+            <div class="logo-preview">
+                <img src="/uploads/favicon/{{ siteFavicon }}" alt="Favicon actual" class="favicon-preview__img">
+                <p class="logo-preview__caption">Favicon actual</p>
+            </div>
+        {% else %}
+            <p class="admin-section__empty">No hay favicon configurado. El navegador usará el icono por defecto.</p>
+        {% endif %}
+
+        <form method="post" action="{{ path('admin_personalizacion_favicon') }}" enctype="multipart/form-data" class="admin-form">
+            <input type="hidden" name="_token" value="{{ csrf_token('update_favicon') }}">
+            <div class="form-group">
+                <label for="favicon" class="form-label">{{ siteFavicon ? 'Cambiar favicon' : 'Subir favicon' }}</label>
+                <input type="file" id="favicon" name="favicon" accept="image/png,image/x-icon,image/vnd.microsoft.icon,image/svg+xml" class="form-input" required>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn--primary">Guardar favicon</button>
+            </div>
+        </form>
+    </div>
+
+    <style>
+        .admin-section { margin-top: 2rem; }
+        .admin-section__title { font-size: 1rem; font-weight: 600; margin-bottom: 0.4rem; }
+        .admin-section__desc  { font-size: 0.85rem; color: #666; margin-bottom: 1.25rem; }
+        .admin-section__empty { font-size: 0.85rem; color: #999; margin-bottom: 1.25rem; font-style: italic; }
+        .logo-preview { margin-bottom: 1.5rem; }
+        .logo-preview__img { max-height: 80px; display: block; }
+        .logo-preview__caption { font-size: 0.75rem; color: #999; margin-top: 0.4rem; }
+        .favicon-preview__img { max-height: 48px; display: block; image-rendering: pixelated; }
+    </style>
+{% endblock %}

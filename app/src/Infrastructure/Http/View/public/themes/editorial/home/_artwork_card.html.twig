@@ -1,9 +1,10 @@
 <div class="ed-card">
+    {% if artwork.imageFilename is not null %}
     <a href="/uploads/artworks/{{ artwork.imageFilename }}"
        class="glightbox ed-card__link"
        data-gallery="artworks"
        data-title="{{ artwork.titleForLocale(app.request.locale) }}"
-       data-description="<span class='lb-technique'>{{ artwork.techniqueForLocale(app.request.locale) }}</span>{% if artwork.dimensions is not null %}<span class='lb-dimensions'>{{ artwork.dimensions.value }}</span>{% endif %}{% if artwork.year is not null %}<span class='lb-year'>{{ artwork.year.value }}</span>{% endif %}{% if artwork.price is not null %}<span class='lb-price'>{{ artwork.price.value }}€</span>{% endif %}{% if artwork.shopUrl is not null and artwork.isAvailable %}<a href='{{ artwork.shopUrl }}' target='_blank' class='lb-shop-link'>{{ 'shop.view'|trans }}</a>{% endif %}">
+       data-description="{% if artwork.techniqueForLocale(app.request.locale) is not null %}<span class='lb-technique'>{{ artwork.techniqueForLocale(app.request.locale) }}</span>{% endif %}{% if artwork.dimensions is not null %}<span class='lb-dimensions'>{{ artwork.dimensions.value }}</span>{% endif %}{% if artwork.year is not null %}<span class='lb-year'>{{ artwork.year.value }}</span>{% endif %}{% if artwork.price is not null %}<span class='lb-price'>{{ artwork.price.value }}€</span>{% endif %}{% if artwork.shopUrl is not null and artwork.isAvailable %}<a href='{{ artwork.shopUrl }}' target='_blank' class='lb-shop-link'>{{ 'shop.view'|trans }}</a>{% endif %}">
         <div class="ed-card__image-wrap">
             <img src="/uploads/artworks/thumbnails/{{ artwork.imageFilename }}"
                  alt="{{ artwork.titleForLocale(app.request.locale) }}"
@@ -14,6 +15,9 @@
             {% endif %}
         </div>
     </a>
+    {% else %}
+    <div class="ed-card__no-image"></div>
+    {% endif %}
     <div class="ed-card__caption">
         <p class="ed-card__title">{{ artwork.titleForLocale(app.request.locale) }}</p>
         {% if artwork.isAvailable and artwork.price is not null %}

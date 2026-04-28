@@ -1,0 +1,87 @@
+{% extends 'public/themes/custom/layout.html.twig' %}
+
+{% block title %}{{ 'contact.title'|trans }} — Anna Pownall{% endblock %}
+
+{% block content %}
+<div class="contact-page">
+    {% if contactImage %}
+        <div class="contact-page__image">
+            <img src="/uploads/contact/{{ contactImage }}" alt="Anna Pownall">
+        </div>
+    {% endif %}
+
+    <div class="contact-page__info">
+        {% if contactEmail %}
+            <div class="contact-page__row">
+                <span class="contact-page__label">{{ 'contact.email_label'|trans }}</span>
+                <a href="mailto:{{ contactEmail }}" class="contact-page__value">{{ contactEmail }}</a>
+            </div>
+        {% endif %}
+
+        {% if contactInstagram %}
+            <div class="contact-page__row">
+                <span class="contact-page__label">{{ 'contact.instagram_label'|trans }}</span>
+                <a href="{{ contactInstagram }}" target="_blank" rel="noopener" class="contact-page__value">{{ contactInstagram|replace({'https://www.instagram.com/': '@', 'https://instagram.com/': '@'})|trim('/') }}</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .contact-page {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 3rem 2rem 4rem;
+        gap: 2.5rem;
+    }
+
+    .contact-page__image {
+        width: 100%;
+        max-width: 480px;
+    }
+
+    .contact-page__image img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .contact-page__info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .contact-page__row {
+        display: flex;
+        align-items: baseline;
+        gap: 1.25rem;
+    }
+
+    .contact-page__label {
+        font-size: 0.65rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--es-muted);
+        white-space: nowrap;
+        min-width: 130px;
+        text-align: right;
+    }
+
+    .contact-page__value {
+        font-size: 0.82rem;
+        letter-spacing: 0.04em;
+        color: var(--es-text);
+        text-decoration: none;
+        border-bottom: 1px solid var(--es-border);
+        padding-bottom: 0.1rem;
+        transition: border-color 0.2s;
+    }
+
+    .contact-page__value:hover {
+        border-color: var(--es-text);
+    }
+</style>
+{% endblock %}

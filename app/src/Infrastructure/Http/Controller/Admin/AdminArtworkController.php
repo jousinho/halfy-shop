@@ -56,25 +56,21 @@ final class AdminArtworkController extends AbstractController
     {
         $imageFile = $request->files->get('imageFile');
 
-        if (!$imageFile instanceof UploadedFile) {
-            $this->addFlash('error', 'La imagen es obligatoria.');
-            return $this->redirectToRoute('admin_artworks_new');
-        }
-
         $this->createArtworkService->execute(CreateArtworkCommand::create(
             title:         $request->request->getString('title'),
             titleEn:       $request->request->getString('titleEn') ?: null,
             description:   $request->request->getString('description') ?: null,
             descriptionEn: $request->request->getString('descriptionEn') ?: null,
-            technique:     $request->request->getString('technique'),
+            technique:     $request->request->getString('technique') ?: null,
             techniqueEn:   $request->request->getString('techniqueEn') ?: null,
-            dimensions:    $request->request->getString('dimensions'),
-            year:        $request->request->getInt('year'),
-            price:       $this->parsePrice($request->request->getString('price')),
-            imageFile:   $imageFile,
-            shopUrl:     $request->request->getString('shopUrl') ?: null,
-            isAvailable: $request->request->getBoolean('isAvailable'),
-            categoryIds: $request->request->all('categoryIds'),
+            dimensions:    $request->request->getString('dimensions') ?: null,
+            year:          $this->parseYear($request->request->getString('year')),
+            price:         $this->parsePrice($request->request->getString('price')),
+            imageFile:     $imageFile instanceof UploadedFile ? $imageFile : null,
+            shopUrl:       $request->request->getString('shopUrl') ?: null,
+            isAvailable:   $request->request->getBoolean('isAvailable'),
+            isVisible:     !$request->request->getBoolean('isHidden'),
+            categoryIds:   $request->request->all('categoryIds'),
         ));
 
         $this->addFlash('success', 'Obra creada correctamente.');
@@ -97,6 +93,17 @@ final class AdminArtworkController extends AbstractController
         ]);
     }
 
+    #[Route('/reorder', name: 'admin_artworks_reorder', methods: ['POST'])]
+    public function reorder(Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $ids  = $data['ids'] ?? [];
+
+        $this->reorderArtworksService->execute(ReorderArtworksCommand::create($ids));
+
+        return $this->json(['success' => true]);
+    }
+
     #[Route('/{id}', name: 'admin_artworks_update', methods: ['POST'])]
     public function update(string $id, Request $request): Response
     {
@@ -106,15 +113,16 @@ final class AdminArtworkController extends AbstractController
             titleEn:       $request->request->getString('titleEn') ?: null,
             description:   $request->request->getString('description') ?: null,
             descriptionEn: $request->request->getString('descriptionEn') ?: null,
-            technique:     $request->request->getString('technique'),
+            technique:     $request->request->getString('technique') ?: null,
             techniqueEn:   $request->request->getString('techniqueEn') ?: null,
-            dimensions:    $request->request->getString('dimensions'),
-            year:        $request->request->getInt('year'),
-            price:       $this->parsePrice($request->request->getString('price')),
-            imageFile:   $request->files->get('imageFile'),
-            shopUrl:     $request->request->getString('shopUrl') ?: null,
-            isAvailable: $request->request->getBoolean('isAvailable'),
-            categoryIds: $request->request->all('categoryIds'),
+            dimensions:    $request->request->getString('dimensions') ?: null,
+            year:          $this->parseYear($request->request->getString('year')),
+            price:         $this->parsePrice($request->request->getString('price')),
+            imageFile:     $request->files->get('imageFile'),
+            shopUrl:       $request->request->getString('shopUrl') ?: null,
+            isAvailable:   $request->request->getBoolean('isAvailable'),
+            isVisible:     !$request->request->getBoolean('isHidden'),
+            categoryIds:   $request->request->all('categoryIds'),
         ));
 
         $this->addFlash('success', 'Obra actualizada correctamente.');
@@ -155,15 +163,11 @@ final class AdminArtworkController extends AbstractController
         return $this->redirectToRoute('admin_artworks');
     }
 
-    #[Route('/reorder', name: 'admin_artworks_reorder', methods: ['POST'])]
-    public function reorder(Request $request): JsonResponse
+    private function parseYear(string $value): ?int
     {
-        $data = json_decode($request->getContent(), true);
-        $ids  = $data['ids'] ?? [];
+        $value = trim($value);
 
-        $this->reorderArtworksService->execute(ReorderArtworksCommand::create($ids));
-
-        return $this->json(['success' => true]);
+        return $value !== '' ? (int) $value : null;
     }
 
     private function parsePrice(string $value): ?float

@@ -123,20 +123,23 @@
             <div id="wysiwyg-editor-en" contenteditable="true">{{ page is not null and page.contentEn is not null ? page.contentEn|raw : '' }}</div>
             <textarea id="contentEn" name="contentEn" style="display:none"></textarea>
         </div>
+        <hr style="border: none; border-top: 1px solid #000; width: 60%; margin: 0 0 1.5rem 0;">
 
         <div class="form-group">
             <label>Foto</label>
             {% if page is not null and page.photoFilename is not null %}
             <div class="current-image">
                 <img src="/uploads/about/{{ page.photoFilename }}" alt="Foto actual">
-                <label class="checkbox-label">
-                    <input type="checkbox" name="removePhoto" value="1">
-                    Eliminar foto actual
-                </label>
             </div>
             {% endif %}
             <input type="file" name="photoFile" accept="image/jpeg,image/png,image/webp">
             <small>Sube una nueva foto para reemplazar la actual.</small>
+            {% if page is not null and page.photoFilename is not null %}
+            <label class="checkbox-label" style="margin-top: 8px; display: flex; align-items: center; gap: 6px;">
+                <input type="checkbox" name="removePhoto" value="1">
+                Eliminar foto actual — si la eliminas, no se mostrará ninguna imagen en la web
+            </label>
+            {% endif %}
         </div>
 
         <div class="form-actions">
