@@ -192,6 +192,7 @@
         @media (max-width: 640px) {
             .es-header { padding: 0 1rem; }
             .es-hamburger { display: flex; }
+            .es-locale { gap: 0.75rem; }
             .es-nav {
                 display: none;
                 position: absolute;
@@ -463,6 +464,40 @@
         }
         .es-instagram:hover { color: var(--es-text); }
         .es-instagram svg { width: 16px; height: 16px; }
+
+        @media (max-width: 1024px) {
+            .es-instagram { display: none; }
+            .es-header { height: 52px; }
+            .es-header.is-scrolled { height: 52px; }
+            .es-logo__img { max-height: 32px; }
+            .es-header.is-scrolled .es-logo__img { max-height: 32px; }
+            .es-main { padding-top: 52px; }
+
+            .site-search__form {
+                position: fixed;
+                top: 52px;
+                left: 0;
+                right: 0;
+                max-width: none;
+                width: 100%;
+                transform: none;
+                background: var(--es-bg);
+                border-bottom: 1px solid var(--es-border);
+                padding: 0.75rem 1rem;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.2s ease;
+            }
+            .site-search.is-open .site-search__form {
+                max-width: none;
+                opacity: 1;
+                pointer-events: auto;
+            }
+            .site-search__input {
+                width: 100%;
+            }
+        }
     </style>
     {% block stylesheets %}{% endblock %}
 </head>
@@ -503,11 +538,6 @@
                 </svg>
             </a>
             {% endif %}
-            <button class="es-hamburger" id="hamburger" aria-expanded="false" aria-label="Menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
             <div class="es-lang" id="langDropdown">
                 <button class="es-lang__trigger" id="langToggle" aria-expanded="false">
                     {{ app.request.locale|upper }}
@@ -520,6 +550,11 @@
                     <a href="{{ path(_route, _route_params|merge({'_locale': 'en'})) }}" {% if app.request.locale == 'en' %}class="active"{% endif %}>EN</a>
                 </div>
             </div>
+            <button class="es-hamburger" id="hamburger" aria-expanded="false" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </header>
 

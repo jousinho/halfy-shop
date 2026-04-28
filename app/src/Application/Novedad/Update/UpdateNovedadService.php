@@ -33,18 +33,20 @@ final class UpdateNovedadService
         $slug = $this->buildSlug($command->titulo, $command->id);
 
         $novedad->update(
-            titulo:      $command->titulo,
-            tituloEn:    $command->tituloEn,
-            contenido:   $command->contenido,
-            contenidoEn: $command->contenidoEn,
-            tipo:        NovedadTipo::from($command->tipo),
-            fecha:       new \DateTimeImmutable($command->fecha),
-            fechaFin:    $command->fechaFin !== null ? new \DateTimeImmutable($command->fechaFin) : null,
-            imagen:      $imagen,
-            lugar:       $command->lugar,
-            url:         $command->url,
-            slug:        $slug,
-            publicado:   $command->publicado,
+            titulo:       $command->titulo,
+            tituloEn:     $command->tituloEn,
+            contenido:    $command->contenido,
+            contenidoEn:  $command->contenidoEn,
+            tipo:         NovedadTipo::from($command->tipo),
+            fecha:        new \DateTimeImmutable($command->fecha),
+            fechaFin:     $command->fechaFin !== null ? new \DateTimeImmutable($command->fechaFin) : null,
+            imagen:       $imagen,
+            lugar:        $command->lugar,
+            url:          $command->url,
+            videoYoutube: $command->videoYoutube,
+            videoReel:    $command->videoReel,
+            slug:         $slug,
+            publicado:    $command->publicado,
         );
 
         $this->novedadRepository->save($novedad);

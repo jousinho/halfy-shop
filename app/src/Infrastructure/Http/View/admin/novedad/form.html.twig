@@ -78,6 +78,21 @@
                    value="{{ novedad is not null and novedad.url is not null ? novedad.url : '' }}">
         </div>
 
+        <div class="form-row">
+            <div class="form-group">
+                <label for="videoYoutube">Vídeo YouTube</label>
+                <input type="url" id="videoYoutube" name="videoYoutube"
+                       placeholder="https://www.youtube.com/watch?v=..."
+                       value="{{ novedad is not null and novedad.videoYoutube is not null ? novedad.videoYoutube : '' }}">
+            </div>
+            <div class="form-group">
+                <label for="videoReel">Reel de Instagram</label>
+                <input type="url" id="videoReel" name="videoReel"
+                       placeholder="https://www.instagram.com/reel/..."
+                       value="{{ novedad is not null and novedad.videoReel is not null ? novedad.videoReel : '' }}">
+            </div>
+        </div>
+
         <div class="form-group">
             <label for="contenido">Contenido (ES)</label>
             <textarea id="contenido" name="contenido" rows="6" class="wysiwyg">{{ novedad is not null and novedad.contenido is not null ? novedad.contenido : '' }}</textarea>

@@ -38,6 +38,21 @@
         <a href="{{ novedad.url }}" target="_blank" rel="noopener noreferrer" class="cn-detail__url">{{ novedad.url }}</a>
     {% endif %}
 
+    {% if novedad.embedUrlYoutube is not null %}
+        <div class="cn-detail__video">
+            <iframe src="{{ novedad.embedUrlYoutube() }}"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+        </div>
+    {% endif %}
+
+    {% if novedad.embedUrlReel is not null %}
+        <div class="cn-detail__video">
+            <iframe src="{{ novedad.embedUrlReel() }}"
+                    allowfullscreen scrolling="no"></iframe>
+        </div>
+    {% endif %}
+
     <a href="{{ path('novedades', {_locale: app.request.locale}) }}" class="cn-detail__back">← {{ 'novedades.back'|trans }}</a>
 
 </div>
@@ -108,6 +123,21 @@
         color: var(--es-accent);
         margin-bottom: 3rem;
         word-break: break-all;
+    }
+
+    .cn-detail__video {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        margin-bottom: 2rem;
+    }
+
+    .cn-detail__video iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
     }
 
     @media (max-width: 640px) {

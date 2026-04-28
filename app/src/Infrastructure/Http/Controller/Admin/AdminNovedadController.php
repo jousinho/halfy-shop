@@ -51,17 +51,19 @@ final class AdminNovedadController extends AbstractController
 
         try {
             $this->createNovedadService->execute(CreateNovedadCommand::create(
-                titulo:      $request->request->getString('titulo'),
-                tituloEn:    $request->request->getString('tituloEn') ?: null,
-                contenido:   $request->request->getString('contenido') ?: null,
-                contenidoEn: $request->request->getString('contenidoEn') ?: null,
-                tipo:        $request->request->getString('tipo'),
-                fecha:       $request->request->getString('fecha'),
-                fechaFin:    $request->request->getString('fechaFin') ?: null,
-                imagenFile:  $imagenFile instanceof UploadedFile ? $imagenFile : null,
-                lugar:       $request->request->getString('lugar') ?: null,
-                url:         $request->request->getString('url') ?: null,
-                publicado:   $request->request->getBoolean('publicado'),
+                titulo:       $request->request->getString('titulo'),
+                tituloEn:     $request->request->getString('tituloEn') ?: null,
+                contenido:    $request->request->getString('contenido') ?: null,
+                contenidoEn:  $request->request->getString('contenidoEn') ?: null,
+                tipo:         $request->request->getString('tipo'),
+                fecha:        $request->request->getString('fecha'),
+                fechaFin:     $request->request->getString('fechaFin') ?: null,
+                imagenFile:   $imagenFile instanceof UploadedFile ? $imagenFile : null,
+                lugar:        $request->request->getString('lugar') ?: null,
+                url:          $request->request->getString('url') ?: null,
+                videoYoutube: $request->request->getString('videoYoutube') ?: null,
+                videoReel:    $request->request->getString('videoReel') ?: null,
+                publicado:    $request->request->getBoolean('publicado'),
             ));
         } catch (\InvalidArgumentException $e) {
             $this->addFlash('error', $e->getMessage());
@@ -94,18 +96,20 @@ final class AdminNovedadController extends AbstractController
 
         try {
             $this->updateNovedadService->execute(UpdateNovedadCommand::create(
-                id:          $id,
-                titulo:      $request->request->getString('titulo'),
-                tituloEn:    $request->request->getString('tituloEn') ?: null,
-                contenido:   $request->request->getString('contenido') ?: null,
-                contenidoEn: $request->request->getString('contenidoEn') ?: null,
-                tipo:        $request->request->getString('tipo'),
-                fecha:       $request->request->getString('fecha'),
-                fechaFin:    $request->request->getString('fechaFin') ?: null,
-                imagenFile:  $imagenFile instanceof UploadedFile ? $imagenFile : null,
-                lugar:       $request->request->getString('lugar') ?: null,
-                url:         $request->request->getString('url') ?: null,
-                publicado:   $request->request->getBoolean('publicado'),
+                id:           $id,
+                titulo:       $request->request->getString('titulo'),
+                tituloEn:     $request->request->getString('tituloEn') ?: null,
+                contenido:    $request->request->getString('contenido') ?: null,
+                contenidoEn:  $request->request->getString('contenidoEn') ?: null,
+                tipo:         $request->request->getString('tipo'),
+                fecha:        $request->request->getString('fecha'),
+                fechaFin:     $request->request->getString('fechaFin') ?: null,
+                imagenFile:   $imagenFile instanceof UploadedFile ? $imagenFile : null,
+                lugar:        $request->request->getString('lugar') ?: null,
+                url:          $request->request->getString('url') ?: null,
+                videoYoutube: $request->request->getString('videoYoutube') ?: null,
+                videoReel:    $request->request->getString('videoReel') ?: null,
+                publicado:    $request->request->getBoolean('publicado'),
             ));
         } catch (\InvalidArgumentException $e) {
             $this->addFlash('error', $e->getMessage());

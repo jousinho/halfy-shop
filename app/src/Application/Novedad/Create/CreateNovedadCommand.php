@@ -19,6 +19,8 @@ final class CreateNovedadCommand
         public readonly ?UploadedFile $imagenFile,
         public readonly ?string $lugar,
         public readonly ?string $url,
+        public readonly ?string $videoYoutube,
+        public readonly ?string $videoReel,
         public readonly bool $publicado,
     ) {}
 
@@ -33,11 +35,13 @@ final class CreateNovedadCommand
         ?UploadedFile $imagenFile,
         ?string $lugar,
         ?string $url,
+        ?string $videoYoutube,
+        ?string $videoReel,
         bool $publicado,
     ): self {
         return new self(
             $titulo, $tituloEn, $contenido, $contenidoEn,
-            $tipo, $fecha, $fechaFin, $imagenFile, $lugar, $url, $publicado,
+            $tipo, $fecha, $fechaFin, $imagenFile, $lugar, $url, $videoYoutube, $videoReel, $publicado,
         );
     }
 }

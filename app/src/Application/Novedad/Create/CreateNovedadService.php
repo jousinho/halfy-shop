@@ -26,19 +26,21 @@ final class CreateNovedadService
             : null;
 
         $novedad = Novedad::create(
-            id:          NovedadId::generate(),
-            titulo:      $command->titulo,
-            tituloEn:    $command->tituloEn,
-            contenido:   $command->contenido,
-            contenidoEn: $command->contenidoEn,
-            tipo:        NovedadTipo::from($command->tipo),
-            fecha:       new \DateTimeImmutable($command->fecha),
-            fechaFin:    $command->fechaFin !== null ? new \DateTimeImmutable($command->fechaFin) : null,
-            imagen:      $imagen,
-            lugar:       $command->lugar,
-            url:         $command->url,
-            slug:        $this->buildSlug($command->titulo),
-            publicado:   $command->publicado,
+            id:           NovedadId::generate(),
+            titulo:       $command->titulo,
+            tituloEn:     $command->tituloEn,
+            contenido:    $command->contenido,
+            contenidoEn:  $command->contenidoEn,
+            tipo:         NovedadTipo::from($command->tipo),
+            fecha:        new \DateTimeImmutable($command->fecha),
+            fechaFin:     $command->fechaFin !== null ? new \DateTimeImmutable($command->fechaFin) : null,
+            imagen:       $imagen,
+            lugar:        $command->lugar,
+            url:          $command->url,
+            videoYoutube: $command->videoYoutube,
+            videoReel:    $command->videoReel,
+            slug:         $this->buildSlug($command->titulo),
+            publicado:    $command->publicado,
         );
 
         $this->novedadRepository->save($novedad);
