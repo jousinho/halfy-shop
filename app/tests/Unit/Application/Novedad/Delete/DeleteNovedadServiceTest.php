@@ -66,19 +66,21 @@ final class DeleteNovedadServiceTest extends TestCase
     private function buildNovedad(): Novedad
     {
         $novedad = Novedad::create(
-            id:          NovedadId::generate(),
-            titulo:      'Novedad a eliminar',
-            tituloEn:    null,
-            contenido:   null,
-            contenidoEn: null,
-            tipo:        NovedadTipo::Noticia,
-            fecha:       new \DateTimeImmutable('2026-06-01'),
-            fechaFin:    null,
-            imagen:      null,
-            lugar:       null,
-            url:         null,
-            slug:        'novedad-a-eliminar',
-            publicado:   true,
+            id:           NovedadId::generate(),
+            titulo:       'Novedad a eliminar',
+            tituloEn:     null,
+            contenido:    null,
+            contenidoEn:  null,
+            tipo:         NovedadTipo::Noticia,
+            fecha:        new \DateTimeImmutable('2026-06-01'),
+            fechaFin:     null,
+            imagen:       null,
+            lugar:        null,
+            url:          null,
+            videoYoutube: null,
+            videoReel:    null,
+            slug:         'novedad-a-eliminar',
+            publicado:    true,
         );
         $novedad->pullDomainEvents();
 

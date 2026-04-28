@@ -41,18 +41,20 @@ final class UpdateNovedadServiceTest extends TestCase
         $this->dispatcher->method('dispatch');
 
         $this->service->execute(UpdateNovedadCommand::create(
-            id:          $novedad->id()->value(),
-            titulo:      'Título actualizado',
-            tituloEn:    null,
-            contenido:   null,
-            contenidoEn: null,
-            tipo:        'noticia',
-            fecha:       '2026-09-01',
-            fechaFin:    null,
-            imagenFile:  null,
-            lugar:       null,
-            url:         null,
-            publicado:   false,
+            id:           $novedad->id()->value(),
+            titulo:       'Título actualizado',
+            tituloEn:     null,
+            contenido:    null,
+            contenidoEn:  null,
+            tipo:         'noticia',
+            fecha:        '2026-09-01',
+            fechaFin:     null,
+            imagenFile:   null,
+            lugar:        null,
+            url:          null,
+            videoYoutube: null,
+            videoReel:    null,
+            publicado:    false,
         ));
 
         $this->assertSame('Título actualizado', $novedad->titulo());
@@ -72,18 +74,20 @@ final class UpdateNovedadServiceTest extends TestCase
             ->with($this->isInstanceOf(NovedadUpdated::class));
 
         $this->service->execute(UpdateNovedadCommand::create(
-            id:          $novedad->id()->value(),
-            titulo:      'Otro título',
-            tituloEn:    null,
-            contenido:   null,
-            contenidoEn: null,
-            tipo:        'noticia',
-            fecha:       '2026-09-01',
-            fechaFin:    null,
-            imagenFile:  null,
-            lugar:       null,
-            url:         null,
-            publicado:   true,
+            id:           $novedad->id()->value(),
+            titulo:       'Otro título',
+            tituloEn:     null,
+            contenido:    null,
+            contenidoEn:  null,
+            tipo:         'noticia',
+            fecha:        '2026-09-01',
+            fechaFin:     null,
+            imagenFile:   null,
+            lugar:        null,
+            url:          null,
+            videoYoutube: null,
+            videoReel:    null,
+            publicado:    true,
         ));
     }
 
@@ -94,37 +98,41 @@ final class UpdateNovedadServiceTest extends TestCase
         $this->expectException(\RuntimeException::class);
 
         $this->service->execute(UpdateNovedadCommand::create(
-            id:          NovedadId::generate()->value(),
-            titulo:      'X',
-            tituloEn:    null,
-            contenido:   null,
-            contenidoEn: null,
-            tipo:        'noticia',
-            fecha:       '2026-09-01',
-            fechaFin:    null,
-            imagenFile:  null,
-            lugar:       null,
-            url:         null,
-            publicado:   true,
+            id:           NovedadId::generate()->value(),
+            titulo:       'X',
+            tituloEn:     null,
+            contenido:    null,
+            contenidoEn:  null,
+            tipo:         'noticia',
+            fecha:        '2026-09-01',
+            fechaFin:     null,
+            imagenFile:   null,
+            lugar:        null,
+            url:          null,
+            videoYoutube: null,
+            videoReel:    null,
+            publicado:    true,
         ));
     }
 
     private function buildNovedad(): Novedad
     {
         $novedad = Novedad::create(
-            id:          NovedadId::generate(),
-            titulo:      'Novedad original',
-            tituloEn:    null,
-            contenido:   null,
-            contenidoEn: null,
-            tipo:        NovedadTipo::Noticia,
-            fecha:       new \DateTimeImmutable('2026-06-01'),
-            fechaFin:    null,
-            imagen:      null,
-            lugar:       null,
-            url:         null,
-            slug:        'novedad-original',
-            publicado:   true,
+            id:           NovedadId::generate(),
+            titulo:       'Novedad original',
+            tituloEn:     null,
+            contenido:    null,
+            contenidoEn:  null,
+            tipo:         NovedadTipo::Noticia,
+            fecha:        new \DateTimeImmutable('2026-06-01'),
+            fechaFin:     null,
+            imagen:       null,
+            lugar:        null,
+            url:          null,
+            videoYoutube: null,
+            videoReel:    null,
+            slug:         'novedad-original',
+            publicado:    true,
         );
         $novedad->pullDomainEvents();
 

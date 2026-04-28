@@ -104,17 +104,19 @@ final class CreateNovedadServiceTest extends TestCase
     private function buildCommand(string $titulo = 'Novedad de prueba', bool $publicado = true): CreateNovedadCommand
     {
         return CreateNovedadCommand::create(
-            titulo:      $titulo,
-            tituloEn:    null,
-            contenido:   null,
-            contenidoEn: null,
-            tipo:        'noticia',
-            fecha:       '2026-06-01',
-            fechaFin:    null,
-            imagenFile:  null,
-            lugar:       null,
-            url:         null,
-            publicado:   $publicado,
+            titulo:       $titulo,
+            tituloEn:     null,
+            contenido:    null,
+            contenidoEn:  null,
+            tipo:         'noticia',
+            fecha:        '2026-06-01',
+            fechaFin:     null,
+            imagenFile:   null,
+            lugar:        null,
+            url:          null,
+            videoYoutube: null,
+            videoReel:    null,
+            publicado:    $publicado,
         );
     }
 }

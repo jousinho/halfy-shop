@@ -55,18 +55,20 @@ final class NovedadTest extends TestCase
         $novedad->pullDomainEvents();
 
         $novedad->update(
-            titulo:      'Nuevo título',
-            tituloEn:    null,
-            contenido:   null,
-            contenidoEn: null,
-            tipo:        NovedadTipo::Noticia,
-            fecha:       new \DateTimeImmutable('2026-07-01'),
-            fechaFin:    null,
-            imagen:      null,
-            lugar:       null,
-            url:         null,
-            slug:        'nuevo-titulo',
-            publicado:   false,
+            titulo:       'Nuevo título',
+            tituloEn:     null,
+            contenido:    null,
+            contenidoEn:  null,
+            tipo:         NovedadTipo::Noticia,
+            fecha:        new \DateTimeImmutable('2026-07-01'),
+            fechaFin:     null,
+            imagen:       null,
+            lugar:        null,
+            url:          null,
+            videoYoutube: null,
+            videoReel:    null,
+            slug:         'nuevo-titulo',
+            publicado:    false,
         );
 
         $events = $novedad->pullDomainEvents();
@@ -81,18 +83,20 @@ final class NovedadTest extends TestCase
         $novedad->pullDomainEvents();
 
         $novedad->update(
-            titulo:      'Título actualizado',
-            tituloEn:    'Updated title',
-            contenido:   'Nuevo contenido',
-            contenidoEn: null,
-            tipo:        NovedadTipo::Noticia,
-            fecha:       new \DateTimeImmutable('2026-08-15'),
-            fechaFin:    null,
-            imagen:      null,
-            lugar:       null,
-            url:         null,
-            slug:        'titulo-actualizado',
-            publicado:   false,
+            titulo:       'Título actualizado',
+            tituloEn:     'Updated title',
+            contenido:    'Nuevo contenido',
+            contenidoEn:  null,
+            tipo:         NovedadTipo::Noticia,
+            fecha:        new \DateTimeImmutable('2026-08-15'),
+            fechaFin:     null,
+            imagen:       null,
+            lugar:        null,
+            url:          null,
+            videoYoutube: null,
+            videoReel:    null,
+            slug:         'titulo-actualizado',
+            publicado:    false,
         );
 
         $this->assertSame('Título actualizado', $novedad->titulo());
@@ -149,19 +153,21 @@ final class NovedadTest extends TestCase
     private function buildNovedad(?NovedadId $id = null, ?string $tituloEn = 'Group exhibition'): Novedad
     {
         return Novedad::create(
-            id:          $id ?? NovedadId::generate(),
-            titulo:      'Exposición colectiva',
-            tituloEn:    $tituloEn,
-            contenido:   'Contenido de la novedad',
-            contenidoEn: null,
-            tipo:        NovedadTipo::Evento,
-            fecha:       new \DateTimeImmutable('2026-06-01'),
-            fechaFin:    null,
-            imagen:      null,
-            lugar:       'Madrid',
-            url:         'https://example.com',
-            slug:        'exposicion-colectiva',
-            publicado:   true,
+            id:           $id ?? NovedadId::generate(),
+            titulo:       'Exposición colectiva',
+            tituloEn:     $tituloEn,
+            contenido:    'Contenido de la novedad',
+            contenidoEn:  null,
+            tipo:         NovedadTipo::Evento,
+            fecha:        new \DateTimeImmutable('2026-06-01'),
+            fechaFin:     null,
+            imagen:       null,
+            lugar:        'Madrid',
+            url:          'https://example.com',
+            videoYoutube: null,
+            videoReel:    null,
+            slug:         'exposicion-colectiva',
+            publicado:    true,
         );
     }
 }
