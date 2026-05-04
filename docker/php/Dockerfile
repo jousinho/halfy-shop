@@ -1,7 +1,6 @@
 FROM php:8.4-fpm-alpine
 
 RUN apk add --no-cache \
-    postgresql-dev \
     icu-dev \
     libzip-dev \
     libpng-dev \
@@ -12,8 +11,7 @@ RUN apk add --no-cache \
 RUN docker-php-ext-configure intl \
     && docker-php-ext-configure gd --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
-        pdo_pgsql \
-        pgsql \
+        pdo_mysql \
         intl \
         bcmath \
         opcache \

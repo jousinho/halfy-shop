@@ -9,7 +9,7 @@ services:
     networks:
       - app
     depends_on:
-      postgres:
+      mysql:
         condition: service_healthy
 
   php-cli:
@@ -23,7 +23,7 @@ services:
     networks:
       - app
     depends_on:
-      postgres:
+      mysql:
         condition: service_healthy
 
   nginx:
@@ -39,48 +39,52 @@ services:
     depends_on:
       - php
 
-  postgres:
-    image: postgres:16-alpine
-    container_name: halfyshop-postgres
+  mysql:
+    image: mysql:8.0
+    container_name: halfyshop-mysql
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-app}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secret}
-      POSTGRES_DB: ${POSTGRES_DB:-halfyshop}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootsecret}
+      MYSQL_DATABASE: ${MYSQL_DB:-halfyshop}
+      MYSQL_USER: ${MYSQL_USER:-app}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-secret}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mysql_data:/var/lib/mysql
     ports:
-      - "5434:5432"
+      - "3306:3306"
     networks:
       - app
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-app} -d ${POSTGRES_DB:-halfyshop}"]
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 30s
 
-  postgres_test:
-    image: postgres:16-alpine
-    container_name: halfyshop-postgres-test
+  mysql_test:
+    image: mysql:8.0
+    container_name: halfyshop-mysql-test
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-app}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secret}
-      POSTGRES_DB: ${POSTGRES_DB_TEST:-halfyshop_test}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootsecret}
+      MYSQL_DATABASE: ${MYSQL_DB_TEST:-halfyshop_test}
+      MYSQL_USER: ${MYSQL_USER:-app}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-secret}
     volumes:
-      - postgres_test_data:/var/lib/postgresql/data
+      - mysql_test_data:/var/lib/mysql
     ports:
-      - "5435:5432"
+      - "3307:3306"
     networks:
       - app
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-app} -d ${POSTGRES_DB_TEST:-halfyshop_test}"]
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 30s
 
 networks:
   app:
     driver: bridge
 
 volumes:
-  postgres_data:
-  postgres_test_data:
+  mysql_data:
+  mysql_test_data:
