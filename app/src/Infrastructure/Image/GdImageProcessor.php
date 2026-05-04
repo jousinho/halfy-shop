@@ -12,7 +12,6 @@ final class GdImageProcessor implements ImageProcessor
 {
     private const MAX_WARNING_SIZE_BYTES = 10 * 1024 * 1024;
     private const THUMBNAIL_WIDTH       = 600;
-    private const THUMBNAIL_HEIGHT      = 400;
     private const LIGHTBOX_MAX_WIDTH    = 1400;
     private const JPEG_QUALITY          = 85;
 
@@ -73,7 +72,7 @@ final class GdImageProcessor implements ImageProcessor
         $dir = $this->uploadsDir . '/' . $destinationDir . '/thumbnails';
         $this->ensureDirectoryExists($dir);
 
-        $thumbnail = $this->cropToSize($source, self::THUMBNAIL_WIDTH, self::THUMBNAIL_HEIGHT);
+        $thumbnail = $this->scaleToWidth($source, self::THUMBNAIL_WIDTH);
         imagejpeg($thumbnail, $dir . '/' . $filename, self::JPEG_QUALITY);
         imagedestroy($thumbnail);
     }

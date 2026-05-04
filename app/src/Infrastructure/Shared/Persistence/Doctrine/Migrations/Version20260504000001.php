@@ -89,12 +89,12 @@ final class Version20260504000001 extends AbstractMigration
         ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB");
 
         $this->addSql("CREATE TABLE IF NOT EXISTS settings (
-            `key`  VARCHAR(100) NOT NULL,
-            value  LONGTEXT     NOT NULL,
-            PRIMARY KEY (`key`)
+            setting_key VARCHAR(100) NOT NULL,
+            value       LONGTEXT     NOT NULL,
+            PRIMARY KEY (setting_key)
         ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB");
 
-        $this->addSql("INSERT IGNORE INTO settings (`key`, value) VALUES ('active_theme', 'default')");
+        $this->addSql("INSERT IGNORE INTO settings (setting_key, value) VALUES ('active_theme', 'default')");
 
         $this->addSql("CREATE TABLE IF NOT EXISTS sync_logs (
             id          VARCHAR(36) NOT NULL,
