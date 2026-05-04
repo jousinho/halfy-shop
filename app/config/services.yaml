@@ -52,7 +52,6 @@ services:
 
     App\Infrastructure\Twig\ThemeAwareTwigLoader:
         arguments:
-            $settingRepository: '@App\Domain\Setting\Repository\SettingRepository'
             $viewsDir: '%kernel.project_dir%/src/Infrastructure/Http/View'
         tags:
             - { name: twig.loader, priority: 100 }

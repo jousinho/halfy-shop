@@ -4,19 +4,13 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Twig;
 
-use App\Domain\Setting\Repository\SettingRepository;
 use Twig\Error\LoaderError;
 use Twig\Loader\LoaderInterface;
 use Twig\Source;
 
 final class ThemeAwareTwigLoader implements LoaderInterface
 {
-    private ?string $cachedTheme = null;
-
-    public function __construct(
-        private readonly SettingRepository $settingRepository,
-        private readonly string $viewsDir,
-    ) {}
+    public function __construct(private readonly string $viewsDir) {}
 
     public function getSourceContext(string $name): Source
     {
@@ -62,29 +56,9 @@ final class ThemeAwareTwigLoader implements LoaderInterface
             return null;
         }
 
-        $theme = $this->activeTheme();
-
-        if ($theme === 'default') {
-            return null;
-        }
-
         $rest = substr($name, strlen('public/'));
-        $path = $this->viewsDir . '/public/themes/' . $theme . '/' . $rest;
+        $path = $this->viewsDir . '/public/themes/custom/' . $rest;
 
         return file_exists($path) ? $path : null;
-    }
-
-    private function activeTheme(): string
-    {
-        if ($this->cachedTheme === null) {
-            try {
-                $setting = $this->settingRepository->findByKey('active_theme');
-                $this->cachedTheme = $setting?->value() ?? 'default';
-            } catch (\Exception) {
-                $this->cachedTheme = 'default';
-            }
-        }
-
-        return $this->cachedTheme;
     }
 }
