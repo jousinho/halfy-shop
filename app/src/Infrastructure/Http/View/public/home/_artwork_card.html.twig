@@ -6,7 +6,7 @@
        data-title="{{ artwork.titleForLocale(app.request.locale) }}"
        data-description="{% if artwork.techniqueForLocale(app.request.locale) is not null %}<span class='lb-technique'>{{ artwork.techniqueForLocale(app.request.locale) }}</span>{% endif %}{% if artwork.dimensions is not null %}<span class='lb-dimensions'>{{ artwork.dimensions.value }}</span>{% endif %}{% if artwork.year is not null %}<span class='lb-year'>{{ artwork.year.value }}</span>{% endif %}{% if artwork.price is not null %}<span class='lb-price'>{{ artwork.price.value }}€</span>{% endif %}{% if artwork.shopUrl is not null and artwork.isAvailable %}<a href='{{ artwork.shopUrl }}' target='_blank' class='lb-shop-link'>{{ 'shop.view'|trans }}</a>{% endif %}">
         <div class="artwork-card__image-wrapper">
-            <img src="/uploads/artworks/thumbnails/{{ artwork.imageFilename }}"
+            <img src="/uploads/artworks/{{ artwork.imageFilename }}"
                  alt="{{ artwork.titleForLocale(app.request.locale) }}"
                  loading="lazy"
                  class="artwork-card__image">

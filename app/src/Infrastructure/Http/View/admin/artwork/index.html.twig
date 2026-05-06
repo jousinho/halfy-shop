@@ -17,7 +17,7 @@
             <li class="artwork-list__item" data-id="{{ artwork.id.value }}">
                 <span class="drag-handle">⠿</span>
                 {% if artwork.imageFilename is not null %}
-                <img src="/uploads/artworks/thumbnails/{{ artwork.imageFilename }}"
+                <img src="/uploads/artworks/{{ artwork.imageFilename }}"
                      alt="{{ artwork.title.value }}"
                      class="artwork-list__thumb">
                 {% else %}

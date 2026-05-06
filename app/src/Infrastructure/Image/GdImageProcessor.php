@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 final class GdImageProcessor implements ImageProcessor
 {
     private const MAX_WARNING_SIZE_BYTES = 10 * 1024 * 1024;
-    private const THUMBNAIL_WIDTH       = 600;
     private const LIGHTBOX_MAX_WIDTH    = 1400;
     private const JPEG_QUALITY          = 85;
 
@@ -25,7 +24,6 @@ final class GdImageProcessor implements ImageProcessor
         $this->warnIfFileTooLarge($file);
         $source   = $this->loadImage($file);
         $filename = $this->generateFilename();
-        $this->saveThumbnail($source, $destinationDir, $filename);
         $this->saveLightbox($source, $destinationDir, $filename);
         imagedestroy($source);
 
@@ -65,16 +63,6 @@ final class GdImageProcessor implements ImageProcessor
     private function generateFilename(): string
     {
         return uniqid('img_', true) . '.jpg';
-    }
-
-    private function saveThumbnail(\GdImage $source, string $destinationDir, string $filename): void
-    {
-        $dir = $this->uploadsDir . '/' . $destinationDir . '/thumbnails';
-        $this->ensureDirectoryExists($dir);
-
-        $thumbnail = $this->scaleToWidth($source, self::THUMBNAIL_WIDTH);
-        imagejpeg($thumbnail, $dir . '/' . $filename, self::JPEG_QUALITY);
-        imagedestroy($thumbnail);
     }
 
     private function saveLightbox(\GdImage $source, string $destinationDir, string $filename): void

@@ -110,7 +110,7 @@
             <label for="imageFile">Imagen</label>
             {% if artwork is not null and artwork.imageFilename is not null %}
             <div class="current-image">
-                <img src="/uploads/artworks/thumbnails/{{ artwork.imageFilename }}" alt="Imagen actual">
+                <img src="/uploads/artworks/{{ artwork.imageFilename }}" alt="Imagen actual">
                 <span>Imagen actual. Sube otra para reemplazarla.</span>
             </div>
             {% endif %}

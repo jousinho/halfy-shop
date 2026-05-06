@@ -17,7 +17,7 @@ final class SearchResultItem
 
     public static function fromArtwork(string $title, ?string $subtitle, string $url, string $imageFilename): self
     {
-        return new self('artwork', $title, $subtitle, $url, $imageFilename, 'artworks/thumbnails');
+        return new self('artwork', $title, $subtitle, $url, $imageFilename, 'artworks');
     }
 
     public static function fromNovedad(string $title, ?string $subtitle, string $url, ?string $imageFilename): self

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anna Pownall</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Droid+Serif:ital,wght@0,400;0,700;1,400&family=Tinos:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Tinos', serif;
+            background: #faf9f6;
+            color: #2a2a2a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .uc-container {
+            max-width: 560px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .uc-name {
+            font-family: 'Droid Serif', serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 2.5rem;
+            color: #555;
+        }
+
+        .uc-image {
+            width: 70%;
+            height: auto;
+            display: block;
+            margin: 0 auto 2rem;
+        }
+
+        .uc-text {
+            font-size: 1.05rem;
+            line-height: 1.75;
+            color: #3a3a3a;
+            margin-bottom: 1rem;
+        }
+
+        .uc-text a {
+            color: #2a2a2a;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .uc-text a:hover {
+            color: #666;
+        }
+
+        footer {
+            margin-top: 3rem;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="uc-container">
+        <p class="uc-name">Anna Pownall</p>
+
+        <img
+            class="uc-image"
+            src="/uploads/artworks/img_69f8e6d7dd8ea7.63558423.jpg"
+            alt="Sopla y Vuelo II"
+        >
+
+        <p class="uc-text">
+            Hola, estoy construyendo mi nueva web.<br>
+            Puedes ver mis ilustraciones en <a href="https://annapownall.bigcartel.com/" target="_blank" rel="noopener">annapownall.bigcartel.com</a> mientras la acabo.
+        </p>
+
+        <p class="uc-text">
+            Y recuerda que del 26 al 28 de junio, estaré exponiendo en El Escorial&nbsp;:)
+        </p>
+    </div>
+
+    <footer>&copy; {{ "now"|date("Y") }} Anna Pownall</footer>
+</body>
+</html>

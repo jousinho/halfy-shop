@@ -44,11 +44,6 @@ final class DeleteArtworkService
             unlink($path);
         }
 
-        $thumbnailPath = $this->uploadsDir . '/artworks/thumbnails/' . $imageFilename;
-
-        if (file_exists($thumbnailPath)) {
-            unlink($thumbnailPath);
-        }
     }
 
     private function delete(Artwork $artwork): void
