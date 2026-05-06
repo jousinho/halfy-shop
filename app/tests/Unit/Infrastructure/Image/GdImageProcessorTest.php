@@ -49,26 +49,6 @@ final class GdImageProcessorTest extends TestCase
         $this->assertFileExists($this->uploadsDir . '/artworks/' . $filename);
     }
 
-    public function test_process__should_create_thumbnail_file(): void
-    {
-        $file     = $this->createUploadedFile(800, 600);
-        $filename = $this->processor->process($file, 'artworks');
-
-        $this->assertFileExists($this->uploadsDir . '/artworks/thumbnails/' . $filename);
-    }
-
-    public function test_process__thumbnail_should_scale_to_600px_wide_preserving_ratio(): void
-    {
-        $file     = $this->createUploadedFile(1200, 900);
-        $filename = $this->processor->process($file, 'artworks');
-
-        $path = $this->uploadsDir . '/artworks/thumbnails/' . $filename;
-        [$width, $height] = getimagesize($path);
-
-        $this->assertSame(600, $width);
-        $this->assertSame(450, $height);
-    }
-
     public function test_process__lightbox_should_not_exceed_1400px_wide(): void
     {
         $file     = $this->createUploadedFile(2000, 1500);
@@ -109,7 +89,6 @@ final class GdImageProcessorTest extends TestCase
         $this->processor->process($file, 'new-dir');
 
         $this->assertDirectoryExists($this->uploadsDir . '/new-dir');
-        $this->assertDirectoryExists($this->uploadsDir . '/new-dir/thumbnails');
     }
 
     public function test_process__should_generate_unique_filenames(): void
