@@ -1,73 +1,93 @@
 # Planificación de Deploy — HalfyShop
 
-Estado actual: código listo en `main`, sin deployar. WordPress activo en Plesk (no tocar hasta go-live).
+Última actualización: 2026-05-06
 
 ---
 
-## Fase 1 — Preparar el código
-> Hago yo
+## Fase 1 — Preparar el código ✅ COMPLETADA
 
-- [ ] Levantar Docker y pasar los tests (`docker compose up -d` + `php bin/phpunit`)
-- [ ] Actualizar `deploy.php` — dos hosts: `app` (subdominio, `keep_releases: 1`) y `production` (`keep_releases: 3`)
-- [ ] Commitear y pushear: `composer.json`, `composer.lock`, `deploy.php`, `scripts/`
-
----
-
-## Fase 2 — Preparar el servidor
-> Haces tú en Plesk + SSH
-
-- [ ] Crear subdominio `app.annapownall.com` en Plesk
-- [ ] Activar SSL (Let's Encrypt) en el subdominio
-- [ ] Verificar que PHP 8.4 está disponible en Plesk → subdominio → PHP Settings
-- [ ] Crear BD MySQL `halfyshop` y usuario (o reutilizar credenciales del WordPress)
-- [ ] Generar hash del password de admin:
-      `docker compose exec php-cli php bin/console security:hash-password`
-- [ ] Generar APP_SECRET: `openssl rand -hex 32`
-- [ ] Crear `/ruta-subdominio/shared/app/.env.local` con:
-      ```
-      APP_ENV=prod
-      APP_SECRET=<generado>
-      DATABASE_URL=mysql://USUARIO:PASSWORD@localhost:3306/halfyshop?serverVersion=8.0&charset=utf8mb4
-      ADMIN_PASSWORD_HASH=<generado>
-      BIGCARTEL_FEED_URL=https://annapownall.bigcartel.com/products.xml
-      CONTACT_EMAIL=anna@annapownall.com
-      ```
-- [ ] Configurar document root en Plesk → apuntar a `current/app/public`
+- [x] Tests pasando (186/186)
+- [x] Commit y push en `main`
+- [x] Página under construction (MaintenanceModeListener)
+- [x] Thumbnails eliminados — solo imagen completa (1400px)
+- [x] `.user.ini` en `public/` para OPcache validate_timestamps
 
 ---
 
-## Fase 3 — Primer deploy
-> Hago yo (con tu confirmación)
+## Fase 2 — Preparar el servidor ✅ COMPLETADA (dev.annapownall.com)
 
-- [ ] `dep deploy app`
-- [ ] Verificar que carga `app.annapownall.com/es` y `app.annapownall.com/admin`
-- [ ] Probar login de admin
+- [x] Subdominio `dev.annapownall.com` creado en Plesk
+- [x] PHP 8.3.30 con FPM+Nginx configurado
+- [x] BD MariaDB `HalfyShop` creada con usuario dedicado
+- [x] `/dev.annapownall.com/shared/app/.env.local` creado con todas las variables
+- [x] Document root → `/dev.annapownall.com/app/public`
+- [x] Repositorio GitHub conectado en Plesk Git
 
----
-
-## Fase 4 — Página under construction
-> Hago yo el HTML, configuras tú en Plesk
-
-- [ ] Crear página estática `under_construction.html` (estilo acorde a Anna)
-- [ ] Configurar dominio principal `annapownall.com` en Plesk para servir esa página estática
+> `dev.annapownall.com` queda como está. Ya no es el objetivo del deploy.
 
 ---
 
-## Resultado esperado
+## Fase 3 — Deploy en `annapownall.com` ⏳ PENDIENTE
+
+### Contexto
+
+- WordPress está actualmente en `annapownall.com` — no borrarlo hasta go-live
+- La BD `HalfyShop` que ya existe en el servidor se reutiliza (tiene datos del sync BigCartel)
+- Acceso SSH disponible al servidor
+- El under construction se activa solo al desplegar (el listener está en el código)
+
+### Pasos
+
+- [ ] En Plesk: conectar repo GitHub a `annapownall.com` → código en `annapownall.com/app/`
+- [ ] Cambiar document root de `annapownall.com` → `annapownall.com/app/public/`
+- [ ] Crear `.env.local` en el servidor (ver variables abajo)
+- [ ] Instalar vendor: Plesk PHP Composer → `annapownall.com/app/`
+- [ ] Por SSH: ejecutar migrations
+  ```bash
+  /opt/plesk/php/8.3/bin/php /annapownall.com/app/bin/console doctrine:migrations:migrate --no-interaction --env=prod
+  ```
+- [ ] Por SSH: warmup cache
+  ```bash
+  /opt/plesk/php/8.3/bin/php /annapownall.com/app/bin/console cache:warmup --env=prod
+  ```
+- [ ] Verificar que `annapownall.com` muestra el under construction
+- [ ] Activar SSL (Let's Encrypt) en Plesk para `annapownall.com`
+- [ ] Probar login admin en `annapownall.com/admin/login`
+
+### Variables `.env.local` para producción
+
+```
+APP_ENV=prod
+APP_SECRET=<generar aleatorio>
+DATABASE_URL="mysql://<user>:<pass>@127.0.0.1:3306/HalfyShop?serverVersion=mariadb-5.5.68&charset=utf8mb4"
+ADMIN_PASSWORD_HASH=<hash generado con security:hash-password>
+BIGCARTEL_FEED_URL=https://annapownall.bigcartel.com/products.xml
+CONTACT_EMAIL=<email de Anna>
+```
+
+---
+
+## Fase 4 — Go live ⏳ PENDIENTE (cuando Anna dé el OK)
+
+- [ ] Quitar `MaintenanceModeListener` (o desactivarlo con un parámetro de entorno)
+- [ ] Verificar que el sitio público carga correctamente
+- [ ] WordPress: ya no se sirve (document root cambiado) — se puede borrar
+
+---
+
+## Resultado esperado tras Fase 3
 
 | URL | Qué ve |
 |---|---|
 | `annapownall.com` | Página under construction |
-| `app.annapownall.com/es` | La web completa (Anna la revisa) |
-| `app.annapownall.com/admin` | Panel de gestión de Anna |
+| `annapownall.com/admin` | Panel de gestión de Anna |
+| `dev.annapownall.com` | Queda como está, sin uso activo |
 
 ---
 
 ## Notas
 
-- **WordPress en Plesk**: no eliminar hasta que la web esté en producción y verificada.
-  Contiene credenciales de BD y configuración útil de referencia.
-- **Go-live**: cuando Anna dé el OK, `dep deploy production` + cambio de DNS/document root
-  en `annapownall.com`. Luego se borra el subdominio y el directorio en el servidor.
-- **Deployer**: instalado como dependencia de composer. Se lanza con `./scripts/deploy-prod.sh`
-  o directamente `./app/vendor/bin/dep deploy app`.
+- **MariaDB**: el DATABASE_URL debe usar `serverVersion=mariadb-5.5.68`
+- **OPcache**: `.user.ini` en `public/` activa `validate_timestamps` — no hace falta reiniciar PHP-FPM tras deploy
+- **Imágenes**: al migrar de dev a prod, copiar `uploads/artworks/` al nuevo servidor si hay imágenes subidas manualmente. Las del sync de BigCartel se regeneran con el comando de sync.
+- **Deployer**: descartado. Se usa Plesk Git nativo + SSH manual para migrations.
