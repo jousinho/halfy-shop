@@ -16,11 +16,10 @@ final class Version20260504000003 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE settings RENAME COLUMN `key` TO setting_key');
+        // Column already named setting_key in Version20260504000001; no-op.
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE settings RENAME COLUMN setting_key TO `key`');
     }
 }
