@@ -81,7 +81,7 @@ final class Version20260504000001 extends AbstractMigration
             url           VARCHAR(500) DEFAULT NULL,
             video_youtube VARCHAR(500) DEFAULT NULL,
             video_reel    VARCHAR(500) DEFAULT NULL,
-            slug          VARCHAR(255) NOT NULL,
+            slug          VARCHAR(191) NOT NULL,
             publicado     TINYINT(1)   NOT NULL,
             created_at    DATETIME     NOT NULL COMMENT '(DC2Type:datetime_immutable)',
             PRIMARY KEY (id),

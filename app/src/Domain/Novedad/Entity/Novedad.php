@@ -55,7 +55,7 @@ class Novedad
     #[ORM\Column(type: 'string', length: 500, nullable: true)]
     private ?string $videoReel;
 
-    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    #[ORM\Column(type: 'string', length: 191, unique: true)]
     private string $slug;
 
     #[ORM\Column(type: 'boolean')]
