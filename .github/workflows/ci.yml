@@ -43,9 +43,9 @@ jobs:
       - name: Run migrations
         run: php bin/console doctrine:migrations:migrate --env=test --no-interaction
         env:
-          DATABASE_TEST_URL: mysql://app:secret@127.0.0.1:3306/halfyshop_test?serverVersion=8.0&charset=utf8mb4
+          DATABASE_URL: mysql://app:secret@127.0.0.1:3306/halfyshop_test?serverVersion=8.0&charset=utf8mb4
 
       - name: Run tests
         run: php bin/phpunit
         env:
-          DATABASE_TEST_URL: mysql://app:secret@127.0.0.1:3306/halfyshop_test?serverVersion=8.0&charset=utf8mb4
+          DATABASE_URL: mysql://app:secret@127.0.0.1:3306/halfyshop_test?serverVersion=8.0&charset=utf8mb4
