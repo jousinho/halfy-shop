@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'about_page')]
-final class AboutPage
+class AboutPage
 {
     #[ORM\Id]
     #[ORM\Column(type: 'string', length: 36)]

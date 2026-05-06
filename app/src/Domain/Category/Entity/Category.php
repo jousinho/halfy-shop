@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'categories')]
-final class Category
+class Category
 {
     #[ORM\Id]
     #[ORM\Column(type: 'string', length: 36)]

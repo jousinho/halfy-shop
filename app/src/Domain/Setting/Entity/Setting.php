@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'settings')]
-final class Setting
+class Setting
 {
     #[ORM\Id]
     #[ORM\Column(name: 'setting_key', type: 'string', length: 100)]

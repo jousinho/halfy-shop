@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sync_logs')]
-final class SyncLog
+class SyncLog
 {
     #[ORM\Id]
     #[ORM\Column(type: 'string', length: 36)]

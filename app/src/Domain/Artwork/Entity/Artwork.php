@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'artworks')]
-final class Artwork
+class Artwork
 {
     #[ORM\Id]
     #[ORM\Column(type: 'string', length: 36)]
