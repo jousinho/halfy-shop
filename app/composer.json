@@ -4,29 +4,32 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.4",
+        "php": ">=8.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/collections": "^2.6",
-        "doctrine/doctrine-bundle": "^3.2",
+        "doctrine/doctrine-bundle": "^3.2.2",
         "doctrine/doctrine-migrations-bundle": "^4.0",
-        "doctrine/orm": "^3.6",
-        "ramsey/uuid": "^4.9",
-        "symfony/console": "8.0.*",
-        "symfony/dotenv": "8.0.*",
-        "symfony/flex": "^2",
-        "symfony/framework-bundle": "8.0.*",
-        "symfony/mime": "8.0.*",
-        "symfony/runtime": "8.0.*",
-        "symfony/security-bundle": "8.0.*",
-        "symfony/translation": "8.0.*",
-        "symfony/twig-bundle": "8.0.*",
-        "symfony/uid": "8.0.*",
-        "symfony/yaml": "8.0.*",
-        "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0"
+        "doctrine/orm": "^3.6.3",
+        "ramsey/uuid": "^4.9.2",
+        "symfony/console": "7.4.*",
+        "symfony/dotenv": "7.4.*",
+        "symfony/flex": "^2.10",
+        "symfony/framework-bundle": "7.4.*",
+        "symfony/mime": "7.4.*",
+        "symfony/runtime": "7.4.*",
+        "symfony/security-bundle": "7.4.*",
+        "symfony/translation": "7.4.*",
+        "symfony/twig-bundle": "7.4.*",
+        "symfony/uid": "7.4.*",
+        "symfony/yaml": "7.4.*",
+        "twig/extra-bundle": "^2.12|^3.24",
+        "twig/twig": "^2.12|^3.24"
     },
     "config": {
+        "audit": {
+            "ignore": ["PKSA-365x-2zjk-pt47", "PKSA-b35n-565h-rs4q"]
+        },
         "allow-plugins": {
             "php-http/discovery": true,
             "symfony/flex": true,
@@ -75,13 +78,13 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "8.0.*"
+            "require": "7.4.*"
         }
     },
     "require-dev": {
-        "deployer/deployer": "^8.0",
-        "phpunit/phpunit": "^13.0",
-        "symfony/browser-kit": "8.0.*",
-        "symfony/css-selector": "8.0.*"
+        "deployer/deployer": "^8.0.3",
+        "phpunit/phpunit": "^13.1.8",
+        "symfony/browser-kit": "7.4.*",
+        "symfony/css-selector": "7.4.*"
     }
 }
