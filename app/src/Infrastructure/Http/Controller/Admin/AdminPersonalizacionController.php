@@ -4,9 +4,18 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Http\Controller\Admin;
 
+use App\Application\Setting\GetMaintenanceImage\GetMaintenanceImageService;
+use App\Application\Setting\GetMaintenanceMode\GetMaintenanceModeService;
+use App\Application\Setting\GetMaintenanceText\GetMaintenanceTextService;
+use App\Application\Setting\UpdateMaintenanceText\UpdateMaintenanceTextCommand;
+use App\Application\Setting\UpdateMaintenanceText\UpdateMaintenanceTextService;
 use App\Application\Setting\GetSiteFavicon\GetSiteFaviconService;
 use App\Application\Setting\GetSiteInstagram\GetSiteInstagramService;
 use App\Application\Setting\GetSiteLogo\GetSiteLogoService;
+use App\Application\Setting\UpdateMaintenanceImage\UpdateMaintenanceImageCommand;
+use App\Application\Setting\UpdateMaintenanceImage\UpdateMaintenanceImageService;
+use App\Application\Setting\UpdateMaintenanceMode\UpdateMaintenanceModeCommand;
+use App\Application\Setting\UpdateMaintenanceMode\UpdateMaintenanceModeService;
 use App\Application\Setting\UpdateSiteFavicon\UpdateSiteFaviconCommand;
 use App\Application\Setting\UpdateSiteFavicon\UpdateSiteFaviconService;
 use App\Application\Setting\UpdateSiteInstagram\UpdateSiteInstagramCommand;
@@ -29,6 +38,12 @@ final class AdminPersonalizacionController extends AbstractController
         private readonly UpdateSiteFaviconService $updateSiteFaviconService,
         private readonly GetSiteInstagramService $getSiteInstagramService,
         private readonly UpdateSiteInstagramService $updateSiteInstagramService,
+        private readonly GetMaintenanceModeService $getMaintenanceModeService,
+        private readonly UpdateMaintenanceModeService $updateMaintenanceModeService,
+        private readonly GetMaintenanceImageService $getMaintenanceImageService,
+        private readonly UpdateMaintenanceImageService $updateMaintenanceImageService,
+        private readonly GetMaintenanceTextService $getMaintenanceTextService,
+        private readonly UpdateMaintenanceTextService $updateMaintenanceTextService,
         private readonly string $uploadsDir,
     ) {}
 
@@ -36,9 +51,12 @@ final class AdminPersonalizacionController extends AbstractController
     public function index(): Response
     {
         return $this->render('admin/personalizacion/index.html.twig', [
-            'siteLogo'      => $this->getSiteLogoService->execute(),
-            'siteFavicon'   => $this->getSiteFaviconService->execute(),
-            'siteInstagram' => $this->getSiteInstagramService->execute(),
+            'siteLogo'         => $this->getSiteLogoService->execute(),
+            'siteFavicon'      => $this->getSiteFaviconService->execute(),
+            'siteInstagram'    => $this->getSiteInstagramService->execute(),
+            'maintenanceMode'  => $this->getMaintenanceModeService->execute(),
+            'maintenanceImage' => $this->getMaintenanceImageService->execute(),
+            'maintenanceText'  => $this->getMaintenanceTextService->execute(),
         ]);
     }
 
@@ -96,6 +114,54 @@ final class AdminPersonalizacionController extends AbstractController
         return $this->redirectToRoute('admin_personalizacion');
     }
 
+    #[Route('/maintenance-text', name: 'admin_personalizacion_maintenance_text', methods: ['POST'])]
+    public function updateMaintenanceText(Request $request): Response
+    {
+        if (!$this->isCsrfTokenValid('update_maintenance_text', $request->request->getString('_token'))) {
+            throw $this->createAccessDeniedException('CSRF token inválido.');
+        }
+
+        $text = $request->request->getString('maintenance_text');
+        $this->updateMaintenanceTextService->execute(new UpdateMaintenanceTextCommand($text));
+        $this->addFlash('success', 'Texto actualizado correctamente.');
+
+        return $this->redirectToRoute('admin_personalizacion');
+    }
+
+    #[Route('/maintenance', name: 'admin_personalizacion_maintenance', methods: ['POST'])]
+    public function updateMaintenance(Request $request): Response
+    {
+        if (!$this->isCsrfTokenValid('update_maintenance', $request->request->getString('_token'))) {
+            throw $this->createAccessDeniedException('CSRF token inválido.');
+        }
+
+        $enabled = $request->request->getBoolean('maintenance_mode');
+        $this->updateMaintenanceModeService->execute(new UpdateMaintenanceModeCommand($enabled));
+        $this->addFlash('success', $enabled ? 'Modo mantenimiento activado.' : 'Modo mantenimiento desactivado.');
+
+        return $this->redirectToRoute('admin_personalizacion');
+    }
+
+    #[Route('/maintenance-image', name: 'admin_personalizacion_maintenance_image', methods: ['POST'])]
+    public function updateMaintenanceImage(Request $request): Response
+    {
+        if (!$this->isCsrfTokenValid('update_maintenance_image', $request->request->getString('_token'))) {
+            throw $this->createAccessDeniedException('CSRF token inválido.');
+        }
+
+        $file = $request->files->get('maintenance_image');
+
+        if (!$file instanceof UploadedFile) {
+            $this->addFlash('error', 'Selecciona una imagen.');
+            return $this->redirectToRoute('admin_personalizacion');
+        }
+
+        $this->updateMaintenanceImageService->execute(new UpdateMaintenanceImageCommand($this->storeMaintenanceImage($file)));
+        $this->addFlash('success', 'Imagen actualizada correctamente.');
+
+        return $this->redirectToRoute('admin_personalizacion');
+    }
+
     private function storeFile(UploadedFile $file): string
     {
         $extension = $file->guessExtension() ?? 'jpg';
@@ -116,6 +182,21 @@ final class AdminPersonalizacionController extends AbstractController
         $extension = $file->guessExtension() ?? 'png';
         $filename  = 'favicon.' . $extension;
         $dir       = $this->uploadsDir . '/favicon';
+
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
+        $file->move($dir, $filename);
+
+        return $filename;
+    }
+
+    private function storeMaintenanceImage(UploadedFile $file): string
+    {
+        $extension = $file->guessExtension() ?? 'jpg';
+        $filename  = uniqid('maintenance_', true) . '.' . $extension;
+        $dir       = $this->uploadsDir . '/maintenance';
 
         if (!is_dir($dir)) {
             mkdir($dir, 0755, true);
