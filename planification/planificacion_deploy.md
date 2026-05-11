@@ -87,7 +87,12 @@ CONTACT_EMAIL=<email de Anna>
 
 ## Notas
 
-- **MariaDB**: el DATABASE_URL debe usar `serverVersion=mariadb-5.5.68`
-- **OPcache**: `.user.ini` en `public/` activa `validate_timestamps` — no hace falta reiniciar PHP-FPM tras deploy
+- **MariaDB**: el DATABASE_URL debe usar `serverVersion=5.5.68` (sin prefijo `mariadb-` — el prefijo activa MariaDBSchemaManager que consulta `CHECK_CONSTRAINTS`, inexistente en MariaDB 5.5)
+- **OPcache CLI**: al compilar el container via `cache:warmup`, usar `-d opcache.enable_cli=0` para evitar que OPcache del CLI sirva clases viejas. Comando completo:
+  ```bash
+  rm -rf /annapownall.com/app/var/cache/prod/
+  APP_ENV=prod /opt/plesk/php/8.3/bin/php -d opcache.enable_cli=0 /annapownall.com/app/bin/console cache:warmup
+  ```
+- **OPcache FPM**: si tras el warmup sigue el 500, crear `/annapownall.com/app/public/r.php` con `<?php opcache_reset(); echo "done";`, acceder vía web y borrarlo.
 - **Imágenes**: al migrar de dev a prod, copiar `uploads/artworks/` al nuevo servidor si hay imágenes subidas manualmente. Las del sync de BigCartel se regeneran con el comando de sync.
 - **Deployer**: descartado. Se usa Plesk Git nativo + SSH manual para migrations.
