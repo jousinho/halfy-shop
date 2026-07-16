@@ -3,6 +3,10 @@
 {% block title %}{{ activeCategory.nameForLocale(app.request.locale) }} — Anna Pownall{% endblock %}
 
 {% block content %}
+    {% if announcement.enabled and announcement.text %}
+    <div class="es-announcement">{{ announcement.text }}</div>
+    {% endif %}
+
     {% if categories is not empty %}
     <nav class="es-filters">
         <a href="{{ path('home') }}" class="es-filter">{{ 'filter.all'|trans }}</a>

@@ -3,6 +3,10 @@
 {% block title %}{{ 'page.title'|trans }}{% endblock %}
 
 {% block content %}
+    {% if announcement.enabled and announcement.text %}
+    <div class="es-announcement">{{ announcement.text }}</div>
+    {% endif %}
+
     {% if categories is not empty %}
     <nav class="es-filters">
         <a href="{{ path('home') }}" class="es-filter es-filter--active">{{ 'filter.all'|trans }}</a>

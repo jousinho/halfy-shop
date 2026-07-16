@@ -471,3 +471,17 @@ ul, ol { list-style: none; }
     font-size: 0.78rem;
     color: var(--color-muted);
 }
+
+/* Announcement banner — opción A (flujo normal, scrollea con la página) */
+.es-announcement {
+    padding: 1.1rem 2rem;
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #78350F;
+    background: radial-gradient(ellipse at center, #FFFEF7 0%, #FEF3C7 100%);
+    border-top: 2px solid #b89a6e;
+    border-bottom: 2px solid #b89a6e;
+}

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Twig;
 
+use App\Application\Setting\GetAnnouncement\GetAnnouncementService;
 use App\Application\Setting\GetSiteContactEmail\GetSiteContactEmailService;
 use App\Application\Setting\GetSiteContactImage\GetSiteContactImageService;
 use App\Application\Setting\GetSiteInstagram\GetSiteInstagramService;
@@ -20,6 +21,7 @@ final class ActiveThemeExtension extends AbstractExtension implements GlobalsInt
         private readonly GetSiteInstagramService $getSiteInstagramService,
         private readonly GetSiteContactImageService $getSiteContactImageService,
         private readonly GetSiteContactEmailService $getSiteContactEmailService,
+        private readonly GetAnnouncementService $getAnnouncementService,
     ) {}
 
     public function getGlobals(): array
@@ -29,6 +31,7 @@ final class ActiveThemeExtension extends AbstractExtension implements GlobalsInt
         try { $siteInstagram    = $this->getSiteInstagramService->execute();    } catch (\Exception) { $siteInstagram    = null; }
         try { $siteContactImage = $this->getSiteContactImageService->execute(); } catch (\Exception) { $siteContactImage = null; }
         try { $siteContactEmail = $this->getSiteContactEmailService->execute(); } catch (\Exception) { $siteContactEmail = null; }
+        try { $announcement     = $this->getAnnouncementService->execute();     } catch (\Exception) { $announcement     = ['enabled' => false, 'text' => '']; }
 
         return [
             'siteLogo'         => $siteLogo,
@@ -36,6 +39,7 @@ final class ActiveThemeExtension extends AbstractExtension implements GlobalsInt
             'siteInstagram'    => $siteInstagram,
             'siteContactImage' => $siteContactImage,
             'siteContactEmail' => $siteContactEmail,
+            'announcement'     => $announcement,
         ];
     }
 }

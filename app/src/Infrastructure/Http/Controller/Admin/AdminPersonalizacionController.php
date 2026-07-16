@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Http\Controller\Admin;
 
+use App\Application\Setting\GetAnnouncement\GetAnnouncementService;
 use App\Application\Setting\GetMaintenanceImage\GetMaintenanceImageService;
 use App\Application\Setting\GetMaintenanceMode\GetMaintenanceModeService;
 use App\Application\Setting\GetMaintenanceText\GetMaintenanceTextService;
+use App\Application\Setting\UpdateAnnouncement\UpdateAnnouncementCommand;
+use App\Application\Setting\UpdateAnnouncement\UpdateAnnouncementService;
 use App\Application\Setting\UpdateMaintenanceText\UpdateMaintenanceTextCommand;
 use App\Application\Setting\UpdateMaintenanceText\UpdateMaintenanceTextService;
 use App\Application\Setting\GetSiteFavicon\GetSiteFaviconService;
@@ -44,6 +47,8 @@ final class AdminPersonalizacionController extends AbstractController
         private readonly UpdateMaintenanceImageService $updateMaintenanceImageService,
         private readonly GetMaintenanceTextService $getMaintenanceTextService,
         private readonly UpdateMaintenanceTextService $updateMaintenanceTextService,
+        private readonly GetAnnouncementService $getAnnouncementService,
+        private readonly UpdateAnnouncementService $updateAnnouncementService,
         private readonly string $uploadsDir,
     ) {}
 
@@ -57,6 +62,7 @@ final class AdminPersonalizacionController extends AbstractController
             'maintenanceMode'  => $this->getMaintenanceModeService->execute(),
             'maintenanceImage' => $this->getMaintenanceImageService->execute(),
             'maintenanceText'  => $this->getMaintenanceTextService->execute(),
+            'announcement'     => $this->getAnnouncementService->execute(),
         ]);
     }
 
@@ -138,6 +144,22 @@ final class AdminPersonalizacionController extends AbstractController
         $enabled = $request->request->getBoolean('maintenance_mode');
         $this->updateMaintenanceModeService->execute(new UpdateMaintenanceModeCommand($enabled));
         $this->addFlash('success', $enabled ? 'Modo mantenimiento activado.' : 'Modo mantenimiento desactivado.');
+
+        return $this->redirectToRoute('admin_personalizacion');
+    }
+
+    #[Route('/announcement', name: 'admin_personalizacion_announcement', methods: ['POST'])]
+    public function updateAnnouncement(Request $request): Response
+    {
+        if (!$this->isCsrfTokenValid('update_announcement', $request->request->getString('_token'))) {
+            throw $this->createAccessDeniedException('CSRF token inválido.');
+        }
+
+        $enabled = $request->request->getBoolean('announcement_enabled');
+        $text    = trim($request->request->getString('announcement_text'));
+
+        $this->updateAnnouncementService->execute(new UpdateAnnouncementCommand($enabled, $text));
+        $this->addFlash('success', 'Aviso actualizado correctamente.');
 
         return $this->redirectToRoute('admin_personalizacion');
     }

@@ -119,6 +119,26 @@
         </form>
     </div>
 
+    <div class="admin-section">
+        <h2 class="admin-section__title">Aviso en la galería</h2>
+        <p class="admin-section__desc">Muestra una franja de aviso en la galería. Si el texto está vacío no se mostrará aunque esté activado.</p>
+
+        <form method="post" action="{{ path('admin_personalizacion_announcement') }}" class="admin-form">
+            <input type="hidden" name="_token" value="{{ csrf_token('update_announcement') }}">
+            <div class="form-group" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+                <input type="checkbox" id="announcement_enabled" name="announcement_enabled" value="1" {% if announcement.enabled %}checked{% endif %}>
+                <label for="announcement_enabled" class="form-label" style="margin: 0;">Mostrar aviso</label>
+            </div>
+            <div class="form-group">
+                <label for="announcement_text" class="form-label">Texto del aviso</label>
+                <input type="text" id="announcement_text" name="announcement_text" value="{{ announcement.text }}" class="form-input" placeholder="Ej: No procesaré pedidos en agosto — vuelvo en septiembre" maxlength="200">
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn--primary">Guardar</button>
+            </div>
+        </form>
+    </div>
+
     <style>
         .admin-section { margin-top: 2rem; }
         .admin-section__title { font-size: 1rem; font-weight: 600; margin-bottom: 0.4rem; }
